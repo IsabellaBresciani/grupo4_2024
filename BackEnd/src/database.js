@@ -11,8 +11,10 @@ const connection = mysql.createConnection({
     database: process.env.database,
     user: process.env.user,
     password: process.env.password,
-})
-
+    waitForConnections: true,
+    connectionLimit: 10, // Número máximo de conexiones simultáneas
+    queueLimit: 0
+  });
 
 getConnection = async() => connection;
 
