@@ -6,18 +6,15 @@ const bcrypt = require('bcryptjs');
 
 dotenv.config({path: './.env'});
 
-const connection = mysql.createConnection({
-    host: process.env.host,
-    database: process.env.database,
-    user: process.env.user,
-    password: process.env.password,
-    waitForConnections: true,
-    connectionLimit: 10, // Número máximo de conexiones simultáneas
-    queueLimit: 0
-  });
+const pool = mysql.createPool({
+  host: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.NAME,
+  port: process.env.PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
-getConnection = async() => connection;
-
-module.exports= {
-    getConnection
-}
+module.exports = pool;
