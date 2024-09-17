@@ -1,7 +1,8 @@
 const express = require('express');
+const router = express.Router();
 
 
-app.get('/clientes', async (req, res) => {
+router.get('/clientes', async (req, res) => {
     let connection;
     try {
         // Crear la conexión
@@ -21,3 +22,5 @@ app.get('/clientes', async (req, res) => {
         }
     }
 });
+
+module.exports = router;

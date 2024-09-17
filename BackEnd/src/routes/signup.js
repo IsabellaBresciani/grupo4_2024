@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const pool = require('./database');  // Importar la conexión de la base de datos
+const pool = require('../config/database');  // Importar la conexión de la base de datos
 
 // Ruta para crear un nuevo usuario
 router.post('/signup', async (req, res) => {
