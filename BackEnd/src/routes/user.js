@@ -2,33 +2,22 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/database');  // Importar la conexión de la base de datos
 
-
-router.get('/', async (req, res) => {
-    let connection;
+// Listar usuarios
+  router.get("/", async (req, res) => {
     try {
-        // Crear la conexión
-        connection = await mysql.createConnection(dbConfig);
-
-        // Consulta para obtener todos los clientes
-        const [rows] = await connection.execute('SELECT * FROM clientes');
-
-        // Enviar los resultados como respuesta
-        res.json(rows);
-    } catch (err) {
-        console.error('Error en la consulta:', err);
-        res.status(500).json({ message: 'Error en el servidor' });
-    } finally {
-        if (connection) {
-            await connection.end(); // Asegúrate de cerrar la conexión
-        }
+        const [results] = await pool.query('SELECT * FROM servicioya.user');
+        res.json(results);
+    } catch (error) {
+        return res.status(500).json({ error: 'Error en la consulta' });
     }
 });
 
-router.get("/:user_id", async (req, res) => {
-    const { user_id } = req.params;
+// Buscar usuario 
+router.get("/:nom_usuario", async (req, res) => {
+    const { nom_usuario } = req.params;
     
     try {
-        const [results] = await pool.query('SELECT * FROM servicioya.user WHERE idPersona = ?', [user_id]);
+        const [results] = await pool.query('SELECT * FROM servicioya.user WHERE usuario = ?', [nom_usuario]);
         
         if (results.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -41,34 +30,84 @@ router.get("/:user_id", async (req, res) => {
 });
 
 
-// Actualizar un servicio existente
-router.put('/:user_id', async (req, res) => {
-    const { user_id } = req.params;
-    const { dni } = req.body;
-    const { nombre } = req.body;
-    const { apellido } = req.body;
-    const { fechaNac } = req.body;
-    const { mail } = req.body;
-    const { nombreUsuario } = req.body;
-    const { contrasena } = req.body;
 
+// Actualizar un usuario
+// Actualizar un usuario basado en el campo usuario (email o username)
+router.put('/:usuario', async (req, res) => {
+    const { usuario } = req.params;
+    const { dni, nombre, apellido, fecha_nacimiento, email, password } = req.body;
   
-    // Validación básica
-    if ( !description ) {
-        return res.status(400).json({ error: 'Descripcion obligatoria' });
+    // Crear una lista de campos a actualizar dinámicamente
+    const fields = [];
+    const values = [];
+  
+    if (dni !== undefined) {
+      fields.push('dni = ?');
+      values.push(dni);
     }
-    
+    if (nombre !== undefined) {
+      fields.push('nombre = ?');
+      values.push(nombre);
+    }
+    if (apellido !== undefined) {
+      fields.push('apellido = ?');
+      values.push(apellido);
+    }
+    if (fecha_nacimiento !== undefined) {
+      fields.push('fecha_nacimiento = ?');
+      values.push(fecha_nacimiento);
+    }
+    if (email !== undefined) {
+      fields.push('email = ?');
+      values.push(email);
+    }
+    if (password !== undefined) {
+      fields.push('password = ?');
+      values.push(password);
+    }
+  
+    // Verificar si se ha proporcionado al menos un campo para actualizar
+    if (fields.length === 0) {
+      return res.status(400).json({ error: 'No se ha proporcionado ningún campo para actualizar.' });
+    }
+  
+    // Añadir el usuario al final de los valores para la condición WHERE
+    values.push(usuario);
+  
+    // Construir la consulta SQL dinámica usando template literals correctamente
+    const sql = `UPDATE user SET ${fields.join(', ')} WHERE usuario = ?`;
+  
     try {
-        const [result] = await pool.query('UPDATE servicioya.user SET description = ? WHERE idPersona = ?', [description, user_id]);
+      // Ejecutar la consulta
+      const [result] = await pool.query(sql, values);
+  
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: 'Usuario no encontrado.' });
+      }
+  
+      res.json({ message: 'Información del usuario actualizada exitosamente.' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error al actualizar la información del usuario.', error });
+    }
+  });
+  
+
+// Eliminar un usuario exisitente 
+router.delete('/:usuario', async (req, res) => {
+    const { usuario } = req.params;
+
+    try {
+        const [result] = await pool.query('DELETE FROM servicioya.user WHERE usuario = ?', [usuario]);
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
-        res.json({ message: 'Usuario actualizado correctamente' });
+
+        res.status(200).json("Usuario eliminado correctamente");
     } catch (error) {
-        return res.status(500).json({ error: 'Error al actualizar el Usuario' });
+        return res.status(500).json({ error: 'Error al eliminar el Usuario' });
     }
 });
-
 
 module.exports = router;
