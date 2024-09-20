@@ -1,4 +1,4 @@
-class Servicio {
+class Service {
     constructor(idServicio, descripcion) {
       this.idServicio = idServicio;
       this.descripcion = descripcion;
@@ -29,5 +29,5 @@ class Servicio {
     }
   }
   
-  module.exports = Servicio;
+  module.exports = Service;
   

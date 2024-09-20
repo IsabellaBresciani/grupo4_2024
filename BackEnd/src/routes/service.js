@@ -27,6 +27,7 @@ router.post("/", async (req, res) => {
         return res.status(500).json({ error: 'Error al insertar el servicio' });
     }
 });
+
 // Obtener un servicio por ID
 router.get("/:service_id", async (req, res) => {
     const { service_id } = req.params;
@@ -43,7 +44,6 @@ router.get("/:service_id", async (req, res) => {
         return res.status(500).json({ error: 'Error en la consulta' });
     }
 });
-
 
 // Actualizar un servicio existente
 router.put('/:service_id', async (req, res) => {

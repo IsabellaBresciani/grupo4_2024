@@ -1,11 +1,11 @@
 const express = require('express');
-const Resenia = require('../models/reviewModels');
+const Review = require('../models/reviewModels');
 const pool = require('../config/database'); // Conexión a la base de datos
 
 const router = express.Router();
-
+//crear Review.
 router.post('/', async (req, res) => {
-  const { precio, atencion, calidad, tiempo, comentario, idAutor } = req.body;
+  const { precio, atencion, calidad, tiempo, comentario, idAutor } = req.body[0];
   try {
     const result = await Resenia.create(pool, { precio, atencion, calidad, tiempo, comentario, idAutor });
     res.status(201).json({ message: 'Reseña creada', result });
@@ -15,48 +15,55 @@ router.post('/', async (req, res) => {
   }
 });
 
-//  Buscar una reseña por su ID
+//Buscar una reseña por su ID
 router.get('/:review_id', async (req,res) =>{
   try {
-    const review = await Resenia.findById(pool, id);
+    const review = await Review.findById(pool, id);
     if (!review) return res.status(404).json({ message: 'Reseña no encontrada' });
-    res.json(resena);
+    res.json(review);
   } catch (error){
-    return res.status(500).json({ error: 'Error en la consulta' })
+    return res.status(500).json({ error: 'Error en el servidor' })
   }
 })
 
+//Ver todas las reseñas de una persona.
+router.get('/:usuario', async (req,res) => {
+  try {
+    const [reviews] = await Review.findByUser(pool, usuario); 
+    if (!reviews) return res.status(404).json({ message: 'No hay reseñas asociadas al usuario.'});
+    res.json(reviews);
+  } catch (error){
+    return res.status(500).json({error: 'Error en el servidor'})
+  }
+})
 
 // Actualizar una reseña
+router.put('/:review_id', async (req, res) => {
+  const {review_id } = req.params;
+  const { precio, atencion, calidad, tiempo, comentario, idautor } = req.body[0];
 
-// Ruta para permitir a los usuarios actualizar solo el comentario de una reseña.
-
-  router.put('/review/:id', async (req, res) => {
-    const { id } = req.params;
-    const { comentario } = req.body;
-    try {
-      const result = await Resenia.update(pool, { idResenia: id, comentario });
-      if (result.affectedRows === 0) return res.status(404).json({ message: 'Reseña no encontrada' });
-      res.json({ message: 'Reseña actualizada' });
+  if (!precio || !atencion || !calidad || !tiempo || !comentario || !idautor ){
+    return res.status(400).json({ error: 'Todos los campos son obligatorios.'})
+  }
+  try {
+    const review = Review.update(pool, {review_id , comentario});
+    if (review.affectedRows === 0) return res.status(404).json({message: 'Reseña no encontrada'});
+    res.json({message: 'Reseña actualizada'});
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al actualizar la reseña', error });
-    }
-  });
-  
+      res.status(500).json({message: 'Error al actualizar la reseña.', error});
+  }
+});
+
 // Eliminar una reseña
-
-// Ruta para eliminar una reseña por su idResenia.
-
-router.delete('/review/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-      const result = await Resenia.delete(pool, id);
-      if (result.affectedRows === 0) return res.status(404).json({ message: 'Reseña no encontrada' });
-      res.json({ message: 'Reseña eliminada' });
+router.delete('/:review_id', async (req, res) => {
+  const { review_id } = req.params;
+  try {
+    const review = await Review.delete(pool, id);
+    if (!review) return res.status(404).json({ message: 'Reseña no encontrada' });
+    res.json({message: 'Reseña eliminada correctamente'})
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al eliminar la reseña', error });
-    }
-  });
+      res.status(500).json({message: 'Error al actualizar la reseña.', error});
+  }
+});
+
   
