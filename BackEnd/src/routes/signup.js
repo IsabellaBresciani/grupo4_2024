@@ -5,11 +5,12 @@ const pool = require('../config/database');  // Importar la conexion de la base 
 
 // Ruta para crear un nuevo usuario
 router.post('/', async (req, res) => {
-    const { dni, nombre, apellido, fecha_nacimiento, email, usuario, password } = req.body;
 
-    // Validacion basica para todos los campos requeridos
+    // Acceder al primer elemento del array
+    const { dni, nombre, apellido, fecha_nacimiento, email, usuario, password } = req.body[0];
+
+    // Validación básica
     if (!dni || !nombre || !apellido || !fecha_nacimiento || !email || !usuario || !password) {
-        console.log(dni);
         return res.status(400).json({ error: 'Todos los campos son requeridos.' });
     }
 
