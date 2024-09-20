@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const pool = require('../config/database');  // Importar la conexión de la base de datos
 
 
 router.get('/clientes', async (req, res) => {

@@ -1,0 +1,16 @@
+{
+"Servicios": [
+    {
+      "idServicio": 1,
+      "descripcion": "Electricista"
+    },
+    {
+      "idServicio": 2,
+      "descripcion": "Plomero"
+    },
+    {
+      "idServicio": 3,
+      "descripcion": "Jardinero"
+    }
+  ]
+}

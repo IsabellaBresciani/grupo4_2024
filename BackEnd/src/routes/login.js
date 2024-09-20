@@ -24,14 +24,8 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ error: 'Contraseña incorrecta.' });
         }
         // Generar el token JWT
-        const token = jwt.sign({ id: user.id, usuario: user.usuario }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user.id, usuario: user.usuario }, 'mysecretkey', {
             expiresIn: '1h'
-        });
-        // Enviar el token en una cookie HttpOnly para mayor seguridad
-        res.cookie('token', token, {
-            httpOnly: true,    // Evita que sea accesible desde JavaScript
-            secure: process.env.NODE_ENV === 'production', // Solo en HTTPS si está en producción
-            maxAge: 60 * 60 * 1000  // 1 hora de expiración
         });
         // Devolver el token
         return res.json({ message: 'Login exitoso', token });

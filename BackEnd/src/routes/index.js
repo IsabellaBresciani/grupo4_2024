@@ -9,7 +9,7 @@ const signUpRoutes = require('./signup');
 
 // Usar las rutas importadas
 router.use('/users', userRoutes);
-router.use('/products', serviceRoutes);
+router.use('/service', serviceRoutes);
 router.use('/login', loginRoutes);
 router.use('/signup', signUpRoutes);
 

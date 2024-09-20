@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../config/database'); // Asegúrate de tener un archivo 'database.js' para crear el pool de conexión con MySQL
 
 // Obtener todos los servicios
-router.get("/service", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const [results] = await pool.query('SELECT * FROM servicioya.service');
         res.json(results);
@@ -13,7 +13,7 @@ router.get("/service", async (req, res) => {
 });
 
 // Crear un nuevo servicio
-router.post("/service", async (req, res) => {
+router.post("/", async (req, res) => {
     const { descripcion } = req.body;
 
     // Validación básica
@@ -28,39 +28,40 @@ router.post("/service", async (req, res) => {
         return res.status(500).json({ error: 'Error al insertar el servicio' });
     }
 });
-
 // Obtener un servicio por ID
-router.get("/service/:service_id", async (req, res) => {
+router.get("/:service_id", async (req, res) => {
     const { service_id } = req.params;
-
+    
     try {
-        const [results] = await pool.query('SELECT * FROM servicioya.service WHERE id = ?', [service_id]);
+        const [results] = await pool.query('SELECT * FROM servicioya.service WHERE idservice = ?', [service_id]);
+        
         if (results.length === 0) {
             return res.status(404).json({ error: 'Servicio no encontrado' });
         }
+        
         res.json(results[0]);
     } catch (error) {
         return res.status(500).json({ error: 'Error en la consulta' });
     }
 });
 
+
 // Actualizar un servicio existente
-router.put('/service/:id', async (req, res) => {
+router.put('/:service_id', async (req, res) => {
     const { id } = req.params;
-    const { name, description, price } = req.body;
+    const { description } = req.body;
 
     // Validación básica
-    if (!name || !description || !price) {
-        return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    if ( !description ) {
+        return res.status(400).json({ error: 'Descripcion obligatoria' });
     }
-
+    
     try {
-        const [result] = await pool.query('UPDATE servicioya.service SET name = ?, description = ?, price = ? WHERE id = ?', [name, description, price, id]);
-        
+        const [result] = await pool.query('UPDATE servicioya.service SET description = ? WHERE idservice = ?', [description, id]);
+         
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Servicio no encontrado' });
         }
-        
         res.json({ message: 'Servicio actualizado correctamente' });
     } catch (error) {
         return res.status(500).json({ error: 'Error al actualizar el servicio' });
@@ -68,7 +69,7 @@ router.put('/service/:id', async (req, res) => {
 });
 
 // Eliminar un servicio existente
-router.delete('/service/:id', async (req, res) => {
+router.delete('/:service_id', async (req, res) => {
     const { id } = req.params;
 
     try {

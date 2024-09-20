@@ -1,0 +1,16 @@
+{
+"Publicaciones": [
+    {
+      "idPublicacion": 1,
+      "fecha": "2023-01-10",
+      "descripcion": "Ofrecemos servicios de electricidad a buen precio.",
+      "titulo": "Servicio de Electricista"
+    },
+    {
+      "idPublicacion": 2,
+      "fecha": "2023-02-15",
+      "descripcion": "Especialistas en plomería para todas tus necesidades.",
+      "titulo": "Servicio de Plomería"
+    }
+  ]
+}
