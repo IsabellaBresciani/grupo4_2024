@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const pool = require('../config/database');  // Importar la conexión de la base de datos
+const pool = require('../config/database');  // Importar la conexion de la base de datos
 
 // Ruta para crear un nuevo usuario
-router.post('/signup', async (req, res) => {
+router.post('/', async (req, res) => {
     const { dni, nombre, apellido, fecha_nacimiento, email, usuario, password } = req.body;
 
-    // Validación básica para todos los campos requeridos
+    // Validacion basica para todos los campos requeridos
     if (!dni || !nombre || !apellido || !fecha_nacimiento || !email || !usuario || !password) {
+        console.log(dni);
         return res.status(400).json({ error: 'Todos los campos son requeridos.' });
     }
 
@@ -20,7 +21,7 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'El usuario o email ya están registrados.' });
         }
 
-        // Encriptar la contraseña
+        // Encriptar la contrasenia
         const hashedPassword = await bcrypt.hash(password, 10);  // El valor 10 es el "salt rounds"
 
         // Insertar el nuevo usuario en la base de datos
@@ -29,7 +30,7 @@ router.post('/signup', async (req, res) => {
             [dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword]
         );
 
-        // Respuesta de éxito
+        // Respuesta de exito
         return res.status(201).json({ message: 'Usuario creado exitosamente' });
     } catch (error) {
         console.error('Error al crear el usuario:', error);

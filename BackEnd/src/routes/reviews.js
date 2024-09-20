@@ -4,7 +4,7 @@ const pool = require('../config/database'); // Conexión a la base de datos
 
 const router = express.Router();
 
-router.post('/review', async (req, res) => {
+router.post('/', async (req, res) => {
   const { precio, atencion, calidad, tiempo, comentario, idAutor } = req.body;
   try {
     const result = await Resenia.create(pool, { precio, atencion, calidad, tiempo, comentario, idAutor });
@@ -16,20 +16,15 @@ router.post('/review', async (req, res) => {
 });
 
 //  Buscar una reseña por su ID
-
-// Ruta para obtener una reseña específica por su idResenia.
-
-router.get('/review/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-      const resena = await Resenia.findById(pool, id);
-      if (!resena) return res.status(404).json({ message: 'Reseña no encontrada' });
-      res.json(resena);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al buscar la reseña', error });
-    }
-  });
+router.get('/:review_id', async (req,res) =>{
+  try {
+    const review = await Resenia.findById(pool, id);
+    if (!review) return res.status(404).json({ message: 'Reseña no encontrada' });
+    res.json(resena);
+  } catch (error){
+    return res.status(500).json({ error: 'Error en la consulta' })
+  }
+})
 
 
 // Actualizar una reseña

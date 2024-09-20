@@ -8,7 +8,7 @@ const serviceRoutes = require('./service');
 const signUpRoutes = require('./signup');
 
 // Usar las rutas importadas
-router.use('/users', userRoutes);
+router.use('/user', userRoutes);
 router.use('/service', serviceRoutes);
 router.use('/login', loginRoutes);
 router.use('/signup', signUpRoutes);
