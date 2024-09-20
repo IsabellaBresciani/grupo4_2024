@@ -11,17 +11,25 @@ class Review {
 
   // Crear una nueva reseña
   static async create(connection, { precio, atencion, calidad, tiempo, comentario, idAutor }) {
-    const sql = `INSERT INTO review (precio, atencion, calidad, tiempo, comentario, idAutor) VALUES (?, ?, ?, ?, ?, ?)`;
+    const sql = 'INSERT INTO servicioya.review (precio, atencion, calidad, tiempo, comentario, idAutor) VALUES (?,?,?,?,?,?)';
     const [result] = await connection.query(sql, [precio, atencion, calidad, tiempo, comentario, idAutor]);
     return result;
   }
 
+   // Buscar todas las reseñas.
+   static async find(connection) {
+    const sql = `SELECT * FROM review`;
+    const rows= await connection.query(sql);
+    return rows;
+  }
+
   // Buscar una reseña por su ID
-  static async findById(connection, idResenia) {
-    const sql = `SELECT * FROM review WHERE idreview = ?`;
-    const [rows] = await connection.query(sql, [idResenia]);
+  static async findById(connection, idreview) {
+    const sql = `SELECT * FROM servicioya.review WHERE idreview = ?`;
+    const [rows] = await connection.query(sql, [idreview]);
     return rows[0];
   }
+
 //Buscar todas las reseñas asociadas a un usuario, por su ID
   static async findByUser(connection, username) {
     const sql = `SELECT * FROM servicioya.review join servicioya.service join servicioya.userXservice join servicioya.User WHERE servicioya.user.name = ?`;
