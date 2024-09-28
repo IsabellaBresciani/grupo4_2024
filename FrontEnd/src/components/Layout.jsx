@@ -1,9 +1,9 @@
 import React from 'react';
-import Navbar from './NavBar';
+import Navbar from './Navbar';
 
 function Layout({ children }) {
   return (
-    <div style={styles}>
+    <div >
       <Navbar />
       { children }
     </div>

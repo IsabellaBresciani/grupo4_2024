@@ -6,15 +6,15 @@ import Login from './pages/Login';
 import UserInterface from './pages/UserInterface';
 import Search from './pages/Search';
 
+
 function App() {
   return (
     <Router>
         <Routes>
-            <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Register />} /> 
             <Route path="/login" element={<Login />} />
             <Route path="/user/:id" element={<UserInterface />} />
             <Route path="/search" element={<Search />} />
-            {/* <Route path="/service" element={} />*/}
         </Routes>
       </Router>
   );
