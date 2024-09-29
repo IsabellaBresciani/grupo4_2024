@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
 import LogPageComponent from '../components/LogPageComponent';
 import '../css/Register.css';
 import logo from '../assets/logo.png';
