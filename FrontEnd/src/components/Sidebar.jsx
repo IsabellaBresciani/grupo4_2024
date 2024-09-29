@@ -23,11 +23,10 @@ const Sidebar = () => {
             </div>
 
             <ul className="sidebar-menu">
-                <li className="menu-item">
-                    <Link to="/profile" className="menu-link"> {/* Link para la página del perfil */}
-                        <i className="fas fa-user-circle"></i>
-                        <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Mi perfil</span>
-                    </Link>
+                {/* Mi perfil sin link, solo como sección activa */}
+                <li className="menu-item active">
+                    <i className="fas fa-user-circle"></i>
+                    {isOpen && <span className="menu-text">Mi perfil</span>}
                 </li>
                 <li className="menu-item">
                     <Link to="/home" className="menu-link"> {/* Link para la página principal (Home) */}

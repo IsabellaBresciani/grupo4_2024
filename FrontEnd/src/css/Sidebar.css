@@ -85,14 +85,11 @@
     gap: 15px; /* Espacio consistente entre el icono y el texto */
 }
 
-.menu-item:hover,
+/* Estilos para la sección activa (Mi perfil) */
 .menu-item.active {
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    color: white; /* Aseguramos que el texto siga siendo blanco en hover */
-}
-
-.menu-item:hover i {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombreado adicional */
     color: white;
 }
 
