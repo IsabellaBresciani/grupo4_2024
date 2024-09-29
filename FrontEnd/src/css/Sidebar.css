@@ -1,4 +1,4 @@
-/* Sidebar */
+/* General sidebar styles */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -11,16 +11,14 @@
     position: fixed;
     left: 0;
     top: 0;
-    transition: width 0.3s ease; /* Transición suave cuando se oculta */
-    overflow: hidden; /* Evita que los elementos desborden la sidebar */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Añadimos sombra para mayor contraste */
+    transition: width 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Añadimos sombra para un mejor contraste */
 }
 
 .sidebar.closed {
-    width: 80px; /* Sidebar más estrecha cuando está cerrada */
+    width: 80px;
 }
 
-/* Ocultamos los textos cuando la sidebar está cerrada */
 .hidden {
     display: none;
 }
@@ -28,23 +26,107 @@
 .sidebar-icon {
     width: 40px;
     height: auto;
-    margin: 10px;
+    margin-bottom: 10px;
 }
 
+/* Estilos para el header */
 .sidebar-header {
-    position: relative;
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 1.5em;
-    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    padding-bottom: 10px;
+    justify-content: center; /* Centramos el logo y el texto */
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
 }
 
-/* Estilos del botón toggle */
+.logo-text {
+    color: white;
+    font-size: 1.3em;
+    text-align: center; /* Aseguramos que el texto esté centrado */
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.closed .logo-text {
+    opacity: 0; /* Ocultar el texto del logo cuando la sidebar está cerrada */
+}
+
+/* Estilos para alinear los iconos y textos de forma centrada */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+/* Aseguramos que los iconos y el texto estén alineados correctamente */
+.menu-item {
+    font-size: 1.1em;
+    padding: 12px 0;
+    display: flex;
+    align-items: center; /* Centramos verticalmente el icono y el texto */
+    gap: 15px; /* Espacio entre el icono y el texto */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    color: white;
+}
+
+.menu-item i {
+    font-size: 1.4em;
+    text-align: center;
+    color: white; /* Aseguramos que el ícono sea blanco */
+    flex-shrink: 0; /* Evitamos que los iconos se encojan */
+}
+
+/* Forzar que los enlaces (Link) estén en blanco y sin subrayado */
+.sidebar-menu a {
+    color: white !important; /* Forzamos el color blanco */
+    text-decoration: none !important; /* Eliminamos el subrayado */
+    display: flex;
+    align-items: center; /* Aseguramos que el texto y los iconos estén alineados */
+    gap: 15px; /* Espacio consistente entre el icono y el texto */
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white; /* Aseguramos que el texto siga siendo blanco en hover */
+}
+
+.menu-item:hover i {
+    color: white;
+}
+
+/* Cuando la sidebar está cerrada */
+.sidebar.closed .menu-item {
+    justify-content: center; /* Centra solo los iconos cuando está cerrada */
+}
+
+.sidebar.closed .menu-item i {
+    margin-right: 0; /* Quitamos el margen derecho cuando la sidebar está cerrada */
+}
+
+.sidebar.closed .menu-item .menu-text {
+    display: none; /* Ocultamos el texto cuando la sidebar está cerrada */
+}
+
+/* Ajuste del footer */
+.sidebar-footer {
+    font-size: 1.1em;
+    padding: 15px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px; /* Espacio entre el icono y el texto */
+    margin-bottom: 20px;
+    color: white; /* Aseguramos que el texto del footer sea blanco */
+}
+
+.sidebar-footer i {
+    font-size: 1.3em; /* Ajustamos el tamaño del ícono en el footer */
+}
+
+/* Botón de toggle */
 .toggle-btn {
     position: relative;
     margin-top: 10px;
@@ -62,54 +144,13 @@
     background-color: #f0f0f0;
 }
 
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin-top: 20px; /* Espacio entre el header y el menú */
-}
-
-.menu-item {
-    font-size: 1.2em;
-    padding: 15px 0;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.menu-item i {
-    margin-right: 10px;
-}
-
-.menu-item:hover,
-.menu-item.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
-
-.sidebar-footer {
-    font-size: 1.2em;
-    padding: 15px 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px; /* Añadir margen inferior para espacio */
-}
-
-/* Ajustamos los íconos para que estén centrados cuando la sidebar está cerrada */
-.sidebar.closed .menu-item i {
-    margin-right: 0;
-    text-align: center;
-    width: 100%;
-}
-
 /* Ajuste para el contenido principal */
 .profile-content {
-    margin-left: 250px; /* Se ajusta al ancho de la sidebar */
+    margin-left: 250px;
     padding: 20px;
-    transition: margin-left 0.3s ease; /* Transición para que el contenido se mueva suavemente */
+    transition: margin-left 0.3s ease;
 }
 
 .sidebar.closed ~ .profile-content {
-    margin-left: 80px; /* Ajusta el margen cuando la sidebar está colapsada */
+    margin-left: 80px;
 }

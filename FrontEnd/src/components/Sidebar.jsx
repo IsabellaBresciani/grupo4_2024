@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Importamos Link para la navegación
 import '../css/Sidebar.css';
 import icon from '../assets/logo.png'; // Ajusta la ruta según donde tengas la imagen
 
 const Sidebar = () => {
-    // Estado para controlar si la sidebar está visible o no
     const [isOpen, setIsOpen] = useState(true);
 
-    // Función para alternar la visibilidad de la sidebar
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
@@ -25,19 +24,24 @@ const Sidebar = () => {
 
             <ul className="sidebar-menu">
                 <li className="menu-item">
-                    <i className="fas fa-user-circle"></i>
-                    <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Mi perfil</span>
+                    <Link to="/profile" className="menu-link"> {/* Link para la página del perfil */}
+                        <i className="fas fa-user-circle"></i>
+                        <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Mi perfil</span>
+                    </Link>
                 </li>
                 <li className="menu-item">
-                    <i className="fas fa-home"></i>
-                    <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Home</span>
+                    <Link to="/home" className="menu-link"> {/* Link para la página principal (Home) */}
+                        <i className="fas fa-home"></i>
+                        <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Home</span>
+                    </Link>
                 </li>
+                {/* Iconos sin links */}
                 <li className="menu-item">
-                    <i className="fas fa-cog"></i>
+                    <i className="fas fa-cog"></i> {/* Solo icono, sin Link */}
                     <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Configuración</span>
                 </li>
                 <li className="menu-item">
-                    <i className="fas fa-search"></i>
+                    <i className="fas fa-search"></i> {/* Solo icono, sin Link */}
                     <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Buscador</span>
                 </li>
             </ul>
