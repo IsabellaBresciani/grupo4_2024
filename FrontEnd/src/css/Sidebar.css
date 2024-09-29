@@ -1,0 +1,115 @@
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: linear-gradient(180deg, #FF7F11 0%, #FF5500 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: width 0.3s ease; /* Transición suave cuando se oculta */
+    overflow: hidden; /* Evita que los elementos desborden la sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Añadimos sombra para mayor contraste */
+}
+
+.sidebar.closed {
+    width: 80px; /* Sidebar más estrecha cuando está cerrada */
+}
+
+/* Ocultamos los textos cuando la sidebar está cerrada */
+.hidden {
+    display: none;
+}
+
+.sidebar-icon {
+    width: 40px;
+    height: auto;
+    margin: 10px;
+}
+
+.sidebar-header {
+    position: relative;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 1.5em;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+/* Estilos del botón toggle */
+.toggle-btn {
+    position: relative;
+    margin-top: 10px;
+    z-index: 100;
+    border: none;
+    background-color: #ffffff;
+    color: #FF7F11;
+    padding: 5px 10px;
+    border-radius: 5px;
+    align-self: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px; /* Espacio entre el header y el menú */
+}
+
+.menu-item {
+    font-size: 1.2em;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-item i {
+    margin-right: 10px;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.sidebar-footer {
+    font-size: 1.2em;
+    padding: 15px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Añadir margen inferior para espacio */
+}
+
+/* Ajustamos los íconos para que estén centrados cuando la sidebar está cerrada */
+.sidebar.closed .menu-item i {
+    margin-right: 0;
+    text-align: center;
+    width: 100%;
+}
+
+/* Ajuste para el contenido principal */
+.profile-content {
+    margin-left: 250px; /* Se ajusta al ancho de la sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Transición para que el contenido se mueva suavemente */
+}
+
+.sidebar.closed ~ .profile-content {
+    margin-left: 80px; /* Ajusta el margen cuando la sidebar está colapsada */
+}

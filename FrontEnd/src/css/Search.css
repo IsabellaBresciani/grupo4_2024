@@ -1,0 +1,27 @@
+/* Estilos para la página de perfil */
+.profile-page {
+    display: flex; /* Hacemos que la sidebar y el contenido estén uno al lado del otro */
+}
+
+/* Estilos para el contenido de perfil */
+.profile-content {
+    flex-grow: 1; /* El contenido crece para ocupar el espacio restante */
+    margin-left: 250px; /* Espacio reservado para la sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease; /* Transición suave cuando la sidebar se oculta */
+}
+
+/* Cuando la sidebar está cerrada, ajustamos el contenido */
+.sidebar.closed + .profile-content {
+    margin-left: 0;
+}
+
+/* Estilos para la sección de servicios y publicaciones */
+.services-section, .posts-section {
+    margin-top: 20px;
+}
+
+.service-cards, .post-cards {
+    display: flex;
+    gap: 10px;
+}
