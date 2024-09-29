@@ -16,6 +16,7 @@ function Register() {
         email: '',
         usuario: '',
         password: '',
+    
     });
 
     const handleChange = (e) => {
@@ -37,8 +38,8 @@ function Register() {
 
         try {
             console.log(dataToSend);
-            const response = await axios.post('http://localhost:8080/register', dataToSend);
-            
+            const response = await axios.post('http://localhost:4444/api/signup', dataToSend);
+            console.log(response);
             Swal.fire({
                 title: 'Success!',
                 text: response.data.message,
@@ -79,7 +80,7 @@ function Register() {
                     {Object.keys(formData).map((key) => (
                         <div key={key}>
                             <input
-                                type={key.includes('password') ? 'password' : 'text'}
+                                type={key === 'password' ? 'password' : (key === 'fecha_nacimiento' ? 'date' : 'text')}
                                 name={key}
                                 value={formData[key]}
                                 onChange={handleChange}
