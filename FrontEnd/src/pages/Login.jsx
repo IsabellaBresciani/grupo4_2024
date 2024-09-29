@@ -5,11 +5,13 @@ import LogPageComponent from '../components/LogPageComponent';
 
 import axios from 'axios'; // Import axios
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [usuario, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate(); 
     
     const handleSubmit = async (e) => {
       
@@ -24,14 +26,11 @@ function Login() {
         try {
             console.log(dataToSend);
             const response = await axios.post('http://localhost:4444/api/login', dataToSend);
+            if (response.status === 200) {
+                // If login is successful, redirect to /search
+                navigate('/search');
+            }
             
-            Swal.fire({
-                title: 'Success!',
-                text: response.data.message,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-
             // Clear the form
           
         } catch (error) {
