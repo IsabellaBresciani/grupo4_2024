@@ -31,7 +31,12 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
     transition: transform 0.2s; /* Transition for hover effect */
 }
-
+.service-image {
+    width: 100%; /* You can also set a fixed width, e.g., 200px */
+    height: 150px; /* Set a fixed height */
+    object-fit: cover; /* Ensures that the image covers the area without distortion */
+    border-radius: 8px; /* Optional: adds rounded corners */
+}
 /* Hover effect for service cards */
 .service-card:hover {
     transform: scale(1.05); /* Slightly enlarge on hover */

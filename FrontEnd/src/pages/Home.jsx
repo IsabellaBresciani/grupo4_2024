@@ -30,9 +30,10 @@ function Home() {
                 <div className="service-grid">
                     {services.map((service) => (
                         <div className="service-card" key={service.id}>
-                            <h3>{service.name}</h3>
-                            <p>{service.description}</p>
-                        </div>
+                        <h3>{service.name}</h3>
+                        <img className="service-image" src={service.imagen} alt={service.name} />
+                        <p>{service.description}</p>
+                    </div>
                     ))}
                 </div>
             </div>
