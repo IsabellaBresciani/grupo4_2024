@@ -1,0 +1,13 @@
+.profile-header {
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin: 8px 0;
+}
+.profile-header h1 {
+    margin: 0 0 8px;
+}
+.profile-header p {
+    margin: 0;
+}
