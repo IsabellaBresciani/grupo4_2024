@@ -13,28 +13,22 @@ const ProfileHeader = () => {
 export default ProfileHeader;
 */
 
-// src/components/ProfileHeader.jsx
 import React from 'react';
-import './ProfileHeader.css';
 
-function ProfileHeader() {
-  return (
-    <div className="profile-header">
-      <div className="profile-info">
-        <img src="profile_picture.png" alt="Foto de perfil" className="profile-pic" />
-        <div>
-          <h1>Nombre y Apellido</h1>
-          <p>Edad: ---</p>
-          <p>Localidad: ---</p>
-          <p>Email: ---</p>
-          <p>Teléfono: ---</p>
+const ProfileHeader = () => {
+    return (
+        <div style={{ textAlign: 'center' }}>
+            <div style={{ borderRadius: '50%', width: '100px', height: '100px', backgroundColor: '#ccc' }} />
+            <h1>Nombre y Apellido</h1>
+            <p>Edad: ---</p>
+            <p>Localidad: ---</p>
+            <p>Email: ---</p>
+            <p>Teléfono: ---</p>
+            <p>Puntuación: ★★★★☆</p>
+            <p>Descripción: Lorem ipsum dolor sit amet...</p>
         </div>
-      </div>
-      <div className="rating">
-        <p>Puntuación: ★★★★★</p>
-      </div>
-    </div>
-  );
-}
+    );
+};
 
 export default ProfileHeader;
+
