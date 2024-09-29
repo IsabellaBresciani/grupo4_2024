@@ -7,7 +7,7 @@ const pool = require('../config/database');  // Importar la conexion de la base 
 router.post('/', async (req, res) => {
 
     // Acceder al primer elemento del array
-    const { dni, nombre, apellido, fecha_nacimiento, email, usuario, password } = req.body[0];
+    const { dni, nombre, apellido, fecha_nacimiento, email, usuario, password } = req.body;
 
     // Validación básica
     if (!dni || !nombre || !apellido || !fecha_nacimiento || !email || !usuario || !password) {
