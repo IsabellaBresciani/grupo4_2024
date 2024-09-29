@@ -60,13 +60,15 @@
 /* Aseguramos que los iconos y el texto estén alineados correctamente */
 .menu-item {
     font-size: 1.1em;
-    padding: 12px 0;
+    padding: 12px 20px;
     display: flex;
     align-items: center; /* Centramos verticalmente el icono y el texto */
     gap: 15px; /* Espacio entre el icono y el texto */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     color: white;
+    border-radius: 10px;
+    text-align: left; /* Aseguramos que el texto se alinee a la izquierda */
 }
 
 .menu-item i {
@@ -91,6 +93,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombreado adicional */
     color: white;
+    font-weight: bold; /* Aumenta la visibilidad del texto en la sección activa */
 }
 
 /* Cuando la sidebar está cerrada */
