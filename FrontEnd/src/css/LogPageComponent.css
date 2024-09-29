@@ -1,0 +1,39 @@
+
+
+.logo {
+    width: 10vw;
+    margin-bottom: 8vh;
+    height: auto;
+}
+
+.register-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start  ;
+    padding: 5vw;
+    color: white;
+    max-width: 45vw;
+}
+
+.register-info-title {
+    font-size: 3em;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: black;
+}
+
+.register-info-title-2 {
+    font-size: 6em;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: 700;
+}
+
+.register-info-text {
+    color: white;
+    line-height: 1.5;
+    margin-bottom: 1em;
+}
+

@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import Layout from '../components/Layout';
+import axios from 'axios'; // Import axios
+import LogPageComponent from '../components/LogPageComponent';
 import '../css/Register.css';
-import initialUsers from "../jsons/json_users.json";
 import logo from '../assets/logo.png';
 import Swal from 'sweetalert2';
+import initialUsers from "../jsons/json_users.json";
+import LayoutWithoutLogin from '../components/LayoutWithoutLogin';
 
 function Register() {
-   
     const [formData, setFormData] = useState({
         nombre: '',
         apellido: '',
         dni: '',
-        telefono: '',
+        fecha_nacimiento: '',
         email: '',
-        contraseña: '',
-        repetirContraseña: '',
+        usuario: '',
+        password: '',
     });
 
     const handleChange = (e) => {
@@ -25,77 +26,74 @@ function Register() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-      
-    
 
-        console.log('Registered user:', formData);
-    
-        // Display success alert
-        Swal.fire({
-            title: 'Success!',
-            text: 'You have registered successfully.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-        });
-    
-        // Clear the form
-        setFormData({
-            nombre: '',
-            apellido: '',
-            dni: '',
-            telefono: '',
-            email: '',
-            contraseña: '',
-            repetirContraseña: '',
-        });
+        // Prepare data to match back-end expectations
+        const dataToSend = {
+            ...formData,
+            password: formData.password // Assuming 'contraseña' is the password
+        };
+
+        try {
+            console.log(dataToSend);
+            const response = await axios.post('http://localhost:8080/register', dataToSend);
+            
+            Swal.fire({
+                title: 'Success!',
+                text: response.data.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+
+            // Clear the form
+            setFormData({
+                nombre: '',
+                apellido: '',
+                dni: '',
+                fecha_nacimiento: '',
+                email: '',
+                usuario: '',
+                password: ''
+            });
+        } catch (error) {
+            console.error('Error registering user:', error);
+            Swal.fire({
+                title: 'Error',
+                text: error.response ? error.response.data.error : 'There was an issue with your registration.',
+                icon: 'error',
+                confirmButtonText: 'Try again'
+            });
+        }
     };
 
     return (
-        <Layout>
-            <div className='register-container'>
-               
-            <div className="register">
-            
-                <div className="register-info">
-                <img class="logo" src={logo} alt="ServiciosYa logo" />
-                    <h2 className="register-info-title">SOMOS</h2>
-                    <h2 className="register-info-title-2">ServiciosYa</h2>
-                    <p className="register-info-text">
-                        Una plataforma que conecta a personas que necesitan ayuda
-                        con tareas domesticas con profesionales que ofrecen estos
-                        servicios.
-                    </p>
-                    <p className="register-info-text">
-                        Podes buscar jardineros, plomeros, paseadores de perros,
-                        peluquero, instalador de aires, profesor de matemáticas
-                        para tu hijo o cualquier servicio que se te ocurra;
-                        filtrando por ubicación, tipo de tarea y precio. Si sos
-                        un profesional, también podes crear un perfil para ofrecer
-                        tus servicios y llegar a nuevos clientes.
-                    </p>
-                </div>
-                <div className="register-form">
-                    <form onSubmit={handleSubmit}>
-                        {Object.keys(formData).map((key) => (
-                            <div key={key}>
-                                <input
-                                    type={key.includes('contraseña') ? 'password' : 'text'}
-                                    name={key}
-                                    value={formData[key]}
-                                    onChange={handleChange}
-                                    placeholder={key[0].toUpperCase() + key.slice(1)}
-                                    required
-                                />
-                            </div>
-                        ))}
-                        <button type="submit">Register</button>
-                    </form>
-                </div>
+        // (No changes needed in JSX for layout)
+// Just ensure LogPageComponent aligns properly with the style above
+<LayoutWithoutLogin>
+    <div className='register-container'>
+       
+            <LogPageComponent className="register-info" />
+            <div className='form-containter'>
+                <form onSubmit={handleSubmit}>
+                    {Object.keys(formData).map((key) => (
+                        <div key={key}>
+                            <input
+                                type={key.includes('password') ? 'password' : 'text'}
+                                name={key}
+                                value={formData[key]}
+                                onChange={handleChange}
+                                placeholder={key[0].toUpperCase() + key.slice(1)}
+                                required
+                            />
+                        </div>
+                    ))}
+                    <button type="submit">Register</button>
+                </form>
             </div>
-            </div>
-        </Layout>
+     
+    </div>
+    </LayoutWithoutLogin>
     );
 }
 

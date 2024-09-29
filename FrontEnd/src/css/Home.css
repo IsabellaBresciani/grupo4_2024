@@ -1,0 +1,55 @@
+/* Container for the main content */
+.container {
+    max-width: 1200px; /* Limit the width of the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Add spacing around the content */
+}
+
+/* Search bar styling */
+.search-bar {
+    width: 100%; /* Full width */
+    padding: 10px; /* Inner spacing */
+    margin-bottom: 20px; /* Space below the search bar */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+}
+
+/* Grid layout for service cards */
+.service-grid {
+    display: grid; /* Use grid layout */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Space between cards */
+}
+
+/* Individual service card styling */
+.service-card {
+    background-color: #f9f9f9; /* Card background color */
+    border: 1px solid #ddd; /* Card border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Inner spacing */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+    transition: transform 0.2s; /* Transition for hover effect */
+}
+
+/* Hover effect for service cards */
+.service-card:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Heading styling */
+h1 {
+    font-size: 2em; /* Main title size */
+    margin-bottom: 10px; /* Space below the title */
+}
+
+h3 {
+    font-size: 1.5em; /* Subheading size */
+    margin-bottom: 5px; /* Space below the subheading */
+}
+
+/* Paragraph styling */
+p {
+    font-size: 1em; /* Paragraph font size */
+    color: #555; /* Text color */
+}
