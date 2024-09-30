@@ -9,6 +9,8 @@ import Search from './pages/Search';
 import Home from './pages/Home';
 import Profile from './pages/Profile.jsx';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+
 
 function App() {
   return (
@@ -16,6 +18,14 @@ function App() {
         <Routes>
             <Route path="/register" element={<Register />} /> 
             <Route path="/login" element={<Login />} />
+        <Route
+          path="/search"
+          element={
+            <ProtectedRoute>
+              <Search />
+            </ProtectedRoute>
+          }
+        />
             <Route path="/user/:id" element={<UserInterface />} />
             <Route path="/search" element={<Search />} />
             <Route path="/home" element={<Home />} />

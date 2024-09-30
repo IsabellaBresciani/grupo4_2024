@@ -69,15 +69,13 @@ const Profile = () => {
 
                 {/* Sección de Servicios */}
                 <div className="services-section">
-                    <h2>Mis Servicios</h2>
                     <div className="service-cards">
-                        {services.map((service) => (
                             <ServiceCard
-                                key={service.id}
-                                service={service}
+                                key={services[0].id}
+                                service={services[0].title}
                                 onEdit={handleEditService}
                             />
-                        ))}
+                
                     </div>
                 </div>
 
