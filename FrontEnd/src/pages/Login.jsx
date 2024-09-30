@@ -31,7 +31,7 @@ function Login() {
                 localStorage.setItem('jwtToken', token);
 
                 // Redirigir al usuario a la página 'search'
-                navigate('/search');
+                navigate('/profile');
             }
         } catch (error) {
             console.error('Error logging in:', error);
