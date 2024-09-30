@@ -1,0 +1,66 @@
+/* General header styles */
+.header {
+    background: linear-gradient(to bottom, #ff6702, #f69d5d); /* Gradiente de naranja a blanco */
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000; /* Asegura que el header esté por encima del contenido */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Container for header */
+.header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* Logo styles */
+.header .logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+}
+
+.header .logo a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.header .logo a:hover {
+    color: #ffd700; /* Cambia a un dorado cuando se pasa el mouse */
+}
+
+/* Navbar styles */
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar ul li {
+    display: inline-block;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.navbar ul li a:hover {
+    color: #ffd700; /* Color dorado al pasar el mouse */
+}
+
+/* Margins for sections below header */
+body {
+    margin-top: 80px; /* Espacio para evitar que el contenido se superponga al header */
+}

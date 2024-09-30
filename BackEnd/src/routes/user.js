@@ -31,7 +31,6 @@ router.get("/:nom_usuario", async (req, res) => {
 
 
 
-// Actualizar un usuario
 // Actualizar un usuario basado en el campo usuario (email o username)
 router.put('/:usuario', async (req, res) => {
     const { usuario } = req.params;
@@ -91,7 +90,7 @@ router.put('/:usuario', async (req, res) => {
       res.status(500).json({ message: 'Error al actualizar la información del usuario.', error });
     }
   });
-  
+
 
 // Eliminar un usuario exisitente 
 router.delete('/:usuario', async (req, res) => {
@@ -110,4 +109,30 @@ router.delete('/:usuario', async (req, res) => {
     }
 });
 
+// Obtener los servicios asociados a un usuario
+router.get('/:idPersona/servicios', async (req, res) => {
+  const { idPersona } = req.params;
+
+  try {
+    // Consulta para obtener los servicios asociados a la persona con la descripción del servicio
+    const [results] = await pool.query(`
+        SELECT DISTINCT sa.idServicio, s.description, sa.estado
+        FROM ServicioAsociado sa
+        JOIN service s ON sa.idServicio = s.idservice
+        WHERE sa.idPersona = ?
+    `, [idPersona]);
+
+    // Verificar si se encontraron resultados
+    if (results.length === 0) {
+        return res.status(404).json({ error: 'No se encontraron servicios asociados para esta persona' });
+    }
+
+    // Enviar los resultados como respuesta
+    res.json(results);
+
+  } catch (error) {
+    console.error('Error en la consulta:', error); // Log para ver el error en el servidor
+    return res.status(500).json({ error: 'Error al obtener los servicios asociados', details: error.message });
+  }
+});
 module.exports = router;
