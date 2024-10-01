@@ -1,6 +1,6 @@
 import React from 'react';
 import LayoutWithoutLogin from '../components/LayoutWithoutLogin'; // Asegúrate de usar el mismo layout que en las otras páginas
-import '../css/contact.css'; 
+import '../css/Contact.css'; 
 
 const Contact = () => {
   return (

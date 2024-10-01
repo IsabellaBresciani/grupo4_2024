@@ -8,7 +8,7 @@ import UserInterface from './pages/UserInterface';
 import Search from './pages/Search';
 import Home from './pages/Home';
 import Profile from './pages/Profile.jsx';
-import Contact from './pages/contact.jsx'; // Importa el componente de contacto
+import Contact from './pages/Contact.jsx'; // Importa el componente de contacto
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 

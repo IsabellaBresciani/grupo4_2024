@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import LayoutWithoutLogin from '../components/LayoutWithoutLogin';
-import '../css/Login.css';
+
 import LogPageComponent from '../components/LogPageComponent';
 import axios from 'axios'; // Import axios
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-
+import '../css/Login.css';
 function Login() {
     const [usuario, setUser] = useState('');
     const [password, setPassword] = useState('');
