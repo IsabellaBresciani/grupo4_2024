@@ -1,25 +1,11 @@
-const dotenv = require("dotenv");
-const bcrypt = require('bcryptjs');
 const { Sequelize } = require('sequelize');
 
-// dotenv.config({path: '../../.env'});
-/*
-const pool = mysql.createPool({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-  port: process.env.PORT_DB,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
-*/ 
+require('dotenv').config();
 
-const sequelize = new Sequelize('servicioya', 'grupodesa', 'admin', {
-  host: '190.188.16.203',
+const sequelize = new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
+  host: process.env.HOST,
   dialect: 'mysql',
-  port: 3306,
+  port: process.env.PORT_DB,
   logging: false,
 });
 
