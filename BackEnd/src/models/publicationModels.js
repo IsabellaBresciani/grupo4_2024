@@ -1,4 +1,4 @@
-class Publicacion {
+class Publication {
     constructor(idPublicacion, fecha, descripcion, titulo) {
       this.idPublicacion = idPublicacion;
       this.fecha = fecha;
@@ -17,6 +17,12 @@ class Publicacion {
       const [rows] = await connection.query(sql, [idPublicacion]);
       return rows[0];
     }
+
+    static async findByUserId(connection, idUser) {
+      const sql = 'SELECT p.idPublicacion, p.titulo, p.descripcion, p.fecha, p.imagen, u.usuario FROM servicioya.publicacion p JOIN servicioya.publicacionxpersona pxp ON p.idPublicacion =  pxp.idPublicacion JOIN servicioya.user u ON pxp.iduser = u.id WHERE pxp.iduser = ?'
+      const [rows] = await connection.query(sql, [idUser]);
+      return rows;
+    }
   
     static async update(connection, { idPublicacion, descripcion, titulo }) {
       const sql = `UPDATE Publicacion SET descripcion = ?, titulo = ? WHERE idPublicacion = ?`;
@@ -31,5 +37,5 @@ class Publicacion {
     }
   }
   
-  module.exports = Publicacion;
+  module.exports = Publication;
   

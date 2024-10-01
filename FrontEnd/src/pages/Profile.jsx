@@ -7,17 +7,7 @@ import '../css/Profile.css';
 import axios from 'axios'; 
 
 const Profile = () => {
-    const fetchPosts = async () => {
-        try {
-            const response = await axios.get('http://localhost:4444/api/publication/17/posts');  // Cambia el 17 por el idPersona dinámico si es necesario
-            console.log(response.data)
-            setPosts(response.data);  // Guardar los servicios únicos
-        } catch (err) {
-            setError('Error al cargar los posts');
-        } finally {
-            setLoading(false);
-        }
-    };
+    
     const [posts, setPosts] = useState([]);
     const [services, setServices] = useState([ ]);
     const [loading, setLoading] = useState(true);
@@ -32,7 +22,17 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('http://localhost:4444/api/publication/17/posts');  // Cambia el 17 por el idPersona dinámico si es necesario
+                console.log(response.data)
+                setPosts(response.data);  // Guardar los servicios únicos
+            } catch (err) {
+                setError('Error al cargar los posts');
+            } finally {
+                setLoading(false);
+            }
+        };
     
          // Función para obtener los servicios del usuario
         const fetchServices = async () => {
