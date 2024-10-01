@@ -63,30 +63,32 @@ router.get('/:review_id', async (req,res) =>{
 
 //------------------------
 // Actualizar una reseña
-router.put('/:review_id', async (req, res) => {
-  const {review_id } = req.params;
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
   const { precio, atencion, calidad, tiempo, comentario } = req.body;
 
-  if (!precio || !atencion || !calidad || !tiempo || !comentario ){
-    return res.status(400).json({ error: 'Todos los campos son obligatorios.'})
-  }
-
   try {
-    const review = Review.findByPk(review_id);
-    
-    if (!review) return res.status(404).json({message: 'Reseña no encontrada'});
+    // Verificar si la reseña existe
+    const review = await Review.findByPk(id);
 
+    if (!review) {
+      return res.status(404).json({ error: 'Reseña no encontrada' });
+    }
+
+    // Actualizar la reseña con los datos recibidos
     await review.update({
-      precio,           
-      atencion,     
+      precio,
+      atencion,
       calidad,
       tiempo,
-      comentario 
+      comentario
     });
 
-    res.json({message: 'Reseña actualizada'});
-  }catch (error) {
-      res.status(500).json({message: 'Error al actualizar la reseña.', error});
+    // Responder con éxito
+    return res.status(200).json({ message: 'Reseña actualizada exitosamente', review });
+  } catch (error) {
+    console.error('Error al modificar la reseña:', error);
+    return res.status(500).json({ error: 'Error en el servidor' });
   }
 });
 
