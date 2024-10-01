@@ -1,33 +1,29 @@
-class Service {
-    constructor(idServicio, descripcion) {
-      this.idServicio = idServicio;
-      this.descripcion = descripcion;
-    }
+const { Model, DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+
+class Service extends Model{}
+
+Service.init({
+  idservice: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  imagen: {
+    type: DataTypes.STRING, // Se asume que la foto será una URL o un nombre de archivo
+    allowNull: true, // Puede ser nulo si no es obligatorio
+  },
   
-    static async create(connection, { descripcion }) {
-      const sql = `INSERT INTO Servicio (descripcion) VALUES (?)`;
-      const [result] = await connection.query(sql, [descripcion]);
-      return result;
-    }
-  
-    static async findById(connection, idServicio) {
-      const sql = `SELECT * FROM Servicio WHERE idServicio = ?`;
-      const [rows] = await connection.query(sql, [idServicio]);
-      return rows[0];
-    }
-  
-    static async update(connection, { idServicio, descripcion }) {
-      const sql = `UPDATE Servicio SET descripcion = ? WHERE idServicio = ?`;
-      const [result] = await connection.query(sql, [descripcion, idServicio]);
-      return result;
-    }
-  
-    static async delete(connection, idServicio) {
-      const sql = `DELETE FROM Servicio WHERE idServicio = ?`;
-      const [result] = await connection.query(sql, [idServicio]);
-      return result;
-    }
-  }
-  
-  module.exports = Service;
+}, {
+  sequelize,
+  modelName: 'Service',
+  tableName: 'service',
+  timestamps: false,
+});
+
+module.exports = Service;
   

@@ -1,17 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database'); // Asegúrate de tener un archivo 'database.js' para crear el pool de conexión con MySQL
+const Service = require('../models/serviceModels'); // Asegúrate de tener un archivo 'database.js' para crear el pool de conexión con MySQL
 
 // Obtener todos los servicios
 router.get("/", async (req, res) => {
     try {
-        const [results] = await pool.query('SELECT * FROM servicioya.service');
-        res.json(results);
+        const servicios = await Service.findAll();
+        return res.json(servicios);
     } catch (error) {
-        return res.status(500).json({ error: 'Error en la consulta' });
+        console.error('Error al obtener las personas:', error);
+        return res.status(500).json({ error: 'Error al obtener las personas' });
     }
 });
-
+/*
 // Crear un nuevo servicio
 router.post("/", async (req, res) => {
     const { description } = req.body;
@@ -83,5 +84,5 @@ router.delete('/:service_id', async (req, res) => {
         return res.status(500).json({ error: 'Error al eliminar el servicio' });
     }
 });
-
+*/
 module.exports = router;
