@@ -8,8 +8,8 @@ router.get("/", async (req, res) => {
         const servicios = await Service.findAll();
         return res.json(servicios);
     } catch (error) {
-        console.error('Error al obtener las personas:', error);
-        return res.status(500).json({ error: 'Error al obtener las personas' });
+        console.error('Error al obtener las servicios:', error);
+        return res.status(500).json({ error: 'Error al obtener las servicios' });
     }
 });
 /*
