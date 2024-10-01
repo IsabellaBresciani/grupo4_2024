@@ -58,11 +58,9 @@ const ServiceCard = () => {
         try {
             const dataToSend = {
                 idPersona: 17,  // El ID de la persona
-                idServicio: newService.selectedService,  // Asegúrate de enviar el ID del servicio seleccionado
+                idServicio: newService.selectedService, 
                 estado: newService.estado
             };
-
-            console.log('Datos que se envían al servidor:', dataToSend);  // Verifica los datos antes de enviarlos
 
             await axios.post('http://localhost:4444/api/user/17/servicios', dataToSend);
         
@@ -92,7 +90,6 @@ const ServiceCard = () => {
 
     return (
         <div className="services-section">
-            <h2>Mis Servicios</h2>
             <div className="service-cards">
                 {services.length > 0 ? (
                     services.map((service) => (

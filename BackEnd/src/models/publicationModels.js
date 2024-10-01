@@ -1,14 +1,16 @@
 class Publication {
-    constructor(idPublicacion, fecha, descripcion, titulo) {
+    constructor(idPublicacion, fecha, descripcion, titulo, imagen, idUser) {
       this.idPublicacion = idPublicacion;
       this.fecha = fecha;
       this.descripcion = descripcion;
       this.titulo = titulo;
+      this.imagen = imagen;
+      this.idUser = idUser;
     }
   
-    static async create(connection, { fecha, descripcion, titulo }) {
-      const sql = `INSERT INTO Publicacion (fecha, descripcion, titulo) VALUES (?, ?, ?)`;
-      const [result] = await connection.query(sql, [fecha, descripcion, titulo]);
+    static async create(connection, { fecha, descripcion, titulo, imagen, idUser }) {
+      const sql = `INSERT INTO Publicacion (fecha, descripcion, titulo, imagen, idUser) VALUES (?, ?, ?, ?, ?)`;
+      const [result] = await connection.query(sql, [fecha, descripcion, titulo, imagen, idUser]);
       return result;
     }
   
@@ -19,7 +21,7 @@ class Publication {
     }
 
     static async findByUserId(connection, idUser) {
-      const sql = 'SELECT p.idPublicacion, p.titulo, p.descripcion, p.fecha, p.imagen, u.usuario FROM servicioya.publicacion p JOIN servicioya.publicacionxpersona pxp ON p.idPublicacion =  pxp.idPublicacion JOIN servicioya.user u ON pxp.iduser = u.id WHERE pxp.iduser = ?'
+      const sql = 'SELECT p.idPublicacion, p.titulo, p.descripcion, p.fecha, p.imagen, u.usuario FROM servicioya.publicacion p JOIN servicioya.user u ON p.idUser = u.id WHERE p.idUser = ?'
       const [rows] = await connection.query(sql, [idUser]);
       return rows;
     }

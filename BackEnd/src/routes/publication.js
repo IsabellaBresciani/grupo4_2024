@@ -6,14 +6,21 @@ const router = express.Router();
 
 //crear publicacion.
 router.post('/', async (req, res) => {
-  const { idPublicacion, fecha, descripcion, titulo } = req.body;
+  const {fecha, descripcion, titulo, imagen, idUser} = req.body;
   try {
-    const result = await Publication.create( pool, { idPublicacion, fecha, descripcion, titulo });
+
+     // Verifica si todos los datos necesarios están presentes
+     if (!titulo || !descripcion || !idUser) {
+      return res.status(400).json({ error: 'Faltan datos en la solicitud.' });
+  }
+
+    const result = await Publication.create( pool, {fecha, descripcion, titulo, imagen, idUser });
     res.status(201).json({ message: 'Publicacion creada', result });
   } catch (error) {
     res.status(500).json({ message: 'Error al crear la publicacion', error });
   }
 });
+
 
 // Obtener las publicaciones asociadas a un usuario
 router.get('/:idPersona/posts', async (req, res) => {
