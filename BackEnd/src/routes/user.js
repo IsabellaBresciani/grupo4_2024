@@ -1,17 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database');  // Importar la conexión de la base de datos
+const Persona = require('../models/userModels'); // Importar el modelo Persona
 
-// Listar usuarios
-  router.get("/", async (req, res) => {
-    try {
-        const [results] = await pool.query('SELECT * FROM servicioya.user');
-        res.json(results);
-    } catch (error) {
-        return res.status(500).json({ error: 'Error en la consulta' });
-    }
+// Obtener todas las personas
+router.get('/', async (req, res) => {
+  try {
+    const personas = await Persona.findAll(); // Obtiene todas las personas
+    return res.json(personas); // Devuelve la lista de personas
+  } catch (error) {
+    console.error('Error al obtener las personas:', error);
+    return res.status(500).json({ error: 'Error al obtener las personas' });
+  }
 });
 
+module.exports = router;
+/*
 // Buscar usuario 
 router.get("/:nom_usuario", async (req, res) => {
     const { nom_usuario } = req.params;
@@ -194,4 +197,4 @@ router.put('/:idPersona/servicios/:idServicio', async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router;*/

@@ -1,6 +1,6 @@
-const mysql = require("mysql2/promise");
 const dotenv = require("dotenv");
 const bcrypt = require('bcryptjs');
+const { Sequelize } = require('sequelize');
 
 // dotenv.config({path: '../../.env'});
 /*
@@ -15,24 +15,20 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 */ 
-const pool = mysql.createPool({
+
+const sequelize = new Sequelize('servicioya', 'grupodesa', 'admin', {
   host: '190.188.16.203',
-  user: 'grupodesa',
-  password: 'admin',
-  database: 'servicioya',
-  port: '3306',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  dialect: 'mysql',
+  port: 3306,
+  logging: false,
 });
 
-pool.getConnection()
-  .then(conn => {
-    console.log("Conexión exitosa a la base de datos");
-    conn.release();
+sequelize.authenticate()
+  .then(() => {
+    console.log('Conexión exitosa a la base de datos.');
   })
   .catch(err => {
-    console.error("Error conectándose a la base de datos:", err);
+    console.error('Error al conectar a la base de datos:', err);
   });
 
-module.exports = pool;
+module.exports = sequelize;
