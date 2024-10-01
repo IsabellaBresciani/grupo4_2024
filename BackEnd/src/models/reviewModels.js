@@ -10,10 +10,10 @@ Review.init({
     primaryKey: true,
     autoIncrement: true
   },
-  precio: DataTypes.FLOAT,
-  atencion: DataTypes.FLOAT,
-  calidad: DataTypes.FLOAT,
-  tiempo: DataTypes.FLOAT,
+  precio: DataTypes.INTEGER,
+  atencion: DataTypes.INTEGER,
+  calidad: DataTypes.INTEGER,
+  tiempo: DataTypes.INTEGER,
   comentario: DataTypes.TEXT,
   idAutor: {
     type: DataTypes.INTEGER,
