@@ -40,8 +40,7 @@ const ProfileHeader = () => {
             <div className="profile-description">
                 <h3>Descripción:</h3>
                 <p>
-                    Body text for whatever you’d like to say. Add main takeaway points, quotes, anecdotes, 
-                    or even a very very short story.
+                    Ingrese una breve descripcion.
                 </p>
                 <div className="edit-description-icon">
                     <i className="fas fa-edit"></i>

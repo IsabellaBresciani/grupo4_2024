@@ -1,58 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import ProfileHeader from '../components/ProfileHeader';
 import ServiceCard from '../components/ServiceCard';
 import PostCard from '../components/PostCard';
 import '../css/Profile.css';
+import axios from 'axios'; 
 
 const Profile = () => {
-    const [services, setServices] = useState([
-        {
-            id: 1,
-            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQP-szK1VYsCqRCdWCsmiRQFYc-rUUSWQO8GA&s',
-            title: 'Jardinería',
-            description: 'Descripción corta del servicio.',
-            rating: 4.5
-        },
-        {
-            id: 2,
-            image: 'https://lavado-de-cisternas.com/wp-content/uploads/2021/10/plomeros-clean-center.jpg',
-            title: 'Plomeria',
-            description: 'Descripción corta del servicio.',
-            rating: 4
-        },
-        {
-            id: 3,
-            image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-qVgFyo43RDWxwfeHNV6JY3GdVQSc0laBQw&s%22',
-            title: 'Electricista',
-            description: 'Descripción corta del servicio.',
-            rating: 4.8
-        }
-    ]);
+    
+    const [posts, setPosts] = useState([]);
+    const [services, setServices] = useState([ ]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const [posts, setPosts] = useState([
-        {
-            id: 1,
-            user: 'Usuario01',
-            date: '01/01/2024',
-            content: 'Descripción de la publicación.',
-            image: 'ruta/a/imagen4.jpg'
-        },
-        {
-            id: 2,
-            user: 'Usuario01',
-            date: '02/01/2024',
-            content: 'Otra descripción de la publicación.',
-            image: 'ruta/a/imagen5.jpg'
-        }
-    ]);
-
-    const handleEditService = (updatedService) => {
-        const updatedServices = services.map((service) =>
-            service.id === updatedService.id ? updatedService : service
-        );
-        setServices(updatedServices); // Actualiza el estado de los servicios con los nuevos datos
-    };
 
     const handleEditPost = (updatedPost) => {
         const updatedPosts = posts.map((post) =>
@@ -60,6 +20,37 @@ const Profile = () => {
         );
         setPosts(updatedPosts); // Actualiza el estado de las publicaciones
     };
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('http://localhost:4444/api/publication/17/posts');  // Cambia el 17 por el idPersona dinámico si es necesario
+                console.log(response.data)
+                setPosts(response.data);  // Guardar los servicios únicos
+            } catch (err) {
+                setError('Error al cargar los posts');
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+         // Función para obtener los servicios del usuario
+        const fetchServices = async () => {
+            try {
+                const response = await axios.get('http://localhost:4444/api/user/17/servicios');  // Cambia el 17 por el idPersona dinámico si es necesario
+                console.log(response.data)
+                setServices(response.data);  // Guardar los servicios únicos
+            } catch (err) {
+                setError('Error al cargar los servicios');
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchPosts();
+        fetchServices();
+        
+    }, []); 
 
     return (
         <div className="profile-page">
@@ -70,11 +61,8 @@ const Profile = () => {
                 {/* Sección de Servicios */}
                 <div className="services-section">
                     <div className="service-cards">
-                            <ServiceCard
-                                key={services[0].id}
-                                service={services[0].title}
-                                onEdit={handleEditService}
-                            />
+                        
+                            <ServiceCard/>
                 
                     </div>
                 </div>
@@ -83,13 +71,21 @@ const Profile = () => {
                 <div className="posts-section">
                     <h2>Mis Publicaciones</h2>
                     <div className="post-cards">
-                        {posts.map((post) => (
-                            <PostCard
-                                key={post.id}
+                        {posts.length > 0 ? (posts.map((post)=>(
+                                <PostCard
+                                key={post.idPublicacion}
                                 post={post}
                                 onEdit={handleEditPost}
                             />
-                        ))}
+
+                        )) ) : (
+                            <p>No hay Publicaciones asociadas</p>
+                        )
+                    };
+                                
+                        
+                            
+                        
                     </div>
                 </div>
             </div>

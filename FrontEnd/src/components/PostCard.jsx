@@ -1,56 +1,28 @@
-import React, { useState } from 'react';
-import '../css/PostCard.css'; //Asegúrate de crear este archivo CSS también
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';  
+import '../css/PostCard.css'; // Asegúrate de crear este archivo CSS
 
-const PostCard = ({ post, onEdit }) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [postData, setPostData] = useState(post);
-
-    const handleEditClick = () => {
-        setIsEditing(!isEditing);
-    };
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setPostData({ ...postData, [name]: value });
-    };
-
-    const handleSaveClick = () => {
-        onEdit(postData); // Llama a la función para actualizar la publicación
-        setIsEditing(false); // Cierra el modo de edición
-    };
+const PostCard = (props) => {
+    const {post} = props
+    console.log(post)
 
     return (
-        <div className="post-card">
-            {isEditing ? (
-                <div>
-                    <input
-                        type="text"
-                        name="title"
-                        value={postData.title}
-                        onChange={handleInputChange}
-                    />
-                    <textarea
-                        name="content"
-                        value={postData.content}
-                        onChange={handleInputChange}
-                    />
-                    <button onClick={handleSaveClick}>Guardar</button>
-                </div>
-            ) : (
-                <div>
-                    <div className="post-header">
-                        <i className="fas fa-user-circle"></i>
-                        <span className="post-user">{postData.user}</span>
-                        <span className="post-date">{postData.date}</span>
-                    </div>
-                    <div className="post-content">
-                        <img src={postData.image} alt={postData.title} />
-                        <p>{postData.content}</p>
-                    </div>
-                    <button onClick={handleEditClick}>Editar</button>
-                </div>
-            )}
-        </div>
+       
+                
+                        <div className="post-card" key={post.idPublicacion}>
+                            <div className="post-header"> 
+                                <i className="fas fa-user-circle"></i>
+                                <span className="post-user">{post.usuario}</span>
+                                <span className="post-date">{new Date(post.fecha).toLocaleDateString()}</span>
+                            </div>
+                            <div className="post-content">
+                                <h3>{post.titulo}</h3>  {/* Mostrar el título de la publicación */}
+                                <img src={post.imagen} alt={post.titulo} className="post-image" />
+                                <p>{post.descripcion}</p>
+                            </div>
+                        </div>
+       
+        
     );
 };
 
