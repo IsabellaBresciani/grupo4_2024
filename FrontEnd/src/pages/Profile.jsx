@@ -25,8 +25,7 @@ const Profile = () => {
                 <div className="services-section">
                     <h2>Mis Servicios</h2>
                     <div className="service-cards">
-                            <ServiceCard/>
-                
+                        <ServiceCard/>
                     </div>
                 </div>
 

@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import LayoutWithoutLogin from '../components/LayoutWithoutLogin';
-
 import LogPageComponent from '../components/LogPageComponent';
 import axios from 'axios'; // Import axios
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import '../css/Login.css';
+import styles from "../css/Login.styles"
+
 function Login() {
     const [usuario, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate(); 
     
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -72,7 +74,7 @@ function Login() {
                                 placeholder="Contraseña"
                             />
                         </div>
-                        <button type="submit">Login</button>
+                        <button style={styles.button_sumbit}>Login</button>
                     </form>
                 </div>
             </div>

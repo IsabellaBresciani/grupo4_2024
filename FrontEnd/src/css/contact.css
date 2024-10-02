@@ -79,7 +79,7 @@
     box-sizing: border-box;
 }
 
-button[type="submit"] {
+.contactButton {
     background-color: #ff6702;
     color: white;
     border: none;
@@ -90,6 +90,6 @@ button[type="submit"] {
     transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
+.contactButton:hover {
     background-color: #e65c00;
 }
