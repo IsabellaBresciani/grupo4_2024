@@ -34,7 +34,7 @@ router.get("/:nom_usuario", async (req, res) => {
 // Actualizar un usuario basado en el campo usuario (email o username)
 router.put('/:usuario', async (req, res) => {
     const { usuario } = req.params;
-    const { dni, nombre, apellido, fecha_nacimiento, email, password } = req.body;
+    const { dni, nombre, apellido, foto, fecha_nacimiento, email, password, telefono } = req.body;
   
     // Crear una lista de campos a actualizar dinámicamente
     const fields = [];
@@ -43,6 +43,10 @@ router.put('/:usuario', async (req, res) => {
     if (dni !== undefined) {
       fields.push('dni = ?');
       values.push(dni);
+    }
+    if (foto !== undefined) {
+      fields.push('foto = ?');
+      values.push(foto);
     }
     if (nombre !== undefined) {
       fields.push('nombre = ?');
@@ -64,6 +68,10 @@ router.put('/:usuario', async (req, res) => {
       fields.push('password = ?');
       values.push(password);
     }
+    if (telefono !== undefined) {
+      fields.push('telefono = ?');
+      values.push(telefono);
+    }
   
     // Verificar si se ha proporcionado al menos un campo para actualizar
     if (fields.length === 0) {
@@ -83,7 +91,6 @@ router.put('/:usuario', async (req, res) => {
       if (result.affectedRows === 0) {
         return res.status(404).json({ message: 'Usuario no encontrado.' });
       }
-  
       res.json({ message: 'Información del usuario actualizada exitosamente.' });
     } catch (error) {
       console.error(error);

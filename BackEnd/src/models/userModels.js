@@ -1,5 +1,5 @@
   class Persona {
-    constructor(idPersona, dni, nombre, apellido, fechaNac, email, nombreUsuario, contrasena) {
+    constructor(idPersona, dni, nombre, apellido, fechaNac, email, nombreUsuario, contrasena, foto, telefono) {
       this.idPersona = idPersona;
       this.dni = dni;
       this.nombre = nombre;
@@ -8,6 +8,8 @@
       this.mail = email;
       this.nombreUsuario = nombreUsuario;
       this.contrasena = contrasena;
+      this.foto = foto;
+      this.telefono = telefono;
     }
   
     static async create(connection, { dni, nombre, apellido, fechaNac, email, nombreUsuario, contrasena }) {
