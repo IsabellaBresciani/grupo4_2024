@@ -17,7 +17,7 @@
     }
   
     static async findById(connection, idPersona) {
-      const sql = `SELECT * FROM Persona WHERE idPersona = ?`;
+      const sql = `SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento , l.nombre FROM servicioya.user AS u JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad WHERE u.id = ?;`;
       const [rows] = await connection.query(sql, [idPersona]);
       return rows[0];
     }

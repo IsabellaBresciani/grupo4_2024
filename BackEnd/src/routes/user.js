@@ -17,7 +17,7 @@ router.get("/:nom_usuario", async (req, res) => {
     const { nom_usuario } = req.params;
     
     try {
-        const [results] = await pool.query('SELECT * FROM servicioya.user WHERE usuario = ?', [nom_usuario]);
+        const [results] = await pool.query('SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento , l.nombre AS localidad FROM servicioya.user AS u JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad WHERE u.usuario = ?', [nom_usuario]);
         
         if (results.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });

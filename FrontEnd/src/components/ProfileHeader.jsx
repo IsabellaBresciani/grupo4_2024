@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/ProfileHeader.css'; // Asegúrate de crear este archivo CSS también
+import '../css/ProfileHeader.css';
 
 const ProfileHeader = () => {
     const [userData, setUserData] = useState({});
@@ -9,8 +9,8 @@ const ProfileHeader = () => {
 
     const getData = async () => {
         try {
-            const userD = await axios.get(`http://localhost:4444/api/user/eliri`);
-            setUserData(userD.data); // Asegúrate de acceder correctamente al objeto de datos
+            const userD = await axios.get(`http://localhost:4444/api/user/jonyortega`);
+            setUserData(userD.data);
         } catch (err) {
             setError('Error al obtener los datos del usuario');
         } finally {
@@ -22,15 +22,14 @@ const ProfileHeader = () => {
         getData();
     }, []);
 
-    // Función para formatear la fecha a YYYY/MM/DD
     const formatDate = (fechaISO) => {
         const fecha = new Date(fechaISO);
         const year = fecha.getFullYear();
-        const month = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Asegura dos dígitos para el mes
-        const day = fecha.getDate().toString().padStart(2, '0'); // Asegura dos dígitos para el día
+        const month = (fecha.getMonth() + 1).toString().padStart(2, '0'); 
+        const day = fecha.getDate().toString().padStart(2, '0'); 
         return `${year}/${month}/${day}`;
     };
-
+    console.log(userData);
     if (loading) return <p>Cargando datos...</p>;
     if (error) return <p>{error}</p>;
 
@@ -64,7 +63,7 @@ const ProfileHeader = () => {
                         <i className="fas fa-user"></i> 
                         Edad: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
                     </li>
-                    <li><i className="fas fa-map-marker-alt"></i> Localidad: {userData.data.localidad}</li>
+                    <li><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>
                     <li><i className="fas fa-envelope"></i> Email: {userData.email}</li>
                     <li><i className="fas fa-phone"></i> Teléfono: {userData.telefono}</li>
                 </ul>
