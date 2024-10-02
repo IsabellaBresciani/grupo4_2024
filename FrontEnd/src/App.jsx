@@ -19,6 +19,7 @@ function App() {
             <Route path="/register" element={<Register />} /> 
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<Contact />} /> {/* Añadir la ruta de Contact */}
+            {/*
             <Route
               path="/search"
               element={
@@ -27,6 +28,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            */}
             <Route path="/user/:id" element={<UserInterface />} />
             <Route path="/search" element={<Search />} />
             <Route path="/home" element={<Home />} />
