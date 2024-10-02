@@ -19,8 +19,16 @@ function App() {
     <Router>
         <Routes>
             <Route path="/register" element={<Register />} /> 
-            <Route path="/contact" element={<Contact />} /> 
-            <Route path="/search" element={ <ProtectedRoute> <Search /></ProtectedRoute>}/>
+            <Route path="/login" element={<Login />} />
+            <Route path="/contact" element={<Contact />} /> {/* Añadir la ruta de Contact */}
+            <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <Search />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/user/:id" element={<UserInterface />} />
             <Route path="/search" element={<Search />} />
             <Route path="/home" element={<Home />} />

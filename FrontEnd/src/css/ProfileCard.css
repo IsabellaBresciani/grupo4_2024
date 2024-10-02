@@ -1,0 +1,47 @@
+.profile-card {
+    display: flex;
+    align-items: center;
+    border: 20px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .profile-details {
+    flex-grow: 1;
+  }
+  
+  .profile-details h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .profile-details p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  .profile-rating {
+    display: flex;
+    gap: 5px;
+    font-size: 20px;
+    color: #ffc107; /* Color de las estrellas */
+  }
+
+  .profile-card {
+    margin: 10px;  /* Esto crea un espacio de 10px alrededor de cada carta */
+    padding: 15px; /* Puedes ajustar también el espacio interno si es necesario */
+    border: 1px solid #ddd; /* Opcional: Añade un borde para visualización */
+  }
+

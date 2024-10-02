@@ -38,37 +38,25 @@ function Footer() {
           <div className="footer-column">
             <h4>Categorías</h4>
             <ul>
-              <li>Plomería</li>
-              <li>Jardinería</li>
-              <li>Paseadores</li>
-              <li>Lava Autos</li>
-              <li>Peluquería</li>
-              <li>Aires Acondicionados</li>
-              <li>Electricistas</li>
+              <li>Electricista</li>
+              <li>Plomero</li>
+              <li>Jardinero</li>
+              <li>Limpieza domestica</li>
+              <li>Pintor</li>
+              <li>Manetenimiento electrodomesticos</li>
             </ul>
           </div>
           <div className="footer-column">
-            <h4>More</h4>
-            <ul>
-              <li>Pileteros</li>
-              <li>Prototyping</li>
-              <li>Development features</li>
-              <li>Design systems</li>
-              <li>Blog</li>
-              <li>Support</li>
+            <ul id="ulfooter">
+              <li>Fletes</li>
+              <li>Cuidado de mascotas</li>
+              <li>Lavanderia</li>
+              <li>Carpintero</li>
+              <li>Instalador de aires acondicionados</li>
+              <li>Cerrajero</li>
             </ul>
           </div>
-          <div className="footer-column">
-            <h4>More</h4>
-            <ul>
-              <li>Best practices</li>
-              <li>Colors</li>
-              <li>Color wheel</li>
-              <li>Support</li>
-              <li>Developers</li>
-              <li>Resource library</li>
-            </ul>
-          </div>
+        
         </div>
       </div>
     </footer>
