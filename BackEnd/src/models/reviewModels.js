@@ -32,7 +32,8 @@ Review.init({
 
 // Definimos la asociación
 Persona.hasMany(Review, {
-  foreignKey: 'idAutor'
+  foreignKey: 'idAutor',
+  as: 'reviews'
 });
 
 Review.belongsTo(Persona, {

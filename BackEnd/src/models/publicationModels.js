@@ -30,7 +30,8 @@ Publicacion.init({
 
 // Definimos la asociación
 Persona.hasMany(Publicacion, {
-  foreignKey: 'idAutor'
+  foreignKey: 'idAutor',
+  as: 'publications'
 });
 
 Publicacion.belongsTo(Persona, {

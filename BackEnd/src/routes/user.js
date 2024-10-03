@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Persona = require('../models/userModels'); // Importar el modelo Persona
+const Review = require('../models/reviewModels');
 
 // Actualizar un usuario basado en el campo usuario
 router.put('/:usuario', async (req, res) => {
@@ -90,6 +91,26 @@ router.delete('/:nomusuario', async (req, res) => {
       return res.status(500).json({ error: 'Error al eliminar el Usuario' });
   }
 });
+
+//Ver todas las reseñas de una persona.
+router.get('/:nomUsuario/reviews', async (req,res) => {
+  const {nomUsuario} = req.params
+  try {
+    const autor = await Persona.findOne({where:{usuario:nomUsuario},
+      include:{
+        model: Review,
+        as: 'reviews'
+      }
+    }); 
+
+    if (!autor) return res.status(404).json({ message: 'No hay reseñas asociadas al usuario.'});
+
+    res.json(autor.reviews);
+
+  } catch (error){
+    return res.status(500).json({error: 'Error en el servidor'})
+  }
+})
 
 /*
 

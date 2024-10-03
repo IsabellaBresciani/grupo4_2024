@@ -1,6 +1,5 @@
 const express = require('express');
 const Review = require('../models/reviewModels');
-const Autor = require('../models/userModels')
 const router = express.Router();
 
 //crear una reseña.
@@ -109,18 +108,4 @@ router.delete('/:review_id', async (req, res) => {
   }
 });
 
-
-/*
-
-//Ver todas las reseñas de una persona.
-router.get('/:usuario', async (req,res) => {
-  try {
-    const [reviews] = await Review.findByUser(usuario); 
-    if (!reviews) return res.status(404).json({ message: 'No hay reseñas asociadas al usuario.'});
-    res.json(reviews);
-  } catch (error){
-    return res.status(500).json({error: 'Error en el servidor'})
-  }
-})
-*/
 module.exports = router;  

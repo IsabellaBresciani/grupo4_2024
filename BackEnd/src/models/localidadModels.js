@@ -29,7 +29,8 @@ Localidad.init({
 
 // Definimos la asociación
 Provincia.hasMany(Review, {
-    foreignKey: 'idProvincia'
+    foreignKey: 'idProvincia',
+    as: 'localidad'
   });
   
 Localidad.belongsTo(Provincia, {
