@@ -33,7 +33,6 @@ function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
   );
