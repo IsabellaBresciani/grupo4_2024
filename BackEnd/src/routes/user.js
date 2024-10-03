@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Persona = require('../models/userModels'); // Importar el modelo Persona
 const Review = require('../models/reviewModels');
+const Servicio = require('../models/serviceModels');
+const ServicioAso = require('../models/servicioAsociadoModels')
 
 // Actualizar un usuario basado en el campo usuario
 router.put('/:usuario', async (req, res) => {
@@ -112,32 +114,26 @@ router.get('/:nomUsuario/reviews', async (req,res) => {
   }
 })
 
-/*
-
-// Obtener los servicios asociados a un usuario
+//Obtener los servicios asociados a un usuario
 router.get('/:idPersona/servicios', async (req, res) => {
   const { idPersona } = req.params;
 
   try {
-    // Consulta para obtener los servicios asociados a la persona con la descripción del servicio
-    const [results] = await pool.query(`
-        SELECT DISTINCT sa.idServicio, s.description, sa.estado, s.imagen
-        FROM ServicioAsociado sa
-        JOIN service s ON sa.idServicio = s.idservice
-        WHERE sa.idPersona = ?
-    `, [idPersona]);
+    const persona = await Persona.findByPk(idPersona, {
+      include: {
+        model: Servicio,
+        as: 'services',
+      },
+    });
 
-    // Verificar si se encontraron resultados
-    if (results.length === 0) {
-        return res.status(404).json({ error: 'No se encontraron servicios asociados para esta persona' });
+    if (!persona) {
+      return res.status(404).json({ error: 'Persona no encontrada' });
     }
 
-    // Enviar los resultados como respuesta
-    res.json(results);
-
+    res.json(persona.services);  // Retorna los servicios asociados
   } catch (error) {
-    console.error('Error en la consulta:', error); // Log para ver el error en el servidor
-    return res.status(500).json({ error: 'Error al obtener los servicios asociados', details: error.message });
+    console.error('Error al obtener servicios:', error);
+    return res.status(500).json({ error: 'Error al obtener los servicios', details: error.message });
   }
 });
 
@@ -152,16 +148,21 @@ router.post('/:idPersona/servicios', async (req, res) => {
   }
 
   try {
-      // Insertar la asociación en la tabla ServicioAsociado
-      const [result] = await pool.query(`
-          INSERT INTO servicioya.servicioasociado (idPersona, idServicio, estado)
-          VALUES (?, ?, ?)
-      `, [idPersona, idServicio, estado]);
+      // Busca la persona y el servicio en la base de datos
+      const persona = await Persona.findByPk(idPersona);
+      const servicio = await Servicio.findByPk(idServicio);
 
-      // Verificar si la asociación fue exitosa
-      if (result.affectedRows === 0) {
-          return res.status(500).json({ error: 'No se pudo asociar el servicio al usuario.' });
+      // Verificar si la persona y el servicio existen
+      if (!persona || !servicio) {
+          return res.status(404).json({ error: 'Persona o servicio no encontrado' });
       }
+
+      // Crear la asociación en la tabla intermedia
+      await ServicioAso.create({
+          idPersona: persona.id,
+          idServicio: servicio.idservice,
+          estado: estado
+      });
 
       // Respuesta exitosa
       res.json({ message: 'Servicio agregado exitosamente.' });
@@ -182,22 +183,29 @@ router.put('/:idPersona/servicios/:idServicio', async (req, res) => {
   }
 
   try {
-      const [result] = await pool.query(`
-          UPDATE ServicioAsociado 
-          SET estado = ? 
-          WHERE idPersona = ? AND idServicio = ?
-      `, [estado, idPersona, idServicio]);
+      // Buscar la asociación entre Persona y Servicio
+      const servicioAsociado = await ServicioAso.findOne({
+          where: {
+              idPersona: idPersona,
+              idServicio: idServicio
+          }
+      });
 
-      if (result.affectedRows === 0) {
+      // Verificar si la asociación existe
+      if (!servicioAsociado) {
           return res.status(404).json({ error: 'Servicio asociado no encontrado.' });
       }
+
+      // Actualizar el estado
+      servicioAsociado.estado = estado;
+
+      await servicioAsociado.save();
 
       res.json({ message: 'Estado del servicio actualizado correctamente.' });
   } catch (error) {
       console.error('Error al actualizar el estado del servicio:', error);
-      return res.status(500).json({ error: 'Error en el servidor' });
+      return res.status(500).json({ error: 'Error en el servidor', details: error.message });
   }
 });
 
-*/
 module.exports = router;
