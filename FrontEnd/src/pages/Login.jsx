@@ -5,7 +5,7 @@ import axios from 'axios'; // Import axios
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import '../css/Login.css';
-import styles from "../css/Login.styles"
+
 
 function Login() {
     const [usuario, setUser] = useState('');
@@ -74,7 +74,7 @@ function Login() {
                                 placeholder="Contraseña"
                             />
                         </div>
-                        <button style={styles.button_sumbit}>Login</button>
+                        <button>Login</button>
                     </form>
                 </div>
             </div>
