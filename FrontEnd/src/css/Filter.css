@@ -1,0 +1,60 @@
+.filter-group {
+    background-color: #f1f1f1; /* Fondo del contenedor */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 15px; /* Espaciado interno */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra más ligera */
+    margin-top: 20px; /* Espacio superior */
+    width: 15%;
+}
+
+.combo-box-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ocupa el 100% del contenedor */
+}
+
+.combo-box-label {
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.combo-box {
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    width: 100%;
+    cursor: pointer;
+}
+.combo-box:focus {
+    outline: none;
+    border-color: #555; /* Un color más oscuro para indicar enfoque */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Un leve brillo alrededor */
+  }
+
+.combo-box:hover {
+    border-color: #888;
+}
+
+
+
+.slider-group {
+    margin-top: 15px; /* Espacio superior para el slider */
+    font-size: 12px;
+}
+/* Ajusta el tamaño del texto que muestra el valor del slider */
+.slider-group h5 {
+    font-size: 12px; /* Cambia a tu tamaño deseado */
+    margin: 0; /* Elimina el margen si es necesario */
+    font-weight: bold; 
+}
+
+
+.slider-group input::-webkit-slider-thumb {
+    background-color: #555; /* Color del control deslizante */
+    border-radius: 50%; /* Redondea el "thumb" */
+    cursor: pointer; /* Cambia el cursor a pointer */
+  }
+  
