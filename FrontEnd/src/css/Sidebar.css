@@ -1,8 +1,7 @@
-/* General sidebar styles */
 .sidebar {
     width: 250px;
     height: 100vh;
-    background: linear-gradient(180deg, #f9a825 0%, #ff6f00 100%); /* Colores actualizados */
+    background: linear-gradient(180deg, #f9a825 0%, #ff6f00 100%); 
     color: white;
     display: flex;
     flex-direction: column;
@@ -12,11 +11,23 @@
     left: 0;
     top: 0;
     transition: width 0.3s ease;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Añadimos sombra para un mejor contraste */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar.closed {
     width: 80px;
+}
+
+.main-content {
+    margin-left: 250px;
+    background-color: #f5f5f5;
+    min-height: 100vh; 
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+.sidebar.closed ~ .main-content {
+    margin-left: 80px;
 }
 
 .hidden {
@@ -29,12 +40,11 @@
     margin-bottom: 10px;
 }
 
-/* Estilos para el header */
 .sidebar-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Centramos el logo y el texto */
+    justify-content: center; 
     margin-bottom: 20px;
     transition: all 0.3s ease;
 }
@@ -42,74 +52,68 @@
 .logo-text {
     color: white;
     font-size: 1.3em;
-    text-align: center; /* Aseguramos que el texto esté centrado */
+    text-align: center; 
     transition: opacity 0.3s ease;
 }
 
 .sidebar.closed .logo-text {
-    opacity: 0; /* Ocultar el texto del logo cuando la sidebar está cerrada */
+    opacity: 0; 
 }
 
-/* Estilos para alinear los iconos y textos de forma centrada */
 .sidebar-menu {
     list-style: none;
     padding: 0;
     margin-top: 20px;
 }
 
-/* Aseguramos que los iconos y el texto estén alineados correctamente */
 .menu-item {
     font-size: 1.1em;
     padding: 12px 20px;
     display: flex;
-    align-items: center; /* Centramos verticalmente el icono y el texto */
-    gap: 15px; /* Espacio entre el icono y el texto */
+    align-items: center; 
+    gap: 15px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     color: white;
     border-radius: 10px;
-    text-align: left; /* Aseguramos que el texto se alinee a la izquierda */
+    text-align: left; 
 }
 
 .menu-item i {
     font-size: 1.4em;
     text-align: center;
-    color: white; /* Aseguramos que el ícono sea blanco */
-    flex-shrink: 0; /* Evitamos que los iconos se encojan */
+    color: white;
+    flex-shrink: 0; 
 }
 
-/* Forzar que los enlaces (Link) estén en blanco y sin subrayado */
 .sidebar-menu a {
-    color: white !important; /* Forzamos el color blanco */
-    text-decoration: none !important; /* Eliminamos el subrayado */
+    color: white !important; 
+    text-decoration: none !important;
     display: flex;
-    align-items: center; /* Aseguramos que el texto y los iconos estén alineados */
-    gap: 15px; /* Espacio consistente entre el icono y el texto */
+    align-items: center; 
+    gap: 15px; 
 }
 
-/* Estilos para la sección activa (Mi perfil) */
 .menu-item.active {
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombreado adicional */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
     color: white;
-    font-weight: bold; /* Aumenta la visibilidad del texto en la sección activa */
+    font-weight: bold; 
 }
 
-/* Cuando la sidebar está cerrada */
 .sidebar.closed .menu-item {
-    justify-content: center; /* Centra solo los iconos cuando está cerrada */
+    justify-content: center; 
 }
 
 .sidebar.closed .menu-item i {
-    margin-right: 0; /* Quitamos el margen derecho cuando la sidebar está cerrada */
+    margin-right: 0; 
 }
 
 .sidebar.closed .menu-item .menu-text {
-    display: none; /* Ocultamos el texto cuando la sidebar está cerrada */
+    display: none; 
 }
 
-/* Ajuste del footer */
 .sidebar-footer {
     font-size: 1.1em;
     padding: 15px 0;
@@ -117,16 +121,15 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px; /* Espacio entre el icono y el texto */
+    gap: 10px; 
     margin-bottom: 20px;
-    color: white; /* Aseguramos que el texto del footer sea blanco */
+    color: white; 
 }
 
 .sidebar-footer i {
-    font-size: 1.3em; /* Ajustamos el tamaño del ícono en el footer */
+    font-size: 1.3em;
 }
 
-/* Botón de toggle */
 .toggle-btn {
     position: relative;
     margin-top: 10px;
@@ -144,19 +147,13 @@
     background-color: #f0f0f0;
 }
 
-/* Ajuste para el contenido principal */
-.profile-content {
-    margin-left: 250px;
+.profile-content, .search-content {
     padding: 20px;
+    background-color: #f5f5f5; 
+    min-height: 100vh; 
     transition: margin-left 0.3s ease;
 }
 
-.search-content {
-    margin-left: 250px;
-    padding: 20px;
-    transition: margin-left 0.3s ease;
-}
-
-.sidebar.closed ~ .profile-content ~ .search-content {
+.sidebar.closed ~ .profile-content, .sidebar.closed ~ .search-content {
     margin-left: 80px;
 }
