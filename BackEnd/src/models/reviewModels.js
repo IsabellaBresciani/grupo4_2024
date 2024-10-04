@@ -19,8 +19,8 @@ Review.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Persona',   // Referencia al modelo `Persona`
-      key: 'id'      // `id` es la clave primaria de `Persona`
+      model: 'Persona',
+      key: 'id'
     }
   }
 }, {
@@ -30,15 +30,14 @@ Review.init({
   timestamps: false
 });
 
-// Definimos la asociación
-Persona.hasMany(Review, {
-  foreignKey: 'idAutor',
+Persona.hasMany(Review, { //Esto indica que una persona puede tener muchas reviews
+  foreignKey: 'idAutor', //Se especifica que la clave foránea que conecta Review con Persona es idAutor
   as: 'reviews'
 });
 
-Review.belongsTo(Persona, {
-  foreignKey: 'idAutor',
-  onDelete: 'CASCADE'  // Si un usuario es eliminado, sus reseñas también lo serán
+Review.belongsTo(Persona, { //Esto indica que cada review solo pertence a una persona
+  foreignKey: 'idAutor', //Se especifica que la clave foránea que conecta Review con Persona es idAutor
+  onDelete: 'CASCADE' //Si una persona es eliminada de la BD, todas las review que pertenecen a esa persona también serán eliminadas automáticamente
 });
 
 module.exports = Review;

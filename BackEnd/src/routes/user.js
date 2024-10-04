@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Persona = require('../models/userModels'); // Importar el modelo Persona
+const Persona = require('../models/userModels');
 const Review = require('../models/reviewModels');
 const Servicio = require('../models/serviceModels');
 const ServicioAso = require('../models/servicioAsociadoModels')
@@ -74,7 +74,7 @@ router.get("/:nom_usuario", async (req, res) => {
 });
 
 // Eliminar un usuario exisitente 
-router.delete('/:nomusuario', async (req, res) => {
+router.delete('/:nomUsuario', async (req, res) => {
   const { nomUsuario } = req.params;
 
   try {

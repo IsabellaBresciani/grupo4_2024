@@ -1,17 +1,17 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { Model, DataTypes } = require('sequelize'); //Se importan Model (Representa una tabla en la BD) y DataTypes (Los tipos que van a tener cada columna de la BD)
+const sequelize = require('../config/database'); //Se importa la instancia de conexion a la BD
 
-class Persona extends Model {}
+class Persona extends Model {} //Se define la clase persona que extiende Model
 
-Persona.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
+Persona.init({ // Se inicializa el modelo Persona
+  id: { //Atributo de la persona
+    type: DataTypes.INTEGER, //Tipo de la columna
+    autoIncrement: true, //Se autoincrementa
+    primaryKey: true, //Es la Primary Key De la tabla
   },
   dni: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false, //No permite NULL
   },
   nombre: {
     type: DataTypes.STRING,
@@ -45,10 +45,10 @@ Persona.init({
   },
 }, {
   sequelize,
-  modelName: 'Persona',
-  tableName: 'user', // Asegúrate de que el nombre de la tabla sea correcto
-  createdAt: 'created_at',
-  timestamps: false, // Para usar createdAt y updatedAt
+  modelName: 'Persona', //Nombre del modelo
+  tableName: 'user', //Nombre de la tabla de la BD
+  createdAt: 'created_at', //Nombre de la columna para la fecha de creación
+  timestamps: false,
 });
 
 module.exports = Persona;

@@ -15,7 +15,7 @@ Service.init({
   },
   imagen: {
     type: DataTypes.STRING, // Se asume que la foto será una URL o un nombre de archivo
-    allowNull: true, // Puede ser nulo si no es obligatorio
+    allowNull: true,
   },
   
 }, {

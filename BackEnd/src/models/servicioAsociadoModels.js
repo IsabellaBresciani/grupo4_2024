@@ -14,16 +14,16 @@ UserService.init({
   idPersona: {
     type: DataTypes.INTEGER,
     references: {
-      model: Persona, // Referencia al modelo Persona
+      model: Persona,
       key: 'id',
     },
     allowNull: false,
   },
   idServicio: {
     type: DataTypes.INTEGER,
-    references: {
-      model: Service, // Referencia al modelo Service
-      key: 'idservice',
+    references: { //Permite referenciar a un modelo
+      model: Service, //Se referencia al modelo Service
+      key: 'idservice', //Se hace referencia al id de Service
     },
     allowNull: false,
   },
@@ -35,23 +35,24 @@ UserService.init({
 }, {
   sequelize,
   modelName: 'UserService',
-  tableName: 'servicioasociado', // Nombre de la tabla intermedia
+  tableName: 'servicioasociado',
   timestamps: false, 
 });
 
 // Establecer la relación muchos a muchos
-Persona.belongsToMany(Service, {
-  through: UserService,
-  foreignKey: 'idPersona',
-  otherKey: 'idServicio',
-  as: 'services'  // Alias para los servicios asociados a una persona
+
+Persona.belongsToMany(Service, { //Esto establece que el modelo Persona tiene una relación de muchos a muchos con el modelo Service
+  through: UserService, // La tabla intermedia que se utiliza para la relación.
+  foreignKey: 'idPersona', // Clave foránea en la tabla intermedia que hace referencia a `Persona`.
+  otherKey: 'idServicio', // Clave foránea en la tabla intermedia que hace referencia a `Service`.
+  as: 'services' // Alias que se utilizará para acceder a los servicios asociados a una persona.
 });
 
-Service.belongsToMany(Persona, {
-  through: UserService,
-  foreignKey: 'idServicio',
-  otherKey: 'idPersona',
-  as: 'personas'  // Alias para las personas asociadas a un servicio
+Service.belongsToMany(Persona, { //Esto establece que el modelo Service tiene una relación de muchos a muchos con el modelo Persona
+  through: UserService, // La tabla intermedia que se utiliza para la relación.
+  foreignKey: 'idServicio', // Clave foránea en la tabla intermedia que hace referencia a `Service`.
+  otherKey: 'idPersona', // Clave foránea en la tabla intermedia que hace referencia a `Persona`.
+  as: 'personas' // Alias que se utilizará para acceder a las personas asociados a un servicio.
 });
 
 module.exports = UserService;
