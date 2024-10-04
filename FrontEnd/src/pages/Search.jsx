@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';  
 import ProfileCard from '../components/ProfileCard';
+import usersData from '../PruebaSearch.json';
 import '../css/Search.css';
+
     
 const Search = () => {
     const [CantEnc, setNumber] = useState(0);
@@ -32,9 +35,9 @@ const Search = () => {
           <div className='profile-cards'>
             {renderComponents()} 
           </div>
-        </div>
       </div>
-    );
+      </div>
+  );
 };
 
 export default Search;

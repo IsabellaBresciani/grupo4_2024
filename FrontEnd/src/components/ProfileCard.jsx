@@ -1,11 +1,11 @@
 import React from 'react';
 import '../css/ProfileCard.css'; 
 
-function ProfileCard() {
+function ProfileCard({ name, description, email, phone }) {
   return (
     <div className="profile-card">
       {/* Imagen del perfil */}
-        <img 
+      <img 
         src="../../public/logo192.png" 
         alt="Foto de perfil" 
         className="profile-image" 
@@ -13,8 +13,13 @@ function ProfileCard() {
       
       {/* Contenedor del texto */}
       <div className="profile-details">
-        <h3>Jardinero01</h3>
-        <p>Body text for whatever you'd like to say. Add main takeaway points, quotes, anecdotes, or even a very very short story.</p>
+        <h3>{name}</h3>
+        <p>{description}</p>
+        
+        {/* Datos de contacto */}
+        <p>Email: {email}</p>
+        <p>Teléfono: {phone}</p>
+
         {/* Calificación con estrellas */}
         <div className="profile-rating">
           <span>★</span>
