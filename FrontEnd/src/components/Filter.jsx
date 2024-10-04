@@ -1,32 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../css/Filter.css';
 
-const SearchFilter = ({ services, setFilteredServices }) => {
-  const [filterOption, setFilterOption] = useState('');
-  const [stars, setStars] = useState(0);
+const Filter = () => {
   const [selectedOption, setSelectedOption] = useState('');
-
-  useEffect(() => {
-    const filtered = services.filter((service) => {
-      const matchesFilterOption = filterOption ? service.category === filterOption : true;
-      const matchesStars = service.stars >= stars;
-      const matchesLocation = selectedOption ? service.location === selectedOption : true;
-
-      return matchesFilterOption && matchesStars && matchesLocation;
-    });
-
-    setFilteredServices(filtered);
-  }, [filterOption, stars, selectedOption, services, setFilteredServices]);
+  const [stars, setStars] = useState(0);
 
   return (
     <div className="search-filter">
       <div className="filters-container">
         {/* Filtros */}
         <div className="filter-group">
+          {/* ComboBox para Localidad */}
           <div className="combo-box-container">
             <label htmlFor="combo-box" className="combo-box-label">Seleccione una localidad:</label>
-            <select
-              id="combo-box"
+            <select 
+              id="combo-box" 
               className="combo-box"
               value={selectedOption}
               onChange={(e) => setSelectedOption(e.target.value)}
@@ -55,4 +43,4 @@ const SearchFilter = ({ services, setFilteredServices }) => {
   );
 };
 
-export default SearchFilter;
+export default Filter;
