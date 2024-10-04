@@ -17,7 +17,7 @@ const Profile = () => {
   
     return (
         <div className="profile-page">
-            <Sidebar />
+             <Sidebar activeItem="profile" />
             <div className="profile-content">
                 <ProfileHeader />
 

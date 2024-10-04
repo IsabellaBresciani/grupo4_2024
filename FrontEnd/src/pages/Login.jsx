@@ -33,7 +33,7 @@ function Login() {
                 localStorage.setItem('jwtToken', token);
 
                 // Redirigir al usuario a la página 'search'
-                navigate('/profile');
+                navigate('/search');
             }
         } catch (error) {
             console.error('Error logging in:', error);
@@ -49,8 +49,7 @@ function Login() {
     return (
         <LayoutWithoutLogin>         
             <div className="login-container">
-                <LogPageComponent className="register-info"/>
-                
+                <LogPageComponent className="register-info"/> 
                 <div className='form-container'>
                     <h2>Login</h2>
                     <form onSubmit={handleSubmit}>

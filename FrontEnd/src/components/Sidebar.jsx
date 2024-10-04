@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importamos Link para la navegación
+import { Link } from 'react-router-dom';
 import '../css/Sidebar.css';
-import icon from '../assets/logo.png'; // Ajusta la ruta según donde tengas la imagen
+import icon from '../assets/logo.png';
+import SidebarMenuItem from './SidebarMenuItem';
 
-const Sidebar = () => {
+const Sidebar = ({ activeItem }) => {
     const [isOpen, setIsOpen] = useState(true);
 
     const toggleSidebar = () => {
@@ -16,39 +17,23 @@ const Sidebar = () => {
                 <img src={icon} alt="Icono" className="sidebar-icon" />
                 <span className={`logo-text ${isOpen ? '' : 'hidden'}`}>ServiciosYa</span>
 
-                {/* Botón para abrir/cerrar la sidebar */}
                 <button className="toggle-btn" onClick={toggleSidebar}>
                     {isOpen ? <i className="fas fa-angle-left"></i> : <i className="fas fa-angle-right"></i>}
                 </button>
             </div>
 
             <ul className="sidebar-menu">
-                {/* Mi perfil sin link, solo como sección activa */}
-                <li className="menu-item active">
-                    <i className="fas fa-user-circle"></i>
-                    {isOpen && <span className="menu-text">Mi perfil</span>}
-                </li>
-                <li className="menu-item">
-                    <Link to="/home" className="menu-link"> {/* Link para la página principal (Home) */}
-                        <i className="fas fa-home"></i>
-                        <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Home</span>
-                    </Link>
-                </li>
-                {/* Iconos sin links */}
-                <li className="menu-item">
-                    <i className="fas fa-cog"></i> {/* Solo icono, sin Link */}
-                    <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Configuración</span>
-                </li>
-                <li className="menu-item">
-                    <i className="fas fa-search"></i> {/* Solo icono, sin Link */}
-                    <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Buscador</span>
-                </li>
+                <SidebarMenuItem title="Mi perfil" isActive={activeItem === 'profile'} to="/profile" icon="fas fa-user-circle" />
+                <SidebarMenuItem title="Home" isActive={activeItem === 'home'} to="/home" icon="fas fa-home" />
+                <SidebarMenuItem title="Configuración" isActive={activeItem === 'settings'} to="/settings" icon="fas fa-cog" />
+                <SidebarMenuItem title="Buscador" isActive={activeItem === 'search'} to="/search" icon="fas fa-search" />
             </ul>
 
-            <div className="sidebar-footer">
-                <i className="fas fa-sign-out-alt"></i>
-                <span className={`menu-text ${isOpen ? '' : 'hidden'}`}>Cerrar sesión</span>
-            </div>
+            <div className="sidebar-menu">
+                <SidebarMenuItem title="Log Out" isActive={activeItem === null} to="/login"  icon="fas fa-sign-out-alt" />
+               
+            </div>   
+       
         </div>
     );
 };
