@@ -9,13 +9,18 @@
 }
 
 .profile-image {
-  font-size: 60px; /* Tamaño más pequeño para el ícono del perfil */
   margin-right: 15px;
   border-radius: 120px;
   max-height: 200px;
   max-width: 200px;
   overflow: hidden;
-  align-self: flex-start; /* Para alinear la imagen al inicio */
+  align-self: flex-start;
+  display: flex;                
+  justify-content: center;       
+  align-items: center;          
+  height: 300px;                 
+  width: 300px;                  
+  overflow: hidden; 
 }
 
 .profile-info {
