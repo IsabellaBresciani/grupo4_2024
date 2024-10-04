@@ -1,123 +1,137 @@
 [
-    {
+  {
       "id": 1,
       "name": "Alice",
       "edad": "54",
       "email": "alice@example.com",
       "phone": "555-1234",
-      "description": "Alice es una electricista con 5 años de experiencia en la instalación de sistemas eléctricos residenciales."
-    },
-    {
+      "description": "Alice es una electricista con 5 años de experiencia en la instalación de sistemas eléctricos residenciales.",
+      "img": "https://via.placeholder.com/150?text=Alice"
+  },
+  {
       "id": 2,
       "name": "Bob",
       "edad": "54",
       "email": "bob@example.com",
       "phone": "555-5678",
-      "description": "Bob trabaja como fontanero especializado en reparación de tuberías y mantenimiento de sistemas de agua en casas y departamentos."
-    },
-    {
+      "description": "Bob trabaja como fontanero especializado en reparación de tuberías y mantenimiento de sistemas de agua en casas y departamentos.",
+      "img": "https://via.placeholder.com/150?text=Bob"
+  },
+  {
       "id": 3,
       "name": "Charlie",
       "edad": "54",
       "email": "charlie@example.com",
       "phone": "555-9876",
-      "description": "Charlie es técnico en calefacción y aire acondicionado, con experiencia en la instalación y mantenimiento de sistemas HVAC para hogares."
-    },
-    {
+      "description": "Charlie es técnico en calefacción y aire acondicionado, con experiencia en la instalación y mantenimiento de sistemas HVAC para hogares.",
+      "img": "https://via.placeholder.com/150?text=Charlie"
+  },
+  {
       "id": 4,
       "name": "David",
       "edad": "54",
       "email": "david@example.com",
       "phone": "555-4321",
-      "description": "David es carpintero con especialización en la reparación de muebles y estructuras de madera para el hogar."
-    },
-    {
+      "description": "David es carpintero con especialización en la reparación de muebles y estructuras de madera para el hogar.",
+      "img": "https://via.placeholder.com/150?text=David"
+  },
+  {
       "id": 5,
       "name": "Eva",
       "edad": "54",
       "email": "eva@example.com",
       "phone": "555-8765",
-      "description": "Eva se dedica al mantenimiento de jardines, ofreciendo servicios de paisajismo y cuidado de plantas para casas particulares."
-    },
-    {
-        "id": 6,
-        "name": "Carlos",
-        "edad": "34",
-        "email": "carlos@example.com",
-        "phone": "555-1234",
-        "description": "Carlos es un fontanero con más de 10 años de experiencia en reparaciones y mantenimientos en hogares."
-    },
-    {
-        "id": 7,
-        "name": "Laura",
-        "edad": "29",
-        "email": "laura@example.com",
-        "phone": "555-5678",
-        "description": "Laura se especializa en servicios de electricidad, garantizando la seguridad y eficiencia de las instalaciones."
-    },
-    {
-        "id": 8,
-        "name": "Roberto",
-        "edad": "42",
-        "email": "roberto@example.com",
-        "phone": "555-2345",
-        "description": "Roberto es carpintero y ofrece soluciones personalizadas para muebles y estructuras de madera."
-    },
-    {
-        "id": 9,
-        "name": "María",
-        "edad": "37",
-        "email": "maria@example.com",
-        "phone": "555-3456",
-        "description": "María se dedica a la pintura de interiores y exteriores, asegurando acabados profesionales."
-    },
-    {
-        "id": 10,
-        "name": "Luis",
-        "edad": "48",
-        "email": "luis@example.com",
-        "phone": "555-4567",
-        "description": "Luis es un mecánico que se especializa en mantenimiento preventivo y reparaciones de vehículos."
-    },
-    {
-        "id": 11,
-        "name": "Sofía",
-        "edad": "30",
-        "email": "sofia@example.com",
-        "phone": "555-6789",
-        "description": "Sofía ofrece servicios de limpieza profunda y mantenimiento general para hogares."
-    },
-    {
-        "id": 12,
-        "name": "Diego",
-        "edad": "39",
-        "email": "diego@example.com",
-        "phone": "555-7890",
-        "description": "Diego es un cerrajero con experiencia en instalación y reparación de cerraduras de alta seguridad."
-    },
-    {
-        "id": 13,
-        "name": "Clara",
-        "edad": "27",
-        "email": "clara@example.com",
-        "phone": "555-8901",
-        "description": "Clara se encarga del mantenimiento de electrodomésticos, ofreciendo reparaciones rápidas y efectivas."
-    },
-    {
-        "id": 14,
-        "name": "Andrés",
-        "edad": "45",
-        "email": "andres@example.com",
-        "phone": "555-9012",
-        "description": "Andrés es un técnico especializado en la reparación de techos y mantenimiento de estructuras."
-    },
-    {
-        "id": 15,
-        "name": "Valentina",
-        "edad": "32",
-        "email": "valentina@example.com",
-        "phone": "555-3457",
-        "description": "Valentina ofrece servicios de paisajismo, creando espacios verdes únicos y sostenibles."
-    }
-  ]
-  
+      "description": "Eva se dedica al mantenimiento de jardines, ofreciendo servicios de paisajismo y cuidado de plantas para casas particulares.",
+      "img": "https://via.placeholder.com/150?text=Eva"
+  },
+  {
+      "id": 6,
+      "name": "Carlos",
+      "edad": "34",
+      "email": "carlos@example.com",
+      "phone": "555-1234",
+      "description": "Carlos es un fontanero con más de 10 años de experiencia en reparaciones y mantenimientos en hogares.",
+      "img": "https://via.placeholder.com/150?text=Carlos"
+  },
+  {
+      "id": 7,
+      "name": "Laura",
+      "edad": "29",
+      "email": "laura@example.com",
+      "phone": "555-5678",
+      "description": "Laura se especializa en servicios de electricidad, garantizando la seguridad y eficiencia de las instalaciones.",
+      "img": "https://via.placeholder.com/150?text=Laura"
+  },
+  {
+      "id": 8,
+      "name": "Roberto",
+      "edad": "42",
+      "email": "roberto@example.com",
+      "phone": "555-2345",
+      "description": "Roberto es carpintero y ofrece soluciones personalizadas para muebles y estructuras de madera.",
+      "img": "https://via.placeholder.com/150?text=Roberto"
+  },
+  {
+      "id": 9,
+      "name": "María",
+      "edad": "37",
+      "email": "maria@example.com",
+      "phone": "555-3456",
+      "description": "María se dedica a la pintura de interiores y exteriores, asegurando acabados profesionales.",
+      "img": "https://via.placeholder.com/150?text=Maria"
+  },
+  {
+      "id": 10,
+      "name": "Luis",
+      "edad": "48",
+      "email": "luis@example.com",
+      "phone": "555-4567",
+      "description": "Luis es un mecánico que se especializa en mantenimiento preventivo y reparaciones de vehículos.",
+      "img": "https://via.placeholder.com/150?text=Luis"
+  },
+  {
+      "id": 11,
+      "name": "Sofía",
+      "edad": "30",
+      "email": "sofia@example.com",
+      "phone": "555-6789",
+      "description": "Sofía ofrece servicios de limpieza profunda y mantenimiento general para hogares.",
+      "img": "https://via.placeholder.com/150?text=Sofia"
+  },
+  {
+      "id": 12,
+      "name": "Diego",
+      "edad": "39",
+      "email": "diego@example.com",
+      "phone": "555-7890",
+      "description": "Diego es un cerrajero con experiencia en instalación y reparación de cerraduras de alta seguridad.",
+      "img": "https://via.placeholder.com/150?text=Diego"
+  },
+  {
+      "id": 13,
+      "name": "Clara",
+      "edad": "27",
+      "email": "clara@example.com",
+      "phone": "555-8901",
+      "description": "Clara se encarga del mantenimiento de electrodomésticos, ofreciendo reparaciones rápidas y efectivas.",
+      "img": "https://via.placeholder.com/150?text=Clara"
+  },
+  {
+      "id": 14,
+      "name": "Andrés",
+      "edad": "45",
+      "email": "andres@example.com",
+      "phone": "555-9012",
+      "description": "Andrés es un técnico especializado en la reparación de techos y mantenimiento de estructuras.",
+      "img": "https://via.placeholder.com/150?text=Andres"
+  },
+  {
+      "id": 15,
+      "name": "Valentina",
+      "edad": "32",
+      "email": "valentina@example.com",
+      "phone": "555-3457",
+      "description": "Valentina ofrece servicios de paisajismo, creando espacios verdes únicos y sostenibles.",
+      "img": "https://via.placeholder.com/150?text=Valentina"
+  }
+]

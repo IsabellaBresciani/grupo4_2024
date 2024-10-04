@@ -1,12 +1,12 @@
 import React from 'react';
 import '../css/ProfileCard.css'; 
 
-function ProfileCard({ name, description, email, phone }) {
+function ProfileCard({ name, description, email, phone, img }) {
   return (
     <div className="profile-card">
       {/* Imagen del perfil */}
       <img 
-        src="../../public/logo192.png" 
+        src={img}
         alt="Foto de perfil" 
         className="profile-image" 
       />
