@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Persona = require('./userModels')
 
 class Publicacion extends Model {}
 
@@ -38,6 +39,5 @@ Publicacion.belongsTo(Persona, {
   foreignKey: 'idAutor',
   onDelete: 'CASCADE'  // Si un usuario es eliminado, sus reseñas también lo serán
 });
-
 
 module.exports = Publicacion;
