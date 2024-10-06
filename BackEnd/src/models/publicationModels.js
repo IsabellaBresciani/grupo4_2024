@@ -31,12 +31,12 @@ Publicacion.init({
 
 // Definimos la asociación
 Persona.hasMany(Publicacion, {
-  foreignKey: 'idAutor',
+  foreignKey: 'idUser',
   as: 'publications'
 });
 
 Publicacion.belongsTo(Persona, {
-  foreignKey: 'idAutor',
+  foreignKey: 'idUser',
   onDelete: 'CASCADE'  // Si un usuario es eliminado, sus reseñas también lo serán
 });
 

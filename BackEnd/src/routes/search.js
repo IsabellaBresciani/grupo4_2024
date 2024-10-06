@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database'); // Conexión a la base de datos
+
 /*
 // Ruta de búsqueda
 router.get('/search', async (req, res) => {
