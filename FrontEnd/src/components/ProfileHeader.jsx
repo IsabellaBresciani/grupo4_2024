@@ -1,6 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/ProfileHeader.css';
+
+const styles = {
+    profileHeader: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        borderBottom: '1px solid #ddd',
+        paddingBottom: '10px',
+        marginBottom: '20px',
+    },
+    profileImage: {
+        marginRight: '15px',
+        borderRadius: '120px',
+        maxHeight: '200px',
+        maxWidth: '200px',
+        height: '300px',
+        width: '300px',
+        overflow: 'hidden',
+        display: 'flex',                
+        justifyContent: 'center',       
+        alignItems: 'center',
+    },
+    profileInfo: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    nameRatingEdit: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: '10px',
+    },
+    profileDetailsHeader: {
+        fontSize: '1.8rem',
+        marginBottom: '5px',
+        color: '#333',
+        display: 'inline-block',
+    },
+    editIcon: {
+        marginLeft: '10px',
+        fontSize: '1.2rem',
+        cursor: 'pointer',
+        color: '#333',
+        display: 'inline-block',
+    },
+    profileRating: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: '1rem',
+        marginLeft: 'auto',
+    },
+    profileDetails: {
+        listStyle: 'none',
+        padding: 0,
+        margin: 0,
+        fontSize: '0.9rem',
+        marginBottom: '20px',
+    },
+    profileDetailsItem: {
+        marginBottom: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        color: '#555',
+    },
+    profileDescription: {
+        width: '100%',
+        paddingTop: '10px',
+        marginTop: '10px',
+        borderTop: '1px solid #ddd',
+        fontSize: '0.9rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    profileDescriptionHeader: {
+        marginRight: '10px',
+        fontSize: '1rem',
+        color: '#333',
+    },
+    profileDescriptionText: {
+        color: '#555',
+        marginLeft: '10px',
+        flex: 1,
+    },
+    editDescriptionIcon: {
+        fontSize: '1rem',
+        cursor: 'pointer',
+        alignSelf: 'flex-end',
+    },
+};
 
 const ProfileHeader = () => {
     const [userData, setUserData] = useState({});
@@ -35,10 +126,10 @@ const ProfileHeader = () => {
     };
 
     const modifyData = async () => {
-
         const confirm = window.confirm("¿Estás seguro de que deseas modificar tus datos?");
-        if (!confirm) {return
-        }else{
+        if (!confirm) {
+            return;
+        } else {
             setIsModalOpen(false);
         }
         window.location.reload();
@@ -87,19 +178,19 @@ const ProfileHeader = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="profile-header">
-            <div className="profile-image">
-                <img src={userData.foto} className="fas fa-user-circle" alt="Imagen del perfil" /> 
+        <div style={styles.profileHeader}>
+            <div style={styles.profileImage}>
+                <img src={userData.foto} alt="Imagen del perfil" style={{ borderRadius: '120px', maxHeight: '200px', maxWidth: '200px' }} /> 
             </div>
-            <div className="profile-info">
-                <div className="name-rating-edit"> 
-                    <h1>{userData.nombre} {userData.apellido}</h1>
-                    <div className="edit-icon">
-                        <button className="fas fa-edit" onClick={() => setIsModalOpen(true)}></button>
+            <div style={styles.profileInfo}>
+                <div style={styles.nameRatingEdit}> 
+                    <h1 style={styles.profileDetailsHeader}>{userData.nombre} {userData.apellido}</h1>
+                    <div style={styles.editIcon}>
+                        <button className="fas fa-edit" onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer', fontSize: '1.2rem', color: '#333' }}></button>
                     </div>
                     {isModalOpen && (
                         <div className="modal">
-                            <div className="modal-content">
+                            <div style={styles.modalContent}>
                                 <h3>Modificar datos personales</h3>
                                 <form>
                                     <div>
@@ -158,33 +249,33 @@ const ProfileHeader = () => {
                             </div>
                         </div>
                     )}
-                    <div className="profile-rating">
+                    <div style={styles.profileRating}>
                         <p>Puntuación:</p>
                         <div className="stars">
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star"></i>
-                            <i className="fas fa-star-half-alt"></i>
+                            <i className="fas fa-star" style={{ color: '#FFD700', marginRight: '3px' }}></i>
+                            <i className="fas fa-star" style={{ color: '#FFD700', marginRight: '3px' }}></i>
+                            <i className="fas fa-star" style={{ color: '#FFD700', marginRight: '3px' }}></i>
+                            <i className="fas fa-star" style={{ color: '#FFD700', marginRight: '3px' }}></i>
+                            <i className="fas fa-star-half-alt" style={{ color: '#FFD700', marginRight: '3px' }}></i>
                         </div>
                     </div>
                 </div>
-                <ul className="profile-details">
-                    <li>
+                <ul style={styles.profileDetails}>
+                    <li style={styles.profileDetailsItem}>
                         <i className="fas fa-user"></i> 
                         Edad: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
                     </li>
-                    <li><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>
-                    <li><i className="fas fa-envelope"></i> Email: {userData.email}</li>
-                    <li><i className="fas fa-phone"></i> Teléfono: {userData.telefono}</li>
+                    <li style={styles.profileDetailsItem}><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>
+                    <li style={styles.profileDetailsItem}><i className="fas fa-envelope"></i> Email: {userData.email}</li>
+                    <li style={styles.profileDetailsItem}><i className="fas fa-phone"></i> Teléfono: {userData.telefono}</li>
                 </ul>
             </div>
-            <div className="profile-description">
-                <h3>Descripción:</h3>
-                <p>
+            <div style={styles.profileDescription}>
+                <h3 style={styles.profileDescriptionHeader}>Descripción:</h3>
+                <p style={styles.profileDescriptionText}>
                     Ingrese una breve descripción.
                 </p>
-                <div className="edit-description-icon">
+                <div style={styles.editDescriptionIcon}>
                     <i className="fas fa-edit"></i>
                 </div>
             </div>

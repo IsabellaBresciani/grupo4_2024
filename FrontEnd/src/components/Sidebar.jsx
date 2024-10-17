@@ -5,20 +5,17 @@ import icon from '../assets/logo.png';
 import SidebarMenuItem from './SidebarMenuItem';
 
 const Sidebar = ({ activeItem }) => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(true); // Default to open
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
+    const toggleSidebar = () => setIsOpen(!isOpen);
 
     return (
         <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
             <div className="sidebar-header">
-                <img src={icon} alt="Icono" className="sidebar-icon" />
-                <span className={`logo-text ${isOpen ? '' : 'hidden'}`}>ServiciosYa</span>
-
+                <img src={icon} alt="Logo" className="sidebar-icon" />
+                <span className='logo-text'>{isOpen ? 'ServiciosYa' : ' '}</span>
                 <button className="toggle-btn" onClick={toggleSidebar}>
-                    {isOpen ? <i className="fas fa-angle-left"></i> : <i className="fas fa-angle-right"></i>}
+                    <i className={`fas fa-angle-${isOpen ? 'left' : 'right'}`}></i>
                 </button>
             </div>
 
@@ -30,10 +27,8 @@ const Sidebar = ({ activeItem }) => {
             </ul>
 
             <div className="sidebar-menu">
-                <SidebarMenuItem title="Log Out" isActive={activeItem === null} to="/login"  icon="fas fa-sign-out-alt" />
-               
-            </div>   
-       
+                <SidebarMenuItem title="Log Out" isActive={activeItem === null} to="/login" icon="fas fa-sign-out-alt" />
+            </div>
         </div>
     );
 };
