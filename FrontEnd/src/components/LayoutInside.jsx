@@ -3,6 +3,7 @@ import SideMenu from './SideBarCopied';
 import Sidebar from './Sidebar';
 import { MdAddCircle, MdStar, MdPerson} from 'react-icons/md'
 import { CiSettings, CiLogout, CiSearch} from "react-icons/ci";
+import NavBarInside from './NavbarInside';
 
 const styles = {
     bodyLayout: {
@@ -19,49 +20,11 @@ const styles = {
     },
 };
 
-const menu = [
-    
-    {
-        icon: MdAddCircle,
-        text: "New",
-        link: "/new"
-    },
-    {
-        icon: MdStar,
-        text: "Favorites",
-        link: "/favorites"
-    },
-    {
-        hr: true
-    },
-    {
-        icon: MdPerson,
-        text: "Mi Perfil",
-        link: "/profile"
-    },
-    {
-        icon: CiSearch,
-        text: "Buscador",
-        link: "/search"
-    }
-    ,
-    {
-        icon: CiSettings,
-        text: "Configuracion",
-        link: "/settings"
-    }
-    ,
-    {
-        icon: CiLogout,
-        text: "Log Out",
-        link: "/login"
-    }
-]
 
 function LayoutInside({ children }) {
     return (
         <div style={styles.bodyLayout}>
-            <SideMenu menu={menu}  />
+            <NavBarInside />
             <div style={styles.mainLayout}>
                 {children}
             </div>
