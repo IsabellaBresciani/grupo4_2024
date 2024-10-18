@@ -4,39 +4,55 @@ import ProfileCard from '../../components/ProfileCard';
 import usersData from '../../PruebaSearch.json';
 import Filter from '../../components/Filter';  
 
+/*
+Cosas que faltan hacer:
+-cuando se achica la pantalla el filtro se superpone a las tarjetas de usuario
+-que se pueda seleccionar mas de una localidad y que se muestren todas las localidades seleccionadas, deberia tener un boton para quitarlas
+*/
+
 const styles = {
-    searchPage: {
-        marginLeft: '5vw',
+    searchBarContainer: {
+        display: 'inline-flex',            // Para organizar el input y el botón en una fila
+        justifyContent: 'space-between',  // Alinea el input a la izquierda y el botón a la derecha
+        alignItems: 'center',       // Alinea verticalmente el contenido
+        border: '1px solid #ccc',   // Borde del contenedor
+        padding: '10px',            // Espaciado interno del contenedor
+        borderRadius: '4px',        // Bordes redondeados
+        width: '80%',              // Hace que ocupe el 100% del ancho disponible
+        margin: '20px auto',        // Alinea el div en el centro horizontalmente
+    },
+    
+    searchBar: {
+        flex: '1',               // Hace que el input ocupe todo el espacio disponible
+        textAlign: 'left',       // Alinea el texto dentro del input a la izquierda
+        padding: '10px',         // Espaciado interno del input
+        marginRight: '10px',     // Separación entre el input y el botón
+        fontSize: '16px',        // Tamaño de la fuente del texto
+        border: '0px',           // Borde del contenedor
+        outline: 'none',         // Elimina el contorno predeterminado
+    },
+    buttonStyle: {
+        padding: '10px 20px',   // Tamaño del botón
+        border: 'none',         // Sin borde
+        backgroundColor: '#007BFF', // Color de fondo del botón
+        color: 'white',         // Color del texto del botón
+        borderRadius: '4px',    // Bordes redondeados
+        cursor: 'pointer',      // Cambia el cursor a pointer cuando se pase sobre el botón
+    },
+    
+    filter: {
+        marginRight: '5vw',
+        border: '2px solid #ff8000',
         padding: '20px',
-        flexGrow: 1,
-        backgroundColor: '#f9f9f9',
-        overflowY: 'auto',
+        width: '400px',  // Puedes ajustar el ancho según prefieras
+        textAlign: 'left',  // Alineamos el texto a la izquierda
+        position: 'fixed',  // Esto lo fija en la parte derecha de la pantalla
+        right: '0',  // Se pega al borde derecho
+        top: '30%',  // Ajusta la posición vertical
+        boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
     },
-    searchLayout: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'flex-start',
-    },
-    filterContainer: {
-        width: '250px',
-        marginRight: '20px',
-    },
-    searchContent: {
-        flexGrow: 1,
-    },
-    searchInput: {
-        width: '100%',
-    },
-    profileCards: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: '20px',
-    },
-    noResults: {
-        textAlign: 'center',
-        color: '#666',
-        fontSize: '18px',
-    },
+
+
 };
 
 const Search = () => {
@@ -49,18 +65,22 @@ const Search = () => {
 
     return (
         <LayoutInside>  
-            <div style={styles.searchPage}>
-                <div style={styles.searchContent}>
-                    <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
-                    <p>Ingrese el nombre para buscar perfiles:</p>
+            <div>
+                <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
+                <p>Ingrese el nombre para buscar perfiles:</p>
+                <div style={styles.searchBarContainer}>
                     <input
                         type="text"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                         placeholder="Buscar perfiles por nombre..."
-                        style={styles.searchInput}
-                    />   
-                    <div style={styles.profileCards}>
+                        style={styles.searchBar}
+                    />
+                    <button style={styles.buttonStyle}>Buscar</button>
+                </div>
+
+                <div >
+                    <div >
                         {searchTerm && filteredUsers.length > 0 ? (
                             filteredUsers.map(user => (
                                 <ProfileCard 
@@ -76,7 +96,7 @@ const Search = () => {
                             searchTerm && <p style={styles.noResults}>No se encontraron perfiles.</p>
                         )}
                     </div>
-                    <div style={styles.filterContainer}>
+                    <div style={styles.filter}>
                         <Filter />
                     </div>
                 </div>

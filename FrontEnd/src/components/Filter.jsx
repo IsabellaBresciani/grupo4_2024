@@ -38,7 +38,7 @@ const styles = {
         margin: '0',
     },
     sliderInput: {
-        width: '100%',
+        maxWidth: '60%',
     },
 };
 
