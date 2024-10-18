@@ -9,7 +9,7 @@ const styles = {
         padding: '10px',
         maxWidth: '1000px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-        margin: '10px',  // Space around each card
+        margin: '20px 0',  // Space around each card 
     },
     profileImage: {
         width: '100px',
@@ -20,6 +20,7 @@ const styles = {
     },
     profileDetails: {
         flexGrow: 1,
+        overflow: 'hidden',  // Para evitar desbordes en textos largos
     },
     profileDetailsHeader: {
         margin: 0,
@@ -36,6 +37,9 @@ const styles = {
         gap: '5px',
         fontSize: '20px',
         color: '#ffc107', // Star color
+    },
+    contactInfo: {
+      marginTop: '10px', // Espacio entre la descripción y la información de contacto
     },
 };
 
@@ -55,8 +59,10 @@ function ProfileCard({ name, description, email, phone, img }) {
         <p style={styles.profileDetailsText}>{description}</p>
         
         {/* Contact information */}
+        <div style={styles.contactInfo}>
         <p style={styles.profileDetailsText}>Email: {email}</p>
         <p style={styles.profileDetailsText}>Teléfono: {phone}</p>
+        </div>
 
         {/* Rating with stars */}
         <div style={styles.profileRating}>

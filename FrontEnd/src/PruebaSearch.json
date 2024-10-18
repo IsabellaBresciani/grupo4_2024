@@ -133,51 +133,7 @@
       "phone": "555-3457",
       "description": "Valentina ofrece servicios de paisajismo, creando espacios verdes únicos y sostenibles.",
       "img": "https://via.placeholder.com/150?text=Valentina"
-  },
-    {
-        "id": 16,
-        "name": "Fernando",
-        "edad": "38",
-        "email": "fernando@example.com",
-        "phone": "555-2346",
-        "description": "Fernando es un electricista especializado en la instalación de paneles solares y sistemas de energía renovable.",
-        "img": "https://via.placeholder.com/150?text=Fernando"
-    },
-    {
-        "id": 17,
-        "name": "Gabriela",
-        "edad": "29",
-        "email": "gabriela@example.com",
-        "phone": "555-3458",
-        "description": "Gabriela es diseñadora de interiores, ayudando a transformar espacios con su creatividad y estilo.",
-        "img": "https://via.placeholder.com/150?text=Gabriela"
-    },
-    {
-        "id": 18,
-        "name": "Javier",
-        "edad": "50",
-        "email": "javier@example.com",
-        "phone": "555-4568",
-        "description": "Javier se dedica a la reparación de electrodomésticos, brindando un servicio rápido y confiable.",
-        "img": "https://via.placeholder.com/150?text=Javier"
-    },
-    {
-        "id": 19,
-        "name": "Patricia",
-        "edad": "34",
-        "email": "patricia@example.com",
-        "phone": "555-5679",
-        "description": "Patricia es una chef privada que ofrece servicios de catering y cocina a domicilio.",
-        "img": "https://via.placeholder.com/150?text=Patricia"
-    },
-    {
-        "id": 20,
-        "name": "Ricardo",
-        "edad": "46",
-        "email": "ricardo@example.com",
-        "phone": "555-6780",
-        "description": "Ricardo es un especialista en sistemas de seguridad, ofreciendo instalación y mantenimiento de alarmas y cámaras.",
-        "img": "https://via.placeholder.com/150?text=Ricardo"
-    }
+  }
+    
     
 ]

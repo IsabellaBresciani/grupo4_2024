@@ -5,6 +5,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
+        
     },
     comboBoxContainer: {
         display: 'flex',
