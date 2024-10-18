@@ -20,6 +20,44 @@ const styles = {
     },
 };
 
+const menu = [
+    
+    {
+        icon: MdAddCircle,
+        text: "New",
+        link: "/new"
+    },
+    {
+        icon: MdStar,
+        text: "Favorites",
+        link: "/favorites"
+    },
+    {
+        hr: true
+    },
+    {
+        icon: MdPerson,
+        text: "Mi Perfil",
+        link: "/profile"
+    },
+    {
+        icon: CiSearch,
+        text: "Buscador",
+        link: "/search"
+    }
+    ,
+    {
+        icon: CiSettings,
+        text: "Configuracion",
+        link: "/settings"
+    }
+    ,
+    {
+        icon: CiLogout,
+        text: "Log Out",
+        link: "/login"
+    }
+]
 
 function LayoutInside({ children }) {
     return (
