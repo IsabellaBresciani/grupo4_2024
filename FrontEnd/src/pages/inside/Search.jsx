@@ -56,32 +56,48 @@ const styles = {
 };
 
 const Search = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');   // Valor del input en tiempo real
+    const [confirmedSearch, setConfirmedSearch] = useState('');  // Valor confirmado para la búsqueda
     
-    // Filter users based on searchTerm
+    // Filtra los usuarios basados en confirmedSearch (cuando se confirma la búsqueda)
     const filteredUsers = usersData.filter(user => 
-        user.name.toLowerCase().includes(searchTerm.toLowerCase())
+        user.name.toLowerCase().includes(confirmedSearch.toLowerCase())
     );
-
+    
+    // Función para manejar la búsqueda cuando se presiona "Buscar" o Enter
+    const handleSearch = () => {
+        setConfirmedSearch(searchTerm);  // Actualiza el valor confirmado de búsqueda con lo que hay en el input
+    };
+    
     return (
-        <LayoutInside>  
+        <LayoutInside>
             <div>
                 <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
                 <p>Ingrese el nombre para buscar perfiles:</p>
                 <div style={styles.searchBarContainer}>
                     <input
                         type="text"
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
+                        value={searchTerm}  // Muestra el valor actual del input
+                        onChange={e => setSearchTerm(e.target.value)}  // Actualiza el valor del input en tiempo real
                         placeholder="Buscar perfiles por nombre..."
                         style={styles.searchBar}
+                        onKeyDown={(e) => {  // Detecta si se presiona Enter
+                            if (e.key === 'Enter') {
+                                handleSearch();  // Si es Enter, confirma la búsqueda
+                            }
+                        }}
                     />
-                    <button style={styles.buttonStyle}>Buscar</button>
+                    <button 
+                        style={styles.buttonStyle}
+                        onClick={handleSearch}  // Ejecuta la búsqueda al presionar el botón
+                    >
+                        Buscar
+                    </button>
                 </div>
 
-                <div >
-                    <div >
-                        {searchTerm && filteredUsers.length > 0 ? (
+                <div>
+                    <div>
+                        {confirmedSearch && filteredUsers.length > 0 ? (
                             filteredUsers.map(user => (
                                 <ProfileCard 
                                     key={user.id} 
@@ -93,16 +109,17 @@ const Search = () => {
                                 />
                             ))
                         ) : (
-                            searchTerm && <p style={styles.noResults}>No se encontraron perfiles.</p>
+                            searchTerm && <p style={styles.noResults}>No se encontraron perfiles.</p>  // Muestra un mensaje si no se encuentran perfiles
                         )}
                     </div>
                     <div style={styles.filter}>
-                        <Filter />
+                        <Filter /> 
                     </div>
                 </div>
             </div>
         </LayoutInside>
     );
 };
+
 
 export default Search;

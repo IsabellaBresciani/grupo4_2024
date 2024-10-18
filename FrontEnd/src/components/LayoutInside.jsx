@@ -3,12 +3,12 @@ import SideMenu from './SideBarCopied';
 import Sidebar from './Sidebar';
 import { MdAddCircle, MdStar, MdPerson} from 'react-icons/md'
 import { CiSettings, CiLogout, CiSearch} from "react-icons/ci";
-import NavBarInside from './NavbarInside';
+import NavBarInside from './NavBarInside';
 
 const styles = {
     bodyLayout: {
         padding: "5vh 3vh",
-        display: "flex",
+        //display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
         gap: "100px"
@@ -24,7 +24,7 @@ const styles = {
 function LayoutInside({ children }) {
     return (
         <div style={styles.bodyLayout}>
-            <NavBarInside />
+            {/*<NavBarInside />*/}
             <div style={styles.mainLayout}>
                 {children}
             </div>
