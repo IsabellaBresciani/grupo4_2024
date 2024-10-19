@@ -3,6 +3,7 @@ import LayoutInside from '../../components/LayoutInside';
 import ProfileCard from '../../components/ProfileCard';
 import usersData from '../../PruebaSearch.json';
 import Filter from '../../components/Filter';  
+import { MdBorderColor } from 'react-icons/md';
 
 /*
 Cosas que faltan hacer:
@@ -16,10 +17,14 @@ const styles = {
         flexDirection: 'row',       // Organiza los hijos en una fila
         justifyContent: 'space-between',
         padding: '20px',
+        alignItems: 'flex-start',   // Asegura que los elementos se alineen al inicio del eje vertical
     },
     profilesContainer: {
         flex: '1',                  // Toma el 70% del ancho
-        marginRight: '20px',
+        marginTop: '-20px',       
+        marginLeft:  '-20px',
+        marginRight:  '20px',
+        border: '2px solid #ff8000',
     },
     filter: {
         marginRight: '5vw',         //Establece un margen a la derecha del contenedor.
@@ -33,18 +38,20 @@ const styles = {
         boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
         position: 'sticky',         //Permite que el filter siga al scrollbar.
         flexDirection: 'column',
-        height:  '180px',
-
+        boxSizing: 'border-box',    // Incluye borde y padding en el tamaño total
+        height: 'auto',             // Ajusta la altura al contenido
+        alignSelf: 'flex-start',    // Alinea el filtro al principio del contenedor
+        borderRadius: '4px',        // Bordes redondeados
     },
     searchBarContainer: {
-        display: 'inline-flex',            // Para organizar el input y el botón en una fila
-        justifyContent: 'space-between',  // Alinea el input a la izquierda y el botón a la derecha
-        alignItems: 'center',       // Alinea verticalmente el contenido
-        border: '1px solid #ccc',   // Borde del contenedor
-        padding: '10px',            // Espaciado interno del contenedor
-        borderRadius: '4px',        // Bordes redondeados
-        width: '80%',              // Hace que ocupe el 100% del ancho disponible
-        margin: '20px auto',        // Alinea el div en el centro horizontalmente
+        display: 'inline-flex',          // Para organizar el input y el botón en una fila
+        justifyContent: 'space-between', // Alinea el input a la izquierda y el botón a la derecha
+        alignItems: 'center',            // Alinea verticalmente el contenido
+        border: '1px solid #ccc',        // Borde del contenedor
+        padding: '10px',                 // Espaciado interno del contenedor
+        borderRadius: '4px',             // Bordes redondeados
+        width: '80%',                    // Hace que ocupe el 100% del ancho disponible
+        margin: '20px auto',             // Alinea el div en el centro horizontalmente
     },
     searchBar: {
         flex: '1',               // Hace que el input ocupe todo el espacio disponible
@@ -56,12 +63,12 @@ const styles = {
         outline: 'none',         // Elimina el contorno predeterminado
     },
     buttonStyle: {
-        padding: '10px 20px',   // Tamaño del botón
-        border: 'none',         // Sin borde
+        padding: '10px 20px',       // Tamaño del botón
+        border: 'none',             // Sin borde
         backgroundColor: '#007BFF', // Color de fondo del botón
-        color: 'white',         // Color del texto del botón
-        borderRadius: '4px',    // Bordes redondeados
-        cursor: 'pointer',      // Cambia el cursor a pointer cuando se pase sobre el botón
+        color: 'white',             // Color del texto del botón
+        borderRadius: '4px',        // Bordes redondeados
+        cursor: 'pointer',          // Cambia el cursor a pointer cuando se pase sobre el botón
     },
 };
 
