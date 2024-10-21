@@ -7,6 +7,7 @@ import Home from './pages/outside/Home';
 import Profile from './pages/inside/Profile.jsx';
 import Contact from './pages/outside/Contact.jsx'; // Importa el componente de contacto
 import Login from './pages/outside/Login';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 
 function App() {

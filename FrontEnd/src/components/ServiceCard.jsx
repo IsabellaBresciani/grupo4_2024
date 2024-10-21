@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import ReviewPopup from './ReviewPopup' ;
 const styles = {
     servicesSection: {
         display: 'flex',
@@ -24,6 +24,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        position: 'relative',
     },
     serviceImage: {
         width: '100%',
@@ -61,6 +62,25 @@ const styles = {
         borderRadius: '8px',
         width: '300px',
     },
+    starRating: { 
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',  
+        alignItems: 'center',
+    },
+    starIcon: {
+        fontSize: '24px',                  
+        borderRadius: '50%',     
+        width: '30px',           
+        height: '30px',          
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
 };
 
 const ServiceCard = () => {
@@ -70,6 +90,7 @@ const ServiceCard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [newService, setNewService] = useState({ id: 0, estado: 'activo', selectedService: '' });
     const [servicesAll, setServicesAll] = useState([]);
+    const [showPopup, setShowPopup] = useState(false);
 
     const fetchServicesAll = async () => {
         try {
@@ -137,6 +158,14 @@ const ServiceCard = () => {
         fetchServices();    // Fetch user services
     }, []);
 
+    const handleOpenPopup = () => {
+        setShowPopup(true);
+    };
+
+    const handleClosePopup = () => {
+        setShowPopup(false);
+    };
+
     if (loading) return <p>Cargando servicios...</p>;
     if (error) return <p>{error}</p>;
 
@@ -154,12 +183,22 @@ const ServiceCard = () => {
                             >
                                 {service.estado === 'activo' ? 'Marcar como inactivo' : 'Marcar como activo'}
                             </button>
+
+                            <div style={styles.starRating} onClick={handleOpenPopup}>
+                                <div style={styles.starIcon}>
+                                    <i className="fas fa-star"></i>
+                                </div>
+                                <span>X/5</span>
+                            </div>
                         </div>
                     ))
                 ) : (
                     <p>No hay servicios asociados</p>
                 )}
             </div>
+
+            <ReviewPopup show={showPopup} onClose={handleClosePopup} />
+
             <div>
                 <button style={styles.button} onClick={() => setIsModalOpen(true)}>Agregar servicio</button>
             </div>
