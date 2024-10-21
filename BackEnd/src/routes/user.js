@@ -201,4 +201,29 @@ router.put('/:idPersona/servicios/:idServicio', async (req, res) => {
   }
 });
 
+// Obtener usuarios por nombre de servicio
+router.get('/servicio/:nom_servicio', async (req, res) => {
+  const { nom_servicio } = req.params;
+
+  try {
+      const [results] = await pool.query(`
+          SELECT u.id, u.nombre, u.apellido, u.foto, u.email, u.telefono
+          FROM servicioya.user AS u
+          JOIN servicioya.servicioasociado AS sa ON u.id = sa.idPersona
+          JOIN servicioya.service AS s ON sa.idServicio = s.idservice
+          WHERE s.description = ?
+      `, [nom_servicio]);
+
+      if (results.length === 0) {
+          return res.status(404).json({ error: 'No se encontraron usuarios para este servicio' });
+      }
+
+      res.json(results);
+  } catch (error) {
+      console.error('Error en la consulta:', error);
+      return res.status(500).json({ error: 'Error al obtener usuarios asociados al servicio' });
+  }
+});
+
+
 module.exports = router;

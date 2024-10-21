@@ -57,7 +57,7 @@ const styles = {
 };
 
 const Search = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // Estado para la búsqueda
     const [userData, setUserData] = useState([]); 
     const [filteredUsers, setFilteredUsers] = useState([]); 
     const [loading, setLoading] = useState(true);
@@ -81,12 +81,26 @@ const Search = () => {
         getData();
     }, []);
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
+        // Busca primero por nombre de usuario
         const lowercasedFilter = searchTerm.toLowerCase();
-        const filteredData = userData.filter(user => 
+        const filteredByUser = userData.filter(user => 
             user.usuario.toLowerCase().startsWith(lowercasedFilter) 
         );
-        setFilteredUsers(filteredData);
+
+        // Si no hay resultados, busca por nombre de servicio
+        if (filteredByUser.length === 0) {
+            try {
+                const response = await axios.get(`http://localhost:4444/api/user/servicio/${searchTerm}`);
+                setFilteredUsers(response.data);
+            } catch (error) {
+                console.error(error);
+                setFilteredUsers([]);
+            }
+        } else {
+            setFilteredUsers(filteredByUser);
+        }
+
         setConfirmedSearch(true); // Confirma que se realizó la búsqueda
     };
 
@@ -105,13 +119,13 @@ const Search = () => {
         <LayoutInside>  
             <div>
                 <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
-                <p>Ingrese el nombre de usuario para buscar perfiles:</p>
+                <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>
                 <div style={styles.searchBarContainer}>
                     <input
                         type="text"
                         value={searchTerm}
                         onChange={handleChange}
-                        placeholder="Buscar perfiles por nombre de usuario..."
+                        placeholder="Buscar perfiles por nombre de usuario o servicio..."
                         style={styles.searchBar}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
