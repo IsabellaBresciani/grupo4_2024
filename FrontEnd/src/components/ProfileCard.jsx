@@ -4,7 +4,7 @@ const styles = {
     profileCard: {
         display: 'flex',
         alignItems: 'center',
-        border: '20px solid #e0e0e0',
+        border: '2px solid rgba(255, 135, 16, 0.8)',
         borderRadius: '10px',
         padding: '10px',
         maxWidth: '1000px',

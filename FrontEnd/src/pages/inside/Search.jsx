@@ -15,7 +15,6 @@ const styles = {
     profilesContainer: {
         flex: '1',                  
         margin: '20px',             
-        border: '2px solid #ff8000',
         padding: '10px',
     },
     filter: {
@@ -50,7 +49,7 @@ const styles = {
     buttonStyle: {
         padding: '10px 20px',       
         border: 'none',             
-        backgroundColor: '#007BFF', 
+        backgroundColor: '#ff8000', 
         color: 'white',             
         borderRadius: '4px',        
         cursor: 'pointer',          
