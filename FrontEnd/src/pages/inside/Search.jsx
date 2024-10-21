@@ -1,100 +1,118 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LayoutInside from '../../components/LayoutInside';  
 import ProfileCard from '../../components/ProfileCard';
-import usersData from '../../PruebaSearch.json';
 import Filter from '../../components/Filter';  
-import { MdBorderColor } from 'react-icons/md';
-
-/*
-Cosas que faltan hacer:
--cuando se achica la pantalla el filtro se superpone a las tarjetas de usuario
--que se pueda seleccionar mas de una localidad y que se muestren todas las localidades seleccionadas, deberia tener un boton para quitarlas
-*/
+import axios from 'axios';
 
 const styles = {
     container: {
-        display: 'flex',            // Flexbox para dividir en dos columnas
-        flexDirection: 'row',       // Organiza los hijos en una fila
+        display: 'flex',            
+        flexDirection: 'row',       
         justifyContent: 'space-between',
         padding: '20px',
-        alignItems: 'flex-start',   // Asegura que los elementos se alineen al inicio del eje vertical
+        alignItems: 'flex-start',   
     },
     profilesContainer: {
-        flex: '1',                  // Toma el 70% del ancho
-        marginTop: '-20px',       
-        marginLeft:  '-20px',
-        marginRight:  '20px',
+        flex: '1',                  
+        margin: '20px',             
         border: '2px solid #ff8000',
+        padding: '10px',
     },
     filter: {
-        marginRight: '5vw',         //Establece un margen a la derecha del contenedor.
-        border: '2px solid #ff8000',//Define el borde del contenedor del filtro. 
+        marginLeft: '20px',         
+        border: '2px solid #ff8000',
         padding: '20px',
-        width: '300px',             // Fija un ancho al filtro
-        textAlign: 'left',          // Alineamos el texto a la izquierda
-        flexShrink: '0',            // Evita que el filtro se encoja
-        right: '0',                 // Se pega al borde derecho
-        top: '30%',                 // Ajusta la posición vertical
+        width: '300px',             
+        textAlign: 'left',          
+        flexShrink: '0',            
         boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
-        position: 'sticky',         //Permite que el filter siga al scrollbar.
-        flexDirection: 'column',
-        boxSizing: 'border-box',    // Incluye borde y padding en el tamaño total
-        height: 'auto',             // Ajusta la altura al contenido
-        alignSelf: 'flex-start',    // Alinea el filtro al principio del contenedor
-        borderRadius: '4px',        // Bordes redondeados
+        borderRadius: '4px',        
     },
     searchBarContainer: {
-        display: 'inline-flex',          // Para organizar el input y el botón en una fila
-        justifyContent: 'space-between', // Alinea el input a la izquierda y el botón a la derecha
-        alignItems: 'center',            // Alinea verticalmente el contenido
-        border: '1px solid #ccc',        // Borde del contenedor
-        padding: '10px',                 // Espaciado interno del contenedor
-        borderRadius: '4px',             // Bordes redondeados
-        width: '80%',                    // Hace que ocupe el 100% del ancho disponible
-        margin: '20px auto',             // Alinea el div en el centro horizontalmente
+        display: 'inline-flex',          
+        justifyContent: 'space-between', 
+        alignItems: 'center',            
+        border: '1px solid #ccc',        
+        padding: '10px',                 
+        borderRadius: '4px',             
+        width: '80%',                    
+        margin: '20px auto',             
     },
     searchBar: {
-        flex: '1',               // Hace que el input ocupe todo el espacio disponible
-        textAlign: 'left',       // Alinea el texto dentro del input a la izquierda
-        padding: '10px',         // Espaciado interno del input
-        marginRight: '10px',     // Separación entre el input y el botón
-        fontSize: '16px',        // Tamaño de la fuente del texto
-        border: '0px',           // Borde del contenedor
-        outline: 'none',         // Elimina el contorno predeterminado
+        flex: '1',               
+        textAlign: 'left',       
+        padding: '10px',         
+        marginRight: '10px',     
+        fontSize: '16px',        
+        border: '0px',           
+        outline: 'none',         
     },
     buttonStyle: {
-        padding: '10px 20px',       // Tamaño del botón
-        border: 'none',             // Sin borde
-        backgroundColor: '#007BFF', // Color de fondo del botón
-        color: 'white',             // Color del texto del botón
-        borderRadius: '4px',        // Bordes redondeados
-        cursor: 'pointer',          // Cambia el cursor a pointer cuando se pase sobre el botón
+        padding: '10px 20px',       
+        border: 'none',             
+        backgroundColor: '#007BFF', 
+        color: 'white',             
+        borderRadius: '4px',        
+        cursor: 'pointer',          
     },
 };
 
 const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [confirmedSearch, setConfirmedSearch] = useState('');
-    
-    const filteredUsers = usersData.filter(user => 
-        user.name.toLowerCase().includes(confirmedSearch.toLowerCase())
-    );
+    const [userData, setUserData] = useState([]); 
+    const [filteredUsers, setFilteredUsers] = useState([]); 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [confirmedSearch, setConfirmedSearch] = useState(false); // Estado para confirmar búsqueda
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:4444/api/user`);
+                setUserData(response.data);
+                setFilteredUsers(response.data); // Inicializa el estado filtrado con todos los usuarios
+                setError(null);
+            } catch (err) {
+                setError('Error al obtener los datos del usuario');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getData();
+    }, []);
 
     const handleSearch = () => {
-        setConfirmedSearch(searchTerm);
+        const lowercasedFilter = searchTerm.toLowerCase();
+        const filteredData = userData.filter(user => 
+            user.usuario.toLowerCase().startsWith(lowercasedFilter) 
+        );
+        setFilteredUsers(filteredData);
+        setConfirmedSearch(true); // Confirma que se realizó la búsqueda
     };
 
+    const handleChange = (e) => {
+        setSearchTerm(e.target.value);
+        if (!e.target.value) {
+            setFilteredUsers(userData); // Muestra todos los usuarios si el campo está vacío
+            setConfirmedSearch(false); // Resetea la confirmación de búsqueda
+        }
+    };
+
+    if (loading) return <p>Cargando datos...</p>;
+    if (error) return <p>{error}</p>;
+
     return (
-        <LayoutInside>
+        <LayoutInside>  
             <div>
                 <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
-                <p>Ingrese el nombre para buscar perfiles:</p>
+                <p>Ingrese el nombre de usuario para buscar perfiles:</p>
                 <div style={styles.searchBarContainer}>
                     <input
                         type="text"
                         value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                        placeholder="Buscar perfiles por nombre..."
+                        onChange={handleChange}
+                        placeholder="Buscar perfiles por nombre de usuario..."
                         style={styles.searchBar}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -117,11 +135,10 @@ const Search = () => {
                             filteredUsers.map(user => (
                                 <ProfileCard 
                                     key={user.id} 
-                                    name={user.name} 
-                                    description={user.description} 
+                                    name={`${user.nombre} ${user.apellido}`} 
                                     email={user.email} 
-                                    phone={user.phone} 
-                                    img={user.img} 
+                                    phone={user.telefono} 
+                                    img={user.foto} 
                                 />
                             ))
                         ) : (
