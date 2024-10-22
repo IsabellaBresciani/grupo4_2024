@@ -106,8 +106,8 @@ const Filter = () => {
                         />
                     </div>
 
-                                        {/* Mostrar localidades seleccionadas como etiquetas */}
-                                        <div style={styles.selectedTagsContainer}>
+                        {/* Mostrar localidades seleccionadas como etiquetas */}
+                        <div style={styles.selectedTagsContainer}>
                         {selectedLocations.map((location, index) => (
                             <div key={index} style={styles.tag}>
                                 {location}
