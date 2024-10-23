@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import axios from 'axios';
 
 const styles = {
@@ -19,14 +19,78 @@ const styles = {
         height: '300px',
         width: '300px',
         overflow: 'hidden',
-        display: 'flex',                
-        justifyContent: 'center',       
+        display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     profileInfo: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+    },
+    modal: {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Filtro oscuro detrás del modal
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 9999,
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '10px',
+        width: '400px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', /* Sombra para simular tarjeta */
+        textAlign: 'Left', /* Contenido a la izquierza */
+
+    },
+    modalInput: {
+        width: '100%',              // Ancho completo del input
+        padding: '10px',            // Espaciado interno
+        margin: '10px 0',           // Margen entre inputs
+        border: '1px solid #ddd',   // Borde gris claro
+        borderRadius: '5px',        // Bordes redondeados
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',  // Sombra sutil
+        fontSize: '1rem',           // Tamaño de fuente adecuado
+        outline: 'none',            // Elimina el borde azul cuando se selecciona
+        transition: 'border-color 0.3s ease', // Transición suave para el borde
+    },
+    modalInputFocus: {
+        borderColor: '#FF8C00',     // Cambia el color del borde al hacer focus
+    },
+    modalLabel: {
+        display: 'block',           // Asegura que las etiquetas ocupen su propia línea
+        marginBottom: '0px',        // Margen inferior para separar de los inputs
+        fontWeight: 'bold',         // Hace que las etiquetas sean más notorias
+    },
+    buttonsContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end',  // Alinea los botones a la derecha
+        marginTop: '20px',           // Margen superior para separar de los inputs
+    },
+    GuardarButton: {
+        backgroundColor: '#FF8C00',  // Color de fondo naranja
+        color: 'white',              // Color del texto
+        padding: '10px 20px',        // Espaciado interno
+        border: 'none',              // Sin borde
+        borderRadius: '5px',         // Bordes redondeados
+        cursor: 'pointer',           // Cambia el cursor al pasar por encima
+        marginTop: '10px',           // Margen superior para separarlo de otros elementos
+    },
+    cancelButton: {
+        backgroundColor: '#ccc',    // Color de fondo gris claro
+        color: 'black',             // Color del texto
+        padding: '10px 20px',       // Espaciado interno
+        border: 'none',             // Sin borde
+        borderRadius: '5px',        // Bordes redondeados
+        cursor: 'pointer',          // Cambia el cursor al pasar por encima
+        marginTop: '10px',          // Margen superior para separarlo de otros elementos
+        marginLeft: '10px',          // Espacio entre botones
     },
     nameRatingEdit: {
         display: 'flex',
@@ -97,7 +161,7 @@ const ProfileHeader = () => {
     const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [newData, setNewData] = useState({
         nombre: '',
         apellido: '',
@@ -132,7 +196,7 @@ const ProfileHeader = () => {
         } else {
             setIsModalOpen(false);
         }
-        window.location.reload();
+        //window.location.reload(); //Refrescaría toda la UI
 
         try {
             const dataUpdated = {
@@ -142,8 +206,10 @@ const ProfileHeader = () => {
                 ...(newData.localidad && { localidad: newData.localidad }),
                 ...(newData.telefono && { telefono: newData.telefono })
             };
+
             if (Object.keys(dataUpdated).length > 0) {
                 await axios.put('http://localhost:4444/api/user/jonyortega', dataUpdated);
+                getData(); // Refresca los datos después de la modificación
             }
         } catch (error) {
             console.error('Error al modificar los datos:', error);
@@ -169,8 +235,8 @@ const ProfileHeader = () => {
     const formatDate = (fechaISO) => {
         const fecha = new Date(fechaISO);
         const year = fecha.getFullYear();
-        const month = (fecha.getMonth() + 1).toString().padStart(2, '0'); 
-        const day = fecha.getDate().toString().padStart(2, '0'); 
+        const month = (fecha.getMonth() + 1).toString().padStart(2, '0');
+        const day = fecha.getDate().toString().padStart(2, '0');
         return `${year}/${month}/${day}`;
     };
 
@@ -180,71 +246,109 @@ const ProfileHeader = () => {
     return (
         <div style={styles.profileHeader}>
             <div style={styles.profileImage}>
-                <img src={userData.foto} alt="Imagen del perfil" style={{ borderRadius: '120px', maxHeight: '200px', maxWidth: '200px' }} /> 
+                <img src={userData.foto} alt="Imagen del perfil" style={{ borderRadius: '120px', maxHeight: '200px', maxWidth: '200px' }} />
             </div>
             <div style={styles.profileInfo}>
-                <div style={styles.nameRatingEdit}> 
+                <div style={styles.nameRatingEdit}>
                     <h1 style={styles.profileDetailsHeader}>{userData.nombre} {userData.apellido}</h1>
                     <div style={styles.editIcon}>
-                        <button className="fas fa-edit" onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer', fontSize: '1.2rem', color: '#333' }}></button>
+                        <button /*className="fas fa-edit" */
+                            onClick={() => {
+                                setIsModalOpen(true);
+                            }}
+                            style={{ cursor: 'pointer', fontSize: '1.2rem', color: '#333' }}
+                        >
+                            Editar
+                        </button>
                     </div>
                     {isModalOpen && (
-                        <div className="modal">
+                        <div style={styles.modal}>
                             <div style={styles.modalContent}>
                                 <h3>Modificar datos personales</h3>
                                 <form>
                                     <div>
-                                        <label htmlFor="nombre">Nombre</label>
+                                        <label htmlFor="nombre" style={styles.modalLabel}>Nombre</label>
                                         <input
                                             type="text"
                                             id="nombre"
                                             name="nombre"
                                             value={newData.nombre}
                                             onChange={handleChange}
+                                            style={styles.modalInput}
+                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')} // Vuelve al color original cuando se pierde el foco
+
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="apellido">Apellido</label>
+                                        <label htmlFor="apellido" style={styles.modalLabel}>Apellido</label>
                                         <input
                                             type="text"
                                             id="apellido"
                                             name="apellido"
                                             value={newData.apellido}
                                             onChange={handleChange}
+                                            style={styles.modalInput}
+                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="imagen">Imagen (URL)</label>
+                                        <label htmlFor="imagen" style={styles.modalLabel}>Imagen (URL)</label>
                                         <input
                                             type="text"
                                             id="imagen"
                                             name="imagen"
                                             value={newData.imagen}
                                             onChange={handleChange}
+                                            style={styles.modalInput}
+                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="localidad">Localidad</label>
+                                        <label htmlFor="localidad" style={styles.modalLabel}>Localidad</label>
                                         <input
                                             type="text"
                                             id="localidad"
                                             name="localidad"
                                             value={newData.localidad}
                                             onChange={handleChange}
+                                            style={styles.modalInput}
+                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="telefono">Teléfono</label>
+                                        <label htmlFor="telefono" style={styles.modalLabel}>Teléfono</label>
                                         <input
                                             type="text"
                                             id="telefono"
                                             name="telefono"
                                             value={newData.telefono}
                                             onChange={handleChange}
+                                            style={styles.modalInput}
+                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
                                         />
                                     </div>
-                                    <button type="button" onClick={modifyData}>Modificar datos</button>
-                                    <button type="button" onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                                    {/* Contenedor de botones */}
+                                    <div style={styles.buttonsContainer}>
+                                        <button
+                                            type="button"
+                                            onClick={modifyData}
+                                            style={styles.GuardarButton}
+                                        >
+                                            Guardar cambios
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsModalOpen(false)}
+                                            style={styles.cancelButton}
+                                        >
+                                            Cancelar
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -262,7 +366,7 @@ const ProfileHeader = () => {
                 </div>
                 <ul style={styles.profileDetails}>
                     <li style={styles.profileDetailsItem}>
-                        <i className="fas fa-user"></i> 
+                        <i className="fas fa-user"></i>
                         Edad: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
                     </li>
                     <li style={styles.profileDetailsItem}><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>

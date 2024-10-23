@@ -12,6 +12,7 @@ const styles = {
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
         width: '100%',
+     
     },
     serviceCard: {
         backgroundColor: '#fff',
@@ -25,6 +26,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'space-between',
         position: 'relative',
+       
     },
     serviceImage: {
         width: '100%',
