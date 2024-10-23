@@ -208,4 +208,37 @@ router.put('/:idPersona/servicios/:idServicio', async (req, res) => {
   }
 });
 
+// Obtener usuarios por nombre de servicio
+router.get('/servicio/:nom_servicio', async (req, res) => {
+  const { nom_servicio } = req.params;
+
+  try {
+    // Buscar el servicio por descripción
+    const servicio = await Servicio.findOne({
+      where: { description: nom_servicio },
+      include: {
+        model: Persona, // Incluir personas asociadas al servicio
+        as: 'personas', // Alias de la relación Persona-Servicio
+        through: { attributes: [] }, // No incluir la tabla intermedia en la respuesta
+        attributes: ['id', 'nombre', 'apellido', 'foto', 'email', 'telefono'] // Atributos a incluir de las personas
+      }
+    });
+
+    if (!servicio) {
+      return res.status(404).json({ error: 'Servicio no encontrado' });
+    }
+
+    // Si se encuentra el servicio, devolver las personas asociadas
+    const personasAsociadas = servicio.personas;
+    if (personasAsociadas.length === 0) {
+      return res.status(404).json({ error: 'No se encontraron usuarios para este servicio' });
+    }
+
+    res.json(personasAsociadas);
+  } catch (error) {
+    console.error('Error en la consulta:', error);
+    return res.status(500).json({ error: 'Error al obtener usuarios asociados al servicio' });
+  }
+});
+
 module.exports = router;
