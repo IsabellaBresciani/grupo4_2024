@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import NewReviewPopup from './NewReviewPopup';
 
 const styles = {
 	popupOverlay: {
@@ -13,18 +14,28 @@ const styles = {
    		alignItems: 'center',
     	zIndex: 1000, // Asegúrate de que esté encima de todo
   	},
-  
-  	popupContent: {
-    	backgroundColor: 'white',
-    	marginTop: '30px',
-	    padding: '20px',
-	    borderRadius: '10px',
-	    width: '50%',
-	    height: '100%',
-	    boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
- 	   	position: 'relative',
-  	},
-    
+
+	popupContent: {
+		backgroundColor: 'white',
+		borderRadius: '10px', 
+		width: '50%',
+		padding: '20px',
+		marginTop:'50px',
+		maxHeight: '100vh', 
+		overflowY: 'auto', 
+		paddingRight: '20px', 
+		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
+		position: 'relative',
+		display: 'flex',
+		flexDirection: 'column',
+
+		// Para ocultar la scrollbar en diferentes navegadores:
+		scrollbarWidth: 'none', // Firefox
+		'&::-webkit-scrollbar': { // Chrome, Safari y navegadores basados en WebKit
+			display: 'none',
+		},
+	},
+
   	closeButton: {
     	position: 'absolute',
     	top: '10px',
@@ -75,6 +86,24 @@ const styles = {
 		paddingBottom: '2px', 
 	},
 
+	buttonContainer: {
+		display: 'flex',
+		justifyContent: 'center',  
+	},
+
+	button: {
+        padding: '5px 10px',
+        backgroundColor: '#ff7f11',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+		width:'40%',
+		height: '50px',
+        
+    },
+
+
 }
 // Defino los valores de cada Rating (esto deberia venir desde la BD)
 const precioRating = '20%';
@@ -83,6 +112,17 @@ const atencionRating = '4%';
 const tiempoRating = '90%';
 
 const ReviewPopup = ({ show, onClose }) => {
+	//funciones para el segundo popup que permitira crear una nueva reseña
+	const [showPopupNR, setShowPopupNR] = useState(false);
+
+	const handleOpenPopupNR = () => {
+		setShowPopupNR(true);
+	};
+	
+	const handleClosePopupNR = () => {
+		setShowPopupNR(false);
+	};
+
   // Si no debe mostrarse, no renderizamos nada
 	if (!show) {
     	return null;
@@ -138,7 +178,76 @@ const ReviewPopup = ({ show, onClose }) => {
 						<p>Muy veloz</p>
 					</div>
 				</div>
-
+				
+				<div style={styles.buttonContainer}>
+					<button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
+				</div>
+				{/* Renderizamos el segundo popup si showPopupNR es true */}
+				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} />
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					Queria poder scrollear
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				<p>
+					a
+				</p>
+				
 			</div>
 		</div>
   	);
