@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const pool = require('../config/database');  // Importar la conexion de la base de datos
+const User = require('../models/reviewModels');
 
 // Ruta para crear un nuevo usuario
 router.post('/', async (req, res) => {
@@ -15,20 +16,17 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        // Verificar si el usuario o el email ya existen
-        const [existingUser] = await pool.query('SELECT * FROM servicioya.user WHERE usuario = ? OR email = ?', [usuario, email]);
+        const [existingUser] = await User.findUserByEmailUsername(pool, {usuario, email});
 
         if (existingUser.length > 0) {
             return res.status(400).json({ error: 'El usuario o email ya están registrados.' });
         }
 
-        // Encriptar la contrasenia
+        // Encriptar la password
         const hashedPassword = await bcrypt.hash(password, 10);  // El valor 10 es el "salt rounds"
 
         // Insertar el nuevo usuario en la base de datos
-        await pool.query(
-            'INSERT INTO servicioya.user (dni, nombre, apellido, fecha_nacimiento, email, usuario, password) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-            [dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword]
+        await User.create(pool, [dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword]
         );
 
         // Respuesta de exito

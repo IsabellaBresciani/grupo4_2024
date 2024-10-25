@@ -27,6 +27,31 @@ class Service {
       const [result] = await connection.query(sql, [idServicio]);
       return result;
     }
+
+    static async findUserXService(connection, idPersona) {
+      const sql = `SELECT sa.idServicio, sa.idAsociacion, s.description, sa.estado, s.imagen
+        FROM ServicioAsociado sa
+        JOIN service s ON sa.idServicio = s.idservice
+        WHERE sa.idPersona = ?`;
+      const [result] = await connection.query(sql, [idPersona]);
+      return result;
+    }
+
+    static async addUserXService(connection,{ idPersona, idServicio, estado}) {
+      const sql = `
+          INSERT INTO servicioya.servicioasociado (idPersona, idServicio, estado)
+          VALUES (?, ?, ?);
+      `;
+      const [result] = await connection.query(sql, [idPersona, idServicio, estado]);
+      return result;
+    }
+
+    static async updateServicioAsoc(connection, { estado, idServicio, idPersona }) {
+      const sql = `UPDATE ServicioAsociado SET estado = ? WHERE idPersona = ? AND idServicio = ?`;
+      const [result] = await connection.query(sql, [estado, idPersona, idServicio]);
+      return result;
+    }
+
   }
   
   module.exports = Service;

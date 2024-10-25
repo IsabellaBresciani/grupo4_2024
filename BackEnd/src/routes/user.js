@@ -1,11 +1,13 @@
 const express = require('express');
+const User = require('../models/userModels');
+const Service = require('../models/serviceModels');
 const router = express.Router();
 const pool = require('../config/database');  // Importar la conexión de la base de datos
 
 // Listar usuarios
   router.get("/", async (req, res) => {
     try {
-        const [results] = await pool.query('SELECT * FROM servicioya.user');
+        const [results] = User.find(pool);
         res.json(results);
     } catch (error) {
         return res.status(500).json({ error: 'Error en la consulta' });
@@ -17,13 +19,12 @@ router.get("/:nom_usuario", async (req, res) => {
     const { nom_usuario } = req.params;
     
     try {
-        const [results] = await pool.query('SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento , l.nombre AS localidad FROM servicioya.user AS u JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad WHERE u.usuario = ?', [nom_usuario]);
+        const [results] = await User.findByUsername(pool, nom_usuario);
         
         if (results.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
-        
-        res.json(results[0]);
+        res.json(results);
     } catch (error) {
         return res.status(500).json({ error: 'Error en la consulta' });
     }
@@ -81,13 +82,15 @@ router.put('/:usuario', async (req, res) => {
     // Añadir el usuario al final de los valores para la condición WHERE
     values.push(usuario);
   
+    const campos = fields.join( ',');
     // Construir la consulta SQL dinámica usando template literals correctamente
     const sql = `UPDATE user SET ${fields.join(', ')} WHERE usuario = ?`;
   
     try {
       // Ejecutar la consulta
-      const [result] = await pool.query(sql, values);
-  
+      //const [result] = await pool.query(sql, values);
+      const result= await User.update(pool, campos, values);
+
       if (result.affectedRows === 0) {
         return res.status(404).json({ message: 'Usuario no encontrado.' });
       }
@@ -104,8 +107,7 @@ router.delete('/:usuario', async (req, res) => {
     const { usuario } = req.params;
 
     try {
-        const [result] = await pool.query('DELETE FROM servicioya.user WHERE usuario = ?', [usuario]);
-
+        const result = await User.delete(pool, usuario);
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
@@ -122,12 +124,7 @@ router.get('/:idPersona/servicios', async (req, res) => {
 
   try {
     // Consulta para obtener los servicios asociados a la persona con la descripción del servicio
-    const [results] = await pool.query(`
-        SELECT DISTINCT sa.idServicio, s.description, sa.estado, s.imagen
-        FROM ServicioAsociado sa
-        JOIN service s ON sa.idServicio = s.idservice
-        WHERE sa.idPersona = ?
-    `, [idPersona]);
+    const results = await Service.findUserXService(pool, idPersona);
 
     // Verificar si se encontraron resultados
     if (results.length === 0) {
@@ -153,26 +150,26 @@ router.post('/:idPersona/servicios', async (req, res) => {
       return res.status(400).json({ error: 'ID del servicio y estado son requeridos.' });
   }
 
-  try {
-      // Insertar la asociación en la tabla ServicioAsociado
-      const [result] = await pool.query(`
-          INSERT INTO servicioya.servicioasociado (idPersona, idServicio, estado)
-          VALUES (?, ?, ?)
-      `, [idPersona, idServicio, estado]);
-
+    try {
+      const rows = await Service.findUserXService(pool, idPersona);
+      const asoc = rows.some((e) =>
+        String(e.idServicio) === String(idServicio)
+        );
+      if (asoc){
+        return res.status(409).json({error: 'El servicio ya esta asociado al usuario.'})
+      }
+      const result = await Service.addUserXService(pool, {idPersona, idServicio, estado});
       // Verificar si la asociación fue exitosa
       if (result.affectedRows === 0) {
           return res.status(500).json({ error: 'No se pudo asociar el servicio al usuario.' });
       }
-
-      // Respuesta exitosa
       res.json({ message: 'Servicio agregado exitosamente.' });
-
-  } catch (error) {
+    }
+   catch (error) {
       console.error('Error al agregar el servicio:', error);
       return res.status(500).json({ error: 'Error en el servidor.', details: error.message });
-  }
-});
+    }
+})
 
 // Actualizar el estado de un servicio asociado
 router.put('/:idPersona/servicios/:idServicio', async (req, res) => {
@@ -184,16 +181,10 @@ router.put('/:idPersona/servicios/:idServicio', async (req, res) => {
   }
 
   try {
-      const [result] = await pool.query(`
-          UPDATE ServicioAsociado 
-          SET estado = ? 
-          WHERE idPersona = ? AND idServicio = ?
-      `, [estado, idPersona, idServicio]);
-
+        const result = await Service.updateServicioAsoc(pool, {estado, idPersona, idServicio});
       if (result.affectedRows === 0) {
           return res.status(404).json({ error: 'Servicio asociado no encontrado.' });
       }
-
       res.json({ message: 'Estado del servicio actualizado correctamente.' });
   } catch (error) {
       console.error('Error al actualizar el estado del servicio:', error);
@@ -206,13 +197,7 @@ router.get('/servicio/:nom_servicio', async (req, res) => {
   const { nom_servicio } = req.params;
 
   try {
-      const [results] = await pool.query(`
-          SELECT u.id, u.nombre, u.apellido, u.foto, u.email, u.telefono
-          FROM servicioya.user AS u
-          JOIN servicioya.servicioasociado AS sa ON u.id = sa.idPersona
-          JOIN servicioya.service AS s ON sa.idServicio = s.idservice
-          WHERE s.description = ?
-      `, [nom_servicio]);
+      const results = await User.findUserByService(pool, nom_servicio);
 
       if (results.length === 0) {
           return res.status(404).json({ error: 'No se encontraron usuarios para este servicio' });
