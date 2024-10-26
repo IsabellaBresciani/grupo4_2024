@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import NewReviewPopup from './NewReviewPopup';
+import ReviewCard from './ReviewCard';
 
 const styles = {
 	popupOverlay: {
-    	position: 'fixed',
-    	top: 0,
-    	left: 0,
-    	width: '100%',
-    	height: '100%',
-    	backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semi-transparente
-    	display: 'flex',
-    	justifyContent: 'center',
-   		alignItems: 'center',
-    	zIndex: 1000, // Asegúrate de que esté encima de todo
-  	},
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semi-transparente
+    display: 'flex',
+    justifyContent: 'center',
+   	alignItems: 'center',
+    zIndex: 1000, // Asegúrate de que esté encima de todo
+  },
 
 	popupContent: {
 		backgroundColor: 'white',
@@ -36,29 +37,27 @@ const styles = {
 		},
 	},
 
-  	closeButton: {
-    	position: 'absolute',
-    	top: '10px',
-    	right: '10px',
-    	backgroundColor: 'transparent',
-    	border: 'none',
-    	fontSize: '16px',
-    	cursor: 'pointer',
-    	outline: 'none',
-  	},
+  closeButton: {
+  	position: 'absolute',
+  	top: '10px',
+  	right: '10px',
+  	backgroundColor: 'transparent',
+  	border: 'none',
+    fontSize: '16px',
+    cursor: 'pointer',
+    outline: 'none',
+  },
 
-  	ratingGeneral: {
-    	fontSize: '100px',
-    	textAlign: 'center',
-    	fontWeight: '500',
-  	},
-
-  	ratingBarsContainer: {
+  ratingGeneral: {
+    fontSize: '100px',
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  ratingBarsContainer: {
 		display: 'flex',
 		flexDirection: 'column',
 		gap: '2px', // menos espacio entre elementos
 	},
-	
 	ratingBar: {
 		height: '10px',
 		width: '100%',
@@ -67,42 +66,35 @@ const styles = {
 		overflow: 'hidden',
 		position: 'relative',
 	},
-	
 	filledBar: {
 		height: '100%',
 		backgroundColor: '#ffc107',
 		borderRadius: 'inherit',
 	},
-	
 	detailLabelContainer: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		fontSize: '14px',
 	},
-	
 	title: {
 		fontWeight: '500',
 		margin: '0', 
 		paddingBottom: '2px', 
 	},
-
 	buttonContainer: {
 		display: 'flex',
 		justifyContent: 'center',  
 	},
-
 	button: {
-        padding: '5px 10px',
-        backgroundColor: '#ff7f11',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
+    padding: '5px 10px',
+    backgroundColor: '#ff7f11',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
 		width:'40%',
 		height: '50px',  
-    },
-
-
+  },
 }
 // Defino los valores de cada Rating (esto deberia venir desde la BD)
 const precioRating = '20%';
@@ -113,78 +105,59 @@ const tiempoRating = '90%';
 const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
     const [showPopupNR, setShowPopupNR] = useState(false);
 
-    const handleOpenPopupNR = () => {
-        setShowPopupNR(true);
-    };
+	const handleOpenPopupNR = () => {
+		setShowPopupNR(true);
+	};
+	
+	const handleClosePopupNR = () => {
+		setShowPopupNR(false);
+	};
 
-    const handleClosePopupNR = () => {
-        setShowPopupNR(false);
-    };
+	const renderRating = (label, value, minLabel, maxLabel) => (
+		<div style={styles.ratingRow}>
+		  <p style={styles.title}>{label}</p>
+		  <div style={styles.ratingBar}>
+			<div style={{ ...styles.filledBar, width: value }}></div>
+		  </div>
+		  <div style={styles.detailLabelContainer}>
+			<p>{minLabel}</p>
+			<p>{maxLabel}</p>
+		  </div>
+		</div>
+	);
 
-    // Si no debe mostrarse, no renderizamos nada
-    if (!show) {
-        return null;
-    }
+  // Si no debe mostrarse, no renderizamos nada
+	if (!show) {
+    return null;
+	}
 
-	console.log("Este es el id:", servicioasociado_id);
-    // Si debe mostrarse, renderizamos el pop-up
-    return (
-        <div style={styles.popupOverlay} onClick={onClose}>
-            <div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-                <button style={styles.closeButton} onClick={onClose}>X</button>
-                <h2>Reseñas del servicio</h2>
-                <p style={styles.ratingGeneral}>3.5</p> {/* Este valor tiene que venir de la BD */}
-                
-                <div style={styles.ratingBarsContainer}>
-                    {/* Barra para el precio */}
-                    <p style={styles.title}>Precio</p>
-                    <div style={styles.ratingBar}>
-                        <div style={{ ...styles.filledBar, width: precioRating }}></div>
-                    </div>
-                    <div style={styles.detailLabelContainer}>
-                        <p>Malo</p>
-                        <p>Excelente</p>
-                    </div>
-                    
-                    {/* Barra para la calidad */}
-                    <p style={styles.title}>Calidad</p>
-                    <div style={styles.ratingBar}>
-                        <div style={{ ...styles.filledBar, width: calidadRating }}></div>
-                    </div>
-                    <div style={styles.detailLabelContainer}>
-                        <p>Pesima</p>
-                        <p>Admirable</p>
-                    </div>
-
-                    {/* Barra para la atención al cliente */}
-                    <p style={styles.title}>Atención al cliente</p>
-                    <div style={styles.ratingBar}>
-                        <div style={{ ...styles.filledBar, width: atencionRating }}></div>
-                    </div>
-                    <div style={styles.detailLabelContainer}>
-                        <p>Antisocial</p>
-                        <p>Muy atento</p>
-                    </div>
-
-                    {/* Barra para el Tiempo del trabajo */}
-                    <p style={styles.title}>Tiempo del trabajo</p>
-                    <div style={styles.ratingBar}>
-                        <div style={{ ...styles.filledBar, width: tiempoRating }}></div>
-                    </div>
-                    <div style={styles.detailLabelContainer}>
-                        <p>Muy lento</p>
-                        <p>Muy veloz</p>
-                    </div>
-                </div>
-                
-                <div style={styles.buttonContainer}>
-                    <button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
-                </div>
-                {/* Renderizamos el segundo popup si showPopupNR es true */}
-				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
-				</div>
+  // Si debe mostrarse, renderizamos el pop-up
+	return (
+		<div style={styles.popupOverlay} onClick={onClose}>
+			<div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+				<button style={styles.closeButton} onClick={onClose}>X</button>
+				<h2>Reseñas del servicio</h2>
+				<p style={styles.ratingGeneral}>3.5</p>         {/* Este valor tiene que venir de la BD */}
+				
+				<div style={styles.ratingBarsContainer}>
+          {renderRating("Precio", precioRating, "Malo", "Excelente")}
+          {renderRating("Calidad", calidadRating, "Pésima", "Admirable")}
+          {renderRating("Atención al cliente", atencionRating, "Antisocial", "Muy atento")}
+          {renderRating("Tiempo del trabajo", tiempoRating, "Muy lento", "Muy veloz")}
         </div>
-    );
+				
+				<div style={styles.buttonContainer}>
+					<button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
+				</div>
+				{/* Renderizamos el segundo popup si showPopupNR es true */}
+				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
+
+				<ReviewCard />
+        <p></p>
+        <p></p>
+  		</div>
+		</div>
+  	);
 };
 
 export default ReviewPopup;
