@@ -99,8 +99,7 @@ const styles = {
         borderRadius: '5px',
         cursor: 'pointer',
 		width:'40%',
-		height: '50px',
-        
+		height: '50px',  
     },
 
 
