@@ -35,6 +35,7 @@ const styles = {
         borderRadius: '5px',
     },
     button: {
+        fontSize: '18px',
         marginTop: '10px',
         padding: '5px 10px',
         backgroundColor: '#ff7f11',
@@ -42,7 +43,7 @@ const styles = {
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-        alignSelf: 'flex-start',
+        alignSelf: 'center',
     },
     buttonHover: {
         backgroundColor: '#ff5500',
@@ -64,7 +65,7 @@ const styles = {
         borderRadius: '8px',
         width: '300px',
     },
-    starRating: { 
+    isVisible: { 
         position: 'absolute',
         top: '10px',
         right: '10px',
@@ -72,15 +73,10 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',  
         alignItems: 'center',
-    },
-    starIcon: {
-        fontSize: '24px',                  
-        borderRadius: '50%',     
-        width: '30px',           
-        height: '30px',          
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        outline: 'none',
+        border: 'none',
+        backgroundColor: '#fff',
+        fontSize: '18px',
     },
 
 };
@@ -183,18 +179,17 @@ const ServiceCard = () => {
                             <h3>{service.description}</h3>  
                             <p>{service.estado === 'activo' ? 'Servicio activo' : 'Servicio dado de baja'}</p>
                             <button
-                                style={styles.button}
+                                style={styles.isVisible}
                                 onClick={() => handleUpdateStatus(service.idServicio, service.estado)}
-                            >
-                                {service.estado === 'activo' ? 'Marcar como inactivo' : 'Marcar como activo'}
+                                >
+                                {service.estado === 'activo' ? (                                    
+                                    <i className="fas fa-eye-slash"></i>
+                                ) : (                                    
+                                    <i className="fas fa-eye"></i>                                  
+                                )}
                             </button>
 
-                            <div style={styles.starRating} onClick={() => handleOpenPopup(service.idAsociacion)}>
-                                <div style={styles.starIcon}>
-                                    <i className="fas fa-star"></i>
-                                </div>
-                                <span>X/5</span>
-                            </div>
+                            <button style={styles.button} onClick={handleOpenPopup}> Ver reseñas </button>
                         </div>
                     ))
                 ) : (
