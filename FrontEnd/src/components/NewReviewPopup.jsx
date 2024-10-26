@@ -123,136 +123,136 @@ const styles = {
   },
 };
 
-const NewReviewPopup = ({ show, onClose }) => {
-	const [reviewData, setReviewData] = useState({
-	  precio: 0,
-	  calidad: 0,
-	  atencion: 0,
-	  tiempo: 0,
-	  comentario: '',
-	  idAutor: '',
-	  servicioasociado_id: '',
-	});
-  
-	if (!show) {
-	  return null;
-	}
-  
-	// Función para manejar cambios en los inputs
-	const handleInputChange = (e) => {
-	  const { name, value } = e.target;
-	  setReviewData((prevData) => ({
-		  ...prevData,
-		  [name]: value,
-	  }));
-	};
-  
-	// Función para enviar la reseña a la API
-	const handleSubmit = async () => {
-	  try {
-		  const response = await axios.post('http://localhost:4444/api/review', reviewData);
-		  console.log('Reseña creada:', response.data);
-		  // Aquí puedes cerrar el popup o resetear el estado
-		  onClose();
-	  } catch (error) {
-		  console.error('Error al crear la reseña:', error);
-	  }
-	};
-  
-	return (
-		<div style={styles.popupOverlay} onClick={onClose}>
-			<div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-		  	<button style={styles.closeButton} onClick={onClose}>X</button>
-		  	
-        <h2>Crear nueva reseña</h2>
-		  	<div style={styles.columnsContainer}>
-          <div style={styles.ratingBarsColumn}>
-            {/* Barra para puntuar el precio que se cobro por el servicio */}
-            <p style={styles.title}>Precio</p>
-            <input
-                style={styles.ratingBar}
-                type="range"
-                min="0"
-                max="5"
-                name="precio"
-                value={reviewData.precio}
-                onChange={handleInputChange}
-            />
-            <div style={styles.detailLabelContainer}>
-                <p>Malo</p>
-                <p>Excelente</p>
-            </div>
+const NewReviewPopup = ({ show, onClose, asociacionId }) => {
+    const [reviewData, setReviewData] = useState({
+        precio: 0,
+        calidad: 0,
+        atencion: 0,
+        tiempo: 0,
+        comentario: '',
+        idAutor: 17, // Aquí deberías obtener el idAutor del contexto del usuario o similar
+        servicioasociado_id: asociacionId,
+    });
 
-            {/* Barra para puntuar la calidad del trabajo */}
-            <p style={styles.title}>Calidad</p>
-            <input
-              style={styles.ratingBar}
-              type="range"
-              min="0"
-              max="5"
-              name="calidad"
-              value={reviewData.calidad}
-              onChange={handleInputChange}
-            />
-            <div style={styles.detailLabelContainer}>
-              <p>Pesima</p>
-              <p>Admirable</p>
-            </div>
+    if (!show) {
+        return null;
+    }
 
-            {/* Barra para puntuar la atencion al cliente */}
-            <p style={styles.title}>Atención al cliente</p>
-            <input
-              style={styles.ratingBar}
-              type="range"
-              min="0"
-              max="5"
-              name="atencion"
-              value={reviewData.atencion}
-              onChange={handleInputChange}
-            />
-            <div style={styles.detailLabelContainer}>
-              <p>Antisocial</p>
-              <p>Muy atento</p>
-            </div>
+    // Función para manejar cambios en los inputs
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setReviewData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
 
-            {/* Barra para puntuar el tiempo */}
-            <p style={styles.title}>Tiempo</p>
-            <input
-              style={styles.ratingBar}
-              type="range"
-              min="0"
-              max="5"
-              name="tiempo"
-              value={reviewData.tiempo}
-              onChange={handleInputChange}
-            />
-            <div style={styles.detailLabelContainer}>
-              <p>Muy lento</p>
-              <p>Muy veloz</p>
-            </div>
-          </div>
+    // Función para enviar la reseña a la API
+    const handleSubmit = async () => {
+        try {
+            // Verifica que todos los campos están correctamente llenos
+            const response = await axios.post('http://localhost:4444/api/review', reviewData);
+            console.log('Reseña creada:', response.data);
+            // Aquí puedes cerrar el popup o resetear el estado
+            onClose();
+        } catch (error) {
+            console.error('Error al crear la reseña:', error);
+        }
+    };
 
-          <div style={styles.verticalBar}></div>
-        
-          <div style={styles.descriptionColumn}>
-            {/* Campo para el comentario */}
-            <p style={styles.title}>Descripción:</p>
-            <textarea
-              name="comentario"
-              value={reviewData.comentario}
-              onChange={handleInputChange}
-              style={styles.textarea}
-              placeholder="Escribe una descripción..."
-            />
-            <div style={styles.buttonsContainer}>
-              <button style={styles.button} onClick={handleSubmit}>Enviar Reseña</button>
-              <button style={{ ...styles.button, backgroundColor: '#aaa' }} onClick={onClose}>Cancelar</button>
+    return (
+        <div style={styles.popupOverlay} onClick={onClose}>
+            <div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                <button style={styles.closeButton} onClick={onClose}>X</button>
+                <h2>Crear nueva reseña</h2>
+                <div style={styles.columnsContainer}>
+                    <div style={styles.ratingBarsColumn}>
+                        {/* Barra para puntuar el precio */}
+                        <p style={styles.title}>Precio</p>
+                        <input
+                            style={styles.ratingBar}
+                            type="range"
+                            min="0"
+                            max="5"
+                            name="precio"
+                            value={reviewData.precio}
+                            onChange={handleInputChange}
+                        />
+                        <div style={styles.detailLabelContainer}>
+                            <p>Malo</p>
+                            <p>Excelente</p>
+                        </div>
+
+                        {/* Barra para puntuar la calidad del trabajo */}
+                        <p style={styles.title}>Calidad</p>
+                        <input
+                            style={styles.ratingBar}
+                            type="range"
+                            min="0"
+                            max="5"
+                            name="calidad"
+                            value={reviewData.calidad}
+                            onChange={handleInputChange}
+                        />
+                        <div style={styles.detailLabelContainer}>
+                            <p>Pesima</p>
+                            <p>Admirable</p>
+                        </div>
+
+                        {/* Barra para puntuar la atención al cliente */}
+                        <p style={styles.title}>Atención al cliente</p>
+                        <input
+                            style={styles.ratingBar}
+                            type="range"
+                            min="0"
+                            max="5"
+                            name="atencion"
+                            value={reviewData.atencion}
+                            onChange={handleInputChange}
+                        />
+                        <div style={styles.detailLabelContainer}>
+                            <p>Antisocial</p>
+                            <p>Muy atento</p>
+                        </div>
+
+                        {/* Barra para puntuar el tiempo */}
+                        <p style={styles.title}>Tiempo</p>
+                        <input
+                            style={styles.ratingBar}
+                            type="range"
+                            min="0"
+                            max="5"
+                            name="tiempo"
+                            value={reviewData.tiempo}
+                            onChange={handleInputChange}
+                        />
+                        <div style={styles.detailLabelContainer}>
+                            <p>Muy lento</p>
+                            <p>Muy veloz</p>
+                        </div>
+                    </div>
+
+                    <div style={styles.verticalBar}></div>
+
+                    <div style={styles.descriptionColumn}>
+                        {/* Campo para el comentario */}
+                        <p style={styles.title}>Descripción:</p>
+                        <textarea
+                            name="comentario"
+                            value={reviewData.comentario}
+                            onChange={handleInputChange}
+                            style={styles.textarea}
+                            placeholder="Escribe una descripción..."
+                        />
+                        <div style={styles.buttonsContainer}>
+                            <button style={styles.button} onClick={handleSubmit}>Enviar Reseña</button>
+                            <button style={{ ...styles.button, backgroundColor: '#aaa' }} onClick={onClose}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-		  </div>
-	  </div>
-	);
+    );
 };
 
 export default NewReviewPopup;

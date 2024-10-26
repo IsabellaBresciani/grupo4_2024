@@ -93,6 +93,7 @@ const ServiceCard = () => {
     const [newService, setNewService] = useState({ id: 0, estado: 'activo', selectedService: '' });
     const [servicesAll, setServicesAll] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+    const [selectedAsociacionId, setSelectedAsociacionId] = useState(null);  // Estado para almacenar el idAsociacion
 
     const fetchServicesAll = async () => {
         try {
@@ -107,8 +108,8 @@ const ServiceCard = () => {
         try {
             const response = await axios.get('http://localhost:4444/api/user/17/servicios');  
             const uniqueServices = response.data.filter(
-              (service, index, self) =>
-                index === self.findIndex((s) => s.idServicio === service.idServicio)
+                (service, index, self) =>
+                    index === self.findIndex((s) => s.idServicio === service.idServicio)
             );  
             setServices(uniqueServices);
         } catch (err) {
@@ -117,7 +118,7 @@ const ServiceCard = () => {
             setLoading(false);
         }
     };
-    
+
     const handleUpdateStatus = async (idServicio, currentState) => {
         const newStatus = currentState === 'activo' ? 'inactivo' : 'activo';
         try {
@@ -160,12 +161,14 @@ const ServiceCard = () => {
         fetchServices();    // Fetch user services
     }, []);
 
-    const handleOpenPopup = () => {
+    const handleOpenPopup = (idAsociacion) => {
+        setSelectedAsociacionId(idAsociacion);  // Guardar idAsociacion seleccionado
         setShowPopup(true);
     };
 
     const handleClosePopup = () => {
         setShowPopup(false);
+        setSelectedAsociacionId(null);  // Limpiar el idAsociacion al cerrar el popup
     };
 
     if (loading) return <p>Cargando servicios...</p>;
@@ -186,7 +189,7 @@ const ServiceCard = () => {
                                 {service.estado === 'activo' ? 'Marcar como inactivo' : 'Marcar como activo'}
                             </button>
 
-                            <div style={styles.starRating} onClick={handleOpenPopup}>
+                            <div style={styles.starRating} onClick={() => handleOpenPopup(service.idAsociacion)}>
                                 <div style={styles.starIcon}>
                                     <i className="fas fa-star"></i>
                                 </div>
@@ -199,7 +202,11 @@ const ServiceCard = () => {
                 )}
             </div>
 
-            <ReviewPopup show={showPopup} onClose={handleClosePopup} />
+            <ReviewPopup 
+                show={showPopup} 
+                onClose={handleClosePopup} 
+                servicioasociado_id={selectedAsociacionId}  // Pasar idAsociacion seleccionado a ReviewPopup
+            />
 
             <div>
                 <button style={styles.button} onClick={() => setIsModalOpen(true)}>Agregar servicio</button>

@@ -110,146 +110,81 @@ const calidadRating = '50%';
 const atencionRating = '4%';
 const tiempoRating = '90%';
 
-const ReviewPopup = ({ show, onClose }) => {
-	//funciones para el segundo popup que permitira crear una nueva reseña
-	const [showPopupNR, setShowPopupNR] = useState(false);
+const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
+    const [showPopupNR, setShowPopupNR] = useState(false);
 
-	const handleOpenPopupNR = () => {
-		setShowPopupNR(true);
-	};
-	
-	const handleClosePopupNR = () => {
-		setShowPopupNR(false);
-	};
+    const handleOpenPopupNR = () => {
+        setShowPopupNR(true);
+    };
 
-  // Si no debe mostrarse, no renderizamos nada
-	if (!show) {
-    	return null;
-	}
+    const handleClosePopupNR = () => {
+        setShowPopupNR(false);
+    };
 
-  // Si debe mostrarse, renderizamos el pop-up
-	return (
-		<div style={styles.popupOverlay} onClick={onClose}>
-			<div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-				<button style={styles.closeButton} onClick={onClose}>X</button>
-				<h2>Reseñas del servicio</h2>
-				<p style={styles.ratingGeneral}>3.5</p>         {/* Este valor tiene que venir de la BD */}
-				
-				<div style={styles.ratingBarsContainer}>
+    // Si no debe mostrarse, no renderizamos nada
+    if (!show) {
+        return null;
+    }
 
-					{/* Barra para el precio */}
-					<p style={styles.title}>Precio</p>
-					<div style={styles.ratingBar}>
-						<div style={{ ...styles.filledBar, width: precioRating }}></div>
-					</div>
-					<div style={styles.detailLabelContainer}>
-						<p>Malo</p>
-						<p>Excelente</p>
-					</div>
-					
-					{/* Barra para la calidad */}
-					<p style={styles.title}>Calidad</p>
-					<div style={styles.ratingBar}>
-						<div style={{ ...styles.filledBar, width: calidadRating }}></div>
-					</div>
-					<div style={styles.detailLabelContainer}>
-						<p>Pesima</p>
-						<p>Admirable</p>
-					</div>
+	console.log("Este es el id:", servicioasociado_id);
+    // Si debe mostrarse, renderizamos el pop-up
+    return (
+        <div style={styles.popupOverlay} onClick={onClose}>
+            <div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                <button style={styles.closeButton} onClick={onClose}>X</button>
+                <h2>Reseñas del servicio</h2>
+                <p style={styles.ratingGeneral}>3.5</p> {/* Este valor tiene que venir de la BD */}
+                
+                <div style={styles.ratingBarsContainer}>
+                    {/* Barra para el precio */}
+                    <p style={styles.title}>Precio</p>
+                    <div style={styles.ratingBar}>
+                        <div style={{ ...styles.filledBar, width: precioRating }}></div>
+                    </div>
+                    <div style={styles.detailLabelContainer}>
+                        <p>Malo</p>
+                        <p>Excelente</p>
+                    </div>
+                    
+                    {/* Barra para la calidad */}
+                    <p style={styles.title}>Calidad</p>
+                    <div style={styles.ratingBar}>
+                        <div style={{ ...styles.filledBar, width: calidadRating }}></div>
+                    </div>
+                    <div style={styles.detailLabelContainer}>
+                        <p>Pesima</p>
+                        <p>Admirable</p>
+                    </div>
 
-					{/* Barra para la atencion al cliente */}
-					<p style={styles.title}>Atencion al cliente</p>
-					<div style={styles.ratingBar}>
-						<div style={{ ...styles.filledBar, width: atencionRating }}></div>
-					</div>
-					<div style={styles.detailLabelContainer}>
-						<p>Antisocial</p>
-						<p>Muy atento</p>
-					</div>
+                    {/* Barra para la atención al cliente */}
+                    <p style={styles.title}>Atención al cliente</p>
+                    <div style={styles.ratingBar}>
+                        <div style={{ ...styles.filledBar, width: atencionRating }}></div>
+                    </div>
+                    <div style={styles.detailLabelContainer}>
+                        <p>Antisocial</p>
+                        <p>Muy atento</p>
+                    </div>
 
-					{/* Barra para la Tiempo del trabajo */}
-					<p style={styles.title}>Tiempo del trabajo</p>
-					<div style={styles.ratingBar}>
-						<div style={{ ...styles.filledBar, width: tiempoRating }}></div>
-					</div>
-					<div style={styles.detailLabelContainer}>
-						<p>Muy lento</p>
-						<p>Muy veloz</p>
-					</div>
+                    {/* Barra para el Tiempo del trabajo */}
+                    <p style={styles.title}>Tiempo del trabajo</p>
+                    <div style={styles.ratingBar}>
+                        <div style={{ ...styles.filledBar, width: tiempoRating }}></div>
+                    </div>
+                    <div style={styles.detailLabelContainer}>
+                        <p>Muy lento</p>
+                        <p>Muy veloz</p>
+                    </div>
+                </div>
+                
+                <div style={styles.buttonContainer}>
+                    <button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
+                </div>
+                {/* Renderizamos el segundo popup si showPopupNR es true */}
+				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
 				</div>
-				
-				<div style={styles.buttonContainer}>
-					<button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
-				</div>
-				{/* Renderizamos el segundo popup si showPopupNR es true */}
-				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} />
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					Queria poder scrollear
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				<p>
-					a
-				</p>
-				
-			</div>
-		</div>
-  	);
+        </div>
+    );
 };
 
 export default ReviewPopup;
