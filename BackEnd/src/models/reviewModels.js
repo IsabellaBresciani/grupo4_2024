@@ -57,6 +57,18 @@ class Review {
     const [result] = await connection.query(sql, [idResenia]);
     return result;
   }
-}
+
+  static async findByServiceAndUser(pool, idAutor, idservice) {
+    const query = `
+      SELECT review.*
+      FROM servicioya.review AS review
+      JOIN servicioya.servicioasociado AS asociacion ON review.servicioasociado_id = asociacion.idAsociacion
+      JOIN servicioya.service AS service ON asociacion.idServicio = service.idservice  -- Usando 'idServicio' para asociacion y 'idservice' para service
+      WHERE review.idAutor = ? AND service.idservice = ?;
+    `;
+    const [rows] = await pool.query(query, [idAutor, idservice]);
+    return rows;
+  }
+};
 
 module.exports = Review;

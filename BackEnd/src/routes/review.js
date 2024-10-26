@@ -98,4 +98,18 @@ router.delete('/:review_id', async (req, res) => {
   }
 });
 
+router.get('/usuario/:idAutor/servicio/:idService', async (req, res) => {
+  const { idAutor, idService } = req.params;
+
+  try {
+    const reviews = await Review.findByServiceAndUser(pool, idAutor, idService);
+    if (reviews.length === 0) return res.status(404).json({ message: 'No hay reseñas para este usuario y servicio.' });
+    res.json(reviews);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener reseñas del servicio asociado' });
+  }
+});
+
+
 module.exports = router;
