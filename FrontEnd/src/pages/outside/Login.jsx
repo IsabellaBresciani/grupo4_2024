@@ -5,6 +5,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Styles.css';
+import { useAuth } from '../context/AuthContext';
 
 const styles = {
 
@@ -80,10 +81,12 @@ const styles = {
 };
 
 function Login() {
+   
     const [usuario, setUser] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); 
-
+    const { login } = useAuth();
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -96,9 +99,10 @@ function Login() {
             console.log(dataToSend);
             const response = await axios.post('http://localhost:4444/api/login', dataToSend);
 
+            
             if (response.status === 200) {
-                const { token } = response.data; // Assuming token comes in 'token'
-                localStorage.setItem('jwtToken', token);
+                const { token, user } = response.data;
+                login(token, user);
                 navigate('/search');
             }
         } catch (error) {

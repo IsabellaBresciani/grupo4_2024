@@ -12,15 +12,33 @@ import ProfileDetails from './pages/inside/ProfileDetails';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
+  const ProtectedRoute = ({ children }) => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    
+    if (!isAuthenticated) {
+        return <Navigate to="/login" />;
+    }
+    
+    return children;
+};
+
   return (
     <Router>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/search" element={<Search />} />
+        <Route path="/search" element={
+            <ProtectedRoute>
+                <Search/>
+            </ProtectedRoute>
+        }  />
         <Route path="/home" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={
+            <ProtectedRoute>
+                <Profile />
+            </ProtectedRoute>
+        }  />
         <Route path="/profile-details" element={<ProfileDetails />} />
       </Routes>
     </Router>
