@@ -1,145 +1,134 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import icon from '../assets/logo.png';
-import SidebarMenuItem from './SidebarMenuItem';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const styles = {
-
-    sidebar: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      background: 'linear-gradient(to bottom, #ff6702, #f69d5d)',
-      color: 'white',
-      padding: '10px',
-      height: '100vh',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.1)',
-      transition: 'width 0.3s',
-      width: (isOpen) => (isOpen ? 'fit-content' : '80px'),
+const NavbarInside = ({ content, activeItem }) => {
+  const styles = {
+    navbar: {
+        backgroundColor: '#ff8000',
+        color: '#ff5722',
+        minWidth: "10vw"
     },
-    sidebarHeader: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginBottom: '20px',
+    sidebarIcon: { 
+        minWidth: "50px",
+        width: "7vw",
+        height: "auto",
+        color: '#ffffff'
+    }, 
+    activeIcon: { 
+      minWidth: "50px",
+      width: "7vw",
+      height: "auto",
+      backgroundColor: '#ffffff',
+      color: '#ff8000',
+      borderRadius: "10px"
+    }, 
+    profileIcon: { 
+    
+      color: '#ffffff'
+  }, 
+    navbarBrand: {
+        color: '#ff5722',
+        fontSize: '1.5em',
+        fontWeight: 'bold',
+        transition: 'color 0.3s ease',
     },
-    logo: {
-      width: '40px',
-      height: 'auto',
-      marginBottom: '10px',
+    navbarLink: {
+        color: '#ffffff',
+        margin: '0 15px',
+        padding: '10px 15px',
+        borderRadius: '5px',
+        transition: 'background-color 0.3s, color 0.3s',
+    },
+    activeLink: {
+        backgroundColor: '#ffcc80',
+        color: '#333',
+    },
+    navbarToggler: {
+        border: 'none',
     },
     logoText: {
-      fontSize: '1.3em',
-      textAlign: 'center',
-      opacity: (isOpen) => (isOpen ? 1 : 0),  // Fade text in/out
-      transition: 'opacity 0.3s',
+      color: "white",
+      fontSize: "1.3em",
+      textAlign: "center", 
+      transition: "opacity 0.3s ease"
     },
-    sidebarMenu: {
-      listStyle: 'none',
-      padding: 0,
-      marginTop: '20px',
+    spacer: {
+      height: '50px'  // Adjust height as needed
     },
-    menuItem: {
-      fontSize: '1.1em',
-      padding: '12px 20px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '15px',
-      cursor: 'pointer',
-      color: 'white',
-      borderRadius: '10px',
-      transition: 'background-color 0.3s, color 0.3s',
-      textDecoration: 'none',
+    content: {
+      padding: '100px'
     },
-    menuItemIcon: {
-      fontSize: '1.2em',
-      color: 'inherit',
-    },
-    footer: {
-      fontSize: '1.1em',
-      padding: '12px 20px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '15px',
-      cursor: 'pointer',
-      borderRadius: '10px',
-      textAlign: 'left',
-    },
-    toggleBtn: {
-      marginTop: '10px',
-      zIndex: 100,
-      border: 'none',
+    dropdownMenu: {
       backgroundColor: '#ffffff',
-      color: '#FF7F11',
-      padding: '5px 10px',
-      borderRadius: '5px',
-      transition: 'background-color 0.3s ease',
-      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+      border: '1px solid rgba(0,0,0,0.15)',
     },
-    toggleBtnHover: {
-      backgroundColor: '#f0f0f0',
-    },
-  }
-  
-
-
-const NavBarInside = ({ activeItem }) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    const toggleSidebar = () => setIsOpen(!isOpen);
+    
+    dropdownItem: {
+      color: '#212529',
+      '&:hover': {
+        backgroundColor: '#f8f9fa'
+      }
+    }
+  };
 
     return (
-        <div style={styles.sidebar}>
-            <div className="sidebar-header">
-                <img src={icon} alt="Logo" style={styles.logo} />
-                <span style={styles.logoText}>{isOpen ? 'ServiciosYa' : ' '}</span>
-                <button style={styles.toggleBtn} onClick={toggleSidebar}>
-                    <i className={`fas fa-angle-${isOpen ? 'left' : 'right'}`}></i>
-                </button>
-            </div>
+      <div className="container-fluid">
+      <div  className="row">
+          <div  style={styles.navbar}  className="col-sm-auto sticky-top">
+              <div className="d-flex flex-sm-column flex-row flex-nowrap align-items-center sticky-top">
+                  <a href="/" className="d-block p-3 link-dark text-decoration-none" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Icon-only">
+                    <img  style={styles.sidebarIcon}  src={icon} alt="Logo" className="sidebar-icon" />
+                  </a>
+                  <hr/>
+                  <span style={styles.logoText}>ServiciosYa</span>
+                  <hr/><hr/><hr/><hr/><hr/>
+                  <ul  className="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
+                      
+                      <li className="nav-item">
+                          
+                          <a href={icon}   style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover " title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                            <Link to="/profile" style={activeItem === 'profile' ? styles.activeIcon : styles.sidebarIcon}  className="bi bi-person-circle fs-1"></Link>
+                          </a>
+                       
+                      </li>
+                      <li className="nav-item">
+                          
+                          <a href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover " title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                            <Link style={activeItem === 'search' ? styles.activeIcon : styles.sidebarIcon} to="/search" className="bi bi-search fs-1"></Link>
+                          </a>
+                       
+                      </li>
+                  
+                      <li>
+                            <a href="#"  style={{"--bs-icon-link-transform": "translate3d(0, -.200rem, 0)"}} className="nav-link py-3 px-2 icon-link icon-link-hover" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Orders">
+                                <Link to="/config" style={activeItem === 'config' ? styles.activeIcon : styles.sidebarIcon} className="bi bi-gear fs-1"></Link>
+                            </a>
+                      </li>
 
-            <ul style={styles.sidebarMenu}>
-                <SidebarMenuItem
-                    title="Mi perfil"
-                    styles = {styles.menuItem}
-                    isActive={activeItem === 'profile'}
-                    to="/profile"
-                    icon="fas fa-user-circle"
-                />
-                <SidebarMenuItem
-                    title="Home"
-                    styles = {styles.menuItem}
-                    isActive={activeItem === 'home'}
-                    to="/home"
-                    icon="fas fa-home"
-                />
-                <SidebarMenuItem
-                    title="Configuración"
-                    isActive={activeItem === 'settings'}
-                    to="/settings"
-                    icon="fas fa-cog"
-                />
-                <SidebarMenuItem
-                    title="Buscador"
-                    isActive={activeItem === 'search'}
-                    to="/search"
-                    icon="fas fa-search"
-                />
-            </ul>
-
-            <div style={styles.sidebarMenu}>
-                <SidebarMenuItem
-                    title="Log Out"
-                    isActive={activeItem === null}
-                    to="/login"
-                    icon="fas fa-sign-out-alt"
-                />
-            </div>
-        </div>
+                      <hr/><hr/><hr/><hr/><hr/>
+                      <li className="nav-item">
+                          
+                          <a href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                            <Link to="/login" style={styles.sidebarIcon} className="bi bi-box-arrow-right fs-1"></Link>
+                          </a>
+                       
+                      </li>
+                      
+                  </ul>
+                  
+              </div>
+          </div>
+          <div style={styles.content} className="col-sm p-5 min-vh-100">
+              {content}
+          </div>
+      </div>
+    </div>
+  
     );
 };
 
-export default NavBarInside;
+export default NavbarInside;

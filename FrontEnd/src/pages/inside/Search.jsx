@@ -116,7 +116,7 @@ const Search = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <LayoutInside>  
+        <LayoutInside activeItem="search">  
             <div>
                 <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
                 <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>

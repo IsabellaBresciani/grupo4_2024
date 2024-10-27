@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from '../../components/Sidebar';
+import React from 'react';
 import ProfileHeader from '../../components/ProfileHeader';
 import ServiceCard from '../../components/ServiceCard';
 import PostCard from '../../components/PostCard';
@@ -34,12 +33,10 @@ const styles = {
 };
 
 const Profile = () => {
-    const [services, setServices] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+
 
     return (
-        <LayoutInside>  
+        <LayoutInside activeItem="profile">  
             <div style={styles.profilePage}>          
                 <div style={styles.profileContent}>
                     <ProfileHeader />
