@@ -74,7 +74,12 @@ const NavbarInside = ({ content, activeItem }) => {
       }
     }
   };
-
+    const logout = () => {
+        localStorage.removeItem('jwtToken');
+        localStorage.removeItem('user');
+        localStorage.removeItem('isAuthenticated');
+        navigate('/login');
+    };
     return (
       <div className="container-fluid">
       <div  className="row">
@@ -112,8 +117,8 @@ const NavbarInside = ({ content, activeItem }) => {
                       <hr/><hr/><hr/><hr/><hr/>
                       <li className="nav-item">
                           
-                          <a href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
-                            <Link to="/login" style={styles.sidebarIcon} className="bi bi-box-arrow-right fs-1"></Link>
+                          <a onClick={logout} href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                            <Link style={styles.sidebarIcon} className="bi bi-box-arrow-right fs-1"></Link>
                           </a>
                        
                       </li>

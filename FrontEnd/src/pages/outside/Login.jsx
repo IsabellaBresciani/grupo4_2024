@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import '../../css/Styles.css';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../utils/api';
 
 const styles = {
 
@@ -86,19 +87,17 @@ function Login() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); 
     const { login } = useAuth();
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const dataToSend = {
-            usuario: usuario,
-            password: password,
-        };
-
         try {
-            console.log(dataToSend);
-            const response = await axios.post('http://localhost:4444/api/login', dataToSend);
-
+            const credentials = {
+                usuario: usuario,
+                password: password
+            };
+        
+            const response = await api.login(credentials);
+            
             
             if (response.status === 200) {
                 const { token, user } = response.data;
