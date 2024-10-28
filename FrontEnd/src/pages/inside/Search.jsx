@@ -57,19 +57,21 @@ const styles = {
 };
 
 const Search = () => {
-    const [searchTerm, setSearchTerm] = useState(''); // Estado para la búsqueda
+    const [searchTerm, setSearchTerm] = useState(''); 
     const [userData, setUserData] = useState([]); 
     const [filteredUsers, setFilteredUsers] = useState([]); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [confirmedSearch, setConfirmedSearch] = useState(false); // Estado para confirmar búsqueda
+    const [confirmedSearch, setConfirmedSearch] = useState(false); 
 
     useEffect(() => {
         const getData = async () => {
+            setLoading(true); 
+        
             try {
                 const response = await axios.get(`http://localhost:4444/api/user`);
                 setUserData(response.data);
-                setFilteredUsers(response.data); // Inicializa el estado filtrado con todos los usuarios
+                setFilteredUsers(response.data); // Devuelve todos por defecto
                 setError(null);
             } catch (err) {
                 setError('Error al obtener los datos del usuario');
@@ -82,13 +84,11 @@ const Search = () => {
     }, []);
 
     const handleSearch = async () => {
-        // Busca primero por nombre de usuario
         const lowercasedFilter = searchTerm.toLowerCase();
         const filteredByUser = userData.filter(user => 
             user.usuario.toLowerCase().startsWith(lowercasedFilter) 
         );
 
-        // Si no hay resultados, busca por nombre de servicio
         if (filteredByUser.length === 0) {
             try {
                 const response = await axios.get(`http://localhost:4444/api/user/servicio/${searchTerm}`);
@@ -101,14 +101,14 @@ const Search = () => {
             setFilteredUsers(filteredByUser);
         }
 
-        setConfirmedSearch(true); // Confirma que se realizó la búsqueda
+        setConfirmedSearch(true); 
     };
 
     const handleChange = (e) => {
         setSearchTerm(e.target.value);
         if (!e.target.value) {
             setFilteredUsers(userData); // Muestra todos los usuarios si el campo está vacío
-            setConfirmedSearch(false); // Resetea la confirmación de búsqueda
+            setConfirmedSearch(false); 
         }
     };
 
@@ -142,9 +142,8 @@ const Search = () => {
                 </div>
 
                 <div style={styles.container}>
-                    {/* Contenedor de perfiles */}
                     <div style={styles.profilesContainer}>
-                        {confirmedSearch && filteredUsers.length > 0 ? (
+                        {filteredUsers.length > 0 ? (
                             filteredUsers.map(user => (
                                 <ProfileCard 
                                     key={user.id} 
@@ -159,7 +158,6 @@ const Search = () => {
                         )}
                     </div>
 
-                    {/* Contenedor de filtro */}
                     <div style={styles.filter}>
                         <Filter />
                     </div>

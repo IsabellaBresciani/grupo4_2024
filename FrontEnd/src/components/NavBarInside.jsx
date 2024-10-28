@@ -132,7 +132,7 @@ const NavbarInside = ({ content, activeItem }) => {
                   
               </div>
           </div>
-          <div style={styles.content} className="col-sm p-5 min-vh-100">
+          <div style={styles.content} className="col-sm p-3 min-vh-100">
               {content}
           </div>
       </div>
