@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'; 
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const styles = {
     profileHeader: {
@@ -155,6 +157,7 @@ const styles = {
         cursor: 'pointer',
         alignSelf: 'flex-end',
     },
+
 };
 
 const ProfileHeader = () => {
@@ -169,6 +172,9 @@ const ProfileHeader = () => {
         localidad: '',
         telefono: ''
     });
+
+    const [editandoDescripcion, setEditandoDescripcion] = useState(false); // estado para editar descripción
+    const [descripcion, setDescripcion] = useState("Ingrese una breve descripción."); // estado para la descripción
 
     const userName = String(localStorage.getItem('usuario'));
     const getData = async () => {
@@ -244,6 +250,15 @@ const ProfileHeader = () => {
         return `${year}/${month}/${day}`;
     };
 
+    //para la descripcion
+    const handleEditDescriptionClick = () => {
+        setEditandoDescripcion(true);
+    };
+    //para la descripcion
+    const handleSaveDescription = () => {
+        setEditandoDescripcion(false);
+    };
+
     if (loading) return <p>Cargando datos...</p>;
     if (error) return <p>{error}</p>;
 
@@ -255,16 +270,10 @@ const ProfileHeader = () => {
             <div style={styles.profileInfo}>
                 <div style={styles.nameRatingEdit}>
                     <h1 style={styles.profileDetailsHeader}>{userData.nombre} {userData.apellido}</h1>
-                    <div style={styles.editIcon}>
-                        <button /*className="fas fa-edit" */
-                            onClick={() => {
-                                setIsModalOpen(true);
-                            }}
-                            style={{ cursor: 'pointer', fontSize: '1.2rem', color: '#333' }}
-                        >
-                            Editar
-                        </button>
-                    </div>
+                    <button style={styles.editIcon} onClick={() => setIsModalOpen(true)}>
+                    <FontAwesomeIcon icon={faEdit} />
+                </button>
+
                     {isModalOpen && (
                         <div style={styles.modal}>
                             <div style={styles.modalContent}>
@@ -380,12 +389,28 @@ const ProfileHeader = () => {
             </div>
             <div style={styles.profileDescription}>
                 <h3 style={styles.profileDescriptionHeader}>Descripción:</h3>
-                <p style={styles.profileDescriptionText}>
-                    Ingrese una breve descripción.
-                </p>
-                <div style={styles.editDescriptionIcon}>
-                    <i className="fas fa-edit"></i>
-                </div>
+                {editandoDescripcion ? (
+                    <div style={{ flex: 1 }}>
+                        <textarea 
+                            value={descripcion} 
+                            onChange={(e) => setDescripcion(e.target.value)} 
+                            placeholder="Ingrese una breve descripción"
+                            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+                        />
+                        <button onClick={handleSaveDescription} style={styles.GuardarButton}>
+                            Guardar
+                        </button>
+                    </div>
+                ) : (
+                    <p style={styles.profileDescriptionText}>
+                        {descripcion}
+                    </p>
+                )}
+                {!editandoDescripcion && (
+                    <div style={styles.editDescriptionIcon} onClick={handleEditDescriptionClick}>
+                        <FontAwesomeIcon icon={faEdit} />
+                    </div>
+                )}
             </div>
         </div>
     );
