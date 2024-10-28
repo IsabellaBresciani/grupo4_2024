@@ -165,7 +165,7 @@ const ProfileHeader = () => {
     const [newData, setNewData] = useState({
         nombre: '',
         apellido: '',
-        imagen: '',
+        foto: '',
         localidad: '',
         telefono: ''
     });
@@ -183,7 +183,9 @@ const ProfileHeader = () => {
     };
 
     const handleChange = (e) => {
+
         const { name, value } = e.target;
+        console.log(value);
         setNewData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -203,7 +205,7 @@ const ProfileHeader = () => {
             const dataUpdated = {
                 ...(newData.nombre && { nombre: newData.nombre }),
                 ...(newData.apellido && { apellido: newData.apellido }),
-                ...(newData.imagen && { imagen: newData.imagen }),
+                ...(newData.foto && { foto: newData.foto }),
                 ...(newData.localidad && { localidad: newData.localidad }),
                 ...(newData.telefono && { telefono: newData.telefono })
             };
@@ -226,7 +228,7 @@ const ProfileHeader = () => {
             setNewData({
                 nombre: userData.nombre || '',
                 apellido: userData.apellido || '',
-                imagen: userData.imagen || '',
+                foto: userData.foto || '',
                 localidad: userData.localidad || '',
                 telefono: userData.telefono || ''
             });
@@ -296,12 +298,12 @@ const ProfileHeader = () => {
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="imagen" style={styles.modalLabel}>Imagen (URL)</label>
+                                        <label htmlFor="foto" style={styles.modalLabel}>Imagen (URL)</label>
                                         <input
                                             type="text"
-                                            id="imagen"
-                                            name="imagen"
-                                            value={newData.imagen}
+                                            id="foto"
+                                            name="foto"
+                                            value={newData.foto}
                                             onChange={handleChange}
                                             style={styles.modalInput}
                                             onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
