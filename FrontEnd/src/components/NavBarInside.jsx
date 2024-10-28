@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 
-const NavbarInside = ({ content, activeItem }) => {
+const NavBarInside = ({ content, activeItem }) => {
   const navigate = useNavigate(); 
   const { logout } = useAuth();
   const handleLogout = () => {
@@ -114,7 +114,7 @@ const NavbarInside = ({ content, activeItem }) => {
                       </li>
                   
                       <li>
-                            <a href="#"  style={{"--bs-icon-link-transform": "translate3d(0, -.200rem, 0)"}} className="nav-link py-3 px-2 icon-link icon-link-hover" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Orders">
+                            <a href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.200rem, 0)"}} className="nav-link py-3 px-2 icon-link icon-link-hover" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Orders">
                                 <Link to="/config" style={activeItem === 'config' ? styles.activeIcon : styles.sidebarIcon} className="bi bi-gear fs-1"></Link>
                             </a>
                       </li>
@@ -141,4 +141,4 @@ const NavbarInside = ({ content, activeItem }) => {
     );
 };
 
-export default NavbarInside;
+export default NavBarInside;

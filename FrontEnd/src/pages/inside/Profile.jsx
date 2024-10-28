@@ -34,7 +34,6 @@ const styles = {
 
 const Profile = () => {
 
-
     return (
         <LayoutInside activeItem="profile">  
             <div style={styles.profilePage}>          

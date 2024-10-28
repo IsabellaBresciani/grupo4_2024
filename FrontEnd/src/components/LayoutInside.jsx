@@ -1,6 +1,6 @@
 // components/LayoutInside.jsx
 import React from "react";
-import NavbarInside from './NavbarInside';
+import NavbarInside from './NavBarInside';
 
 
 

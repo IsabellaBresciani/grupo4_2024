@@ -97,6 +97,7 @@ const ServiceCard = () => {
     const [servicesAll, setServicesAll] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
     const [selectedAsociacionId, setSelectedAsociacionId] = useState(null);  // Estado para almacenar el idAsociacion
+    const userName = localStorage.getItem('usuario');
 
     const fetchServicesAll = async () => {
         try {
@@ -109,14 +110,18 @@ const ServiceCard = () => {
 
     const fetchServices = async () => {
         try {
-            const response = await axios.get('http://localhost:4444/api/user/17/servicios');  
+            const response = await axios.get(`http://localhost:4444/api/user/${userName}/servicios`);  
             const uniqueServices = response.data.filter(
                 (service, index, self) =>
                     index === self.findIndex((s) => s.idServicio === service.idServicio)
             );  
             setServices(uniqueServices);
         } catch (err) {
-            setError('Error al cargar los servicios');
+            if (err.response && err.response.status === 404) {
+                setError('No se encontraron servicios asociados al usuario.');
+            } else {
+            setError('Error al cargar los servicios.');
+            }
         } finally {
             setLoading(false);
         }

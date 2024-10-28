@@ -32,7 +32,7 @@
   
     static async findByUsername(connection, username) {
       const sql = `SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento , l.nombre AS localidad FROM servicioya.user AS u JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad WHERE u.usuario = ?;`;
-      const [rows] = await connection.query(sql, [username]);
+      const [rows] = await connection.query(sql, username);
       return rows;
     }
 

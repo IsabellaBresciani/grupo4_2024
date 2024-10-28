@@ -25,6 +25,12 @@ class Publication {
       const [rows] = await connection.query(sql, [idUser]);
       return rows;
     }
+
+    static async findByUsername(connection, Username) {
+      const sql = 'SELECT p.idPublicacion, p.titulo, p.descripcion, p.fecha, p.imagen, u.usuario FROM servicioya.publicacion p JOIN servicioya.user u ON p.idUser = u.id WHERE u.usuario = ?'
+      const [rows] = await connection.query(sql, Username);
+      return rows;
+    }
   
     static async update(connection, { idPublicacion, descripcion, titulo }) {
       const sql = `UPDATE Publicacion SET descripcion = ?, titulo = ? WHERE idPublicacion = ?`;

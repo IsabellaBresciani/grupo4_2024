@@ -170,9 +170,10 @@ const ProfileHeader = () => {
         telefono: ''
     });
 
+    const userName = String(localStorage.getItem('usuario'));
     const getData = async () => {
         try {
-            const userD = await axios.get(`http://localhost:4444/api/user/jonyortega`);
+            const userD = await axios.get(`http://localhost:4444/api/user/${userName}`);
             setUserData(userD.data);
         } catch (err) {
             setError('Error al obtener los datos del usuario');
@@ -208,7 +209,7 @@ const ProfileHeader = () => {
             };
 
             if (Object.keys(dataUpdated).length > 0) {
-                await axios.put('http://localhost:4444/api/user/jonyortega', dataUpdated);
+                await axios.put(`http://localhost:4444/api/user/${userName}`, dataUpdated);
                 getData(); // Refresca los datos después de la modificación
             }
         } catch (error) {
@@ -230,6 +231,7 @@ const ProfileHeader = () => {
                 telefono: userData.telefono || ''
             });
         }
+        
     }, [userData]);
 
     const formatDate = (fechaISO) => {

@@ -28,12 +28,12 @@ class Service {
       return result;
     }
 
-    static async findUserXService(connection, idPersona) {
+    static async findUserXService(connection, username) {
       const sql = `SELECT sa.idServicio, sa.idAsociacion, s.description, sa.estado, s.imagen
         FROM ServicioAsociado sa
-        JOIN service s ON sa.idServicio = s.idservice
-        WHERE sa.idPersona = ?`;
-      const [result] = await connection.query(sql, [idPersona]);
+        JOIN service s ON sa.idServicio = s.idservice join user u ON sa.idPersona = u.id
+        WHERE u.usuario = ?`;
+      const [result] = await connection.query(sql, username);
       return result;
     }
 
