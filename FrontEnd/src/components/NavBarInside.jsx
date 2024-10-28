@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import icon from '../assets/logo.png';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
 
 const NavbarInside = ({ content, activeItem }) => {
+  const navigate = useNavigate(); 
+  const { logout } = useAuth();
+  const handleLogout = () => {
+    logout(); // Call the logout function
+    navigate('/login');
+    window.location.reload(); 
+  };
   const styles = {
     navbar: {
         backgroundColor: '#ff8000',
@@ -74,12 +84,7 @@ const NavbarInside = ({ content, activeItem }) => {
       }
     }
   };
-    const logout = () => {
-        localStorage.removeItem('jwtToken');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAuthenticated');
-        navigate('/login');
-    };
+    
     return (
       <div className="container-fluid">
       <div  className="row">
@@ -117,7 +122,7 @@ const NavbarInside = ({ content, activeItem }) => {
                       <hr/><hr/><hr/><hr/><hr/>
                       <li className="nav-item">
                           
-                          <a onClick={logout} href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                          <a onClick={handleLogout} href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
                             <Link style={styles.sidebarIcon} className="bi bi-box-arrow-right fs-1"></Link>
                           </a>
                        

@@ -12,7 +12,7 @@
       this.telefono = telefono;
     }
   
-    static async create(connection, { dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword }) {
+    static async create(connection, dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword ) {
       const sql = `INSERT INTO servicioya.user (dni, nombre, apellido, fecha_nacimiento, email, usuario, password) VALUES (?, ?, ?, ?, ?, ?, ?)`;
       const [result] = await connection.query(sql, [dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword]);
       return result;
@@ -56,8 +56,8 @@
 
     static async findUserByEmailUsername(connection, username, email) {
       const sql = `SELECT * FROM servicioya.user WHERE usuario = ? OR email = ?`;
-      const [result] = await connection.query(sql, {username, email});
-      return result;
+      const [result] = await connection.query(sql, [username, email]);
+      return result || []; // Devuelve un array vacío si result es undefined
     }
 
   }

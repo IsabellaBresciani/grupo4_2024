@@ -1,7 +1,7 @@
 // App.jsx
 import './App.css';
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Register from './pages/outside/Register';
 import Search from './pages/inside/Search';
 import Home from './pages/outside/Home';
@@ -12,34 +12,31 @@ import ProfileDetails from './pages/inside/ProfileDetails';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
-  const ProtectedRoute = ({ children }) => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    
-    if (!isAuthenticated) {
-        return <Navigate to="/login" />;
-    }
-    
-    return children;
-};
+  const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('isAuthenticated') === 'true');
 
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+    setIsAuthenticated(authStatus);
+  }, []);
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/search" element={
-            <ProtectedRoute>
-                <Search/>
-            </ProtectedRoute>
-        }  />
-        <Route path="/home" element={<Home />} />
-        <Route path="/profile" element={
-            <ProtectedRoute>
-                <Profile />
-            </ProtectedRoute>
-        }  />
-        <Route path="/profile-details" element={<ProfileDetails />} />
+        {isAuthenticated ? (
+          <>
+            <Route path="/search" element={<Search />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile-details" element={<ProfileDetails />} />
+            <Route path="*" element={<Navigate to="/search" />} /> {/* Redirect to search if authenticated */}
+          </>
+        ) : (
+          <>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect to login if not authenticated */}
+          </>
+        )}
       </Routes>
     </Router>
   );

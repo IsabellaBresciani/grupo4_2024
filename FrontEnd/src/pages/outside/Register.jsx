@@ -78,6 +78,7 @@ function Register() {
         email: '',
         usuario: '',
         password: '',
+        confirm_password: ''
     });
 
     const handleChange = (e) => {
@@ -115,7 +116,8 @@ function Register() {
                 fecha_nacimiento: '',
                 email: '',
                 usuario: '',
-                password: ''
+                password: '',
+                confirm_password: ''
             });
         } catch (error) {
             console.error('Error registering user:', error);
@@ -141,7 +143,13 @@ function Register() {
                             {Object.keys(formData).map((key) => (
                                 <div style={styles.divInput}  key={key}>
                                     <input
-                                        type={key === 'password' ? 'password' : (key === 'fecha_nacimiento' ? 'date' : 'text')}
+                                        type={
+                                            key === 'password' || key === 'confirm_password' 
+                                            ? 'password' 
+                                            : key === 'fecha_nacimiento' 
+                                            ? 'date' 
+                                            : 'text'
+                                        }
                                         name={key}
                                         value={formData[key]}
                                         onChange={handleChange}

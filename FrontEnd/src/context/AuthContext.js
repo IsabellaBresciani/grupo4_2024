@@ -8,16 +8,18 @@ export const AuthProvider = ({ children }) => {
         return localStorage.getItem('isAuthenticated') === 'true';
     });
 
-    const login = (token, user) => {
+    const login = (token, usuario) => {
+        console.log(token, usuario)
         localStorage.setItem('jwtToken', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('usuario', usuario);
         localStorage.setItem('isAuthenticated', 'true');
         setIsAuthenticated(true);
+        return true
     };
 
     const logout = () => {
         localStorage.removeItem('jwtToken');
-        localStorage.removeItem('user');
+        localStorage.removeItem('usuario');
         localStorage.removeItem('isAuthenticated');
         setIsAuthenticated(false);
     };
@@ -27,4 +29,9 @@ export const AuthProvider = ({ children }) => {
             {children}
         </AuthContext.Provider>
     );
+};
+
+
+export const useAuth = () => {
+    return useContext(AuthContext);
 };
