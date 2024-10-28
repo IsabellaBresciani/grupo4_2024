@@ -105,18 +105,23 @@ const PostCard = () => {
         imagen: '',
         fecha: new Date().toISOString().split('T')[0],  // Solo fecha (YYYY-MM-DD)
     });
+    const userName = localStorage.getItem('usuario');
 
     // Función para obtener las publicaciones del usuario
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('http://localhost:4444/api/publication/17/posts');  
-            const uniquePosts = response.data.filter(
-                (post, index, self) =>
-                    index === self.findIndex((p) => p.idPublicacion === post.idPublicacion)
-            );
-            setPosts(uniquePosts);
+            const response = await axios.get(`http://localhost:4444/api/publication/${userName}/posts`); 
+                const uniquePosts = response.data.filter(
+                    (post, index, self) =>
+                        index === self.findIndex((p) => p.idPublicacion === post.idPublicacion)
+                );
+                setPosts(uniquePosts);
         } catch (err) {
+            if (err.response && err.response.status === 404) {
+                setError('No se encontraron publicaciones para este usuario.');
+            } else {
             setError('Error al cargar las publicaciones');
+        }
         } finally {
             setLoading(false);
         }

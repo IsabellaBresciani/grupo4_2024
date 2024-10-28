@@ -4,7 +4,9 @@ import LogPageComponent from '../../components/LogPageComponent';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import '../../css/Styles.css';
+import { useAuth } from '../../context/AuthContext'; // Use the custom hook
+import { api } from '../../utils/api';
+
 
 const styles = {
 
@@ -83,23 +85,28 @@ function Login() {
     const [usuario, setUser] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); 
+    const { login } = useAuth(); // Using the hook to get login function
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const dataToSend = {
-            usuario: usuario,
-            password: password,
-        };
-
         try {
-            console.log(dataToSend);
-            const response = await axios.post('http://localhost:4444/api/login', dataToSend);
+            const credentials = {
+                usuario,
+                password
+            };
+            console.log(credentials);
 
+            const response = await api.login(credentials);
+            
             if (response.status === 200) {
-                const { token } = response.data; // Assuming token comes in 'token'
-                localStorage.setItem('jwtToken', token);
-                navigate('/search');
+                const { token } = response.data;
+                const set_local_storage_res = login(token, usuario); 
+                if (set_local_storage_res){
+                    console.log('Navigating to /profile...');
+                    navigate('/profile');
+                    window.location.reload();
+                }
+                
             }
         } catch (error) {
             console.error('Error logging in:', error);
@@ -114,42 +121,39 @@ function Login() {
 
     return (
         <LayoutOutside>  
-
             <div style={styles.loginContainer}>
                 <LogPageComponent/> 
                 <div style={styles.formContainer}>
                     <h2 style={styles.formTitle}>Login</h2>
                     <form style={styles.registerForm} onSubmit={handleSubmit}>
-                    <div>
-                        <div style={styles.divInput} >
-                            <input
-                                style={styles.input}
-                                type="text"
-                                id="usuario"
-                                value={usuario}
-                                onChange={(e) => setUser(e.target.value)}
-                                required
-                                placeholder="Usuario"
-                            />
+                        <div>
+                            <div style={styles.divInput}>
+                                <input
+                                    style={styles.input}
+                                    type="text"
+                                    id="usuario"
+                                    value={usuario}
+                                    onChange={(e) => setUser(e.target.value)}
+                                    required
+                                    placeholder="Usuario"
+                                />
+                            </div>
+                            <div style={styles.divInput}>
+                                <input
+                                    style={styles.input}
+                                    type="password"
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    placeholder="Contraseña"
+                                />
+                            </div>
+                            <button style={styles.button}>Login</button>
                         </div>
-                        <div style={styles.divInput}>
-                            <input
-                                style={styles.input}
-                                type="password"
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                placeholder="Contraseña"
-                            />
-                        </div>
-                        <button style={styles.button}>Login</button>
-                    </div>
                     </form>
-                    
                 </div>
             </div>
-   
         </LayoutOutside> 
     );
 }

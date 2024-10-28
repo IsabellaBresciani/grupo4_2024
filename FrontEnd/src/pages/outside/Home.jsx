@@ -71,7 +71,7 @@ function Home() {
         };
 
         fetchServices();
-    }, []); // Added empty dependency array to run once on mount
+    }, []); 
 
     return (
         <LayoutOutside> 
@@ -79,12 +79,7 @@ function Home() {
                 <h1 style={styles.h1}>Servicios</h1>
                 <p style={styles.p}>Todos los servicios a la puerta de tu casa</p>
 
-                <input 
-                    type="text" 
-                    onChange={handleChange} 
-                    placeholder="Hinted search text" 
-                    style={styles.searchBar} 
-                />
+        
 
                 <div style={styles.serviceGrid}>
                     {services.map((service) => (

@@ -23,10 +23,10 @@ router.post('/', async (req, res) => {
 
 
 // Obtener las publicaciones asociadas a un usuario
-router.get('/:idPersona/posts', async (req, res) => {
-    const { idPersona } = req.params;
+router.get('/:username/posts', async (req, res) => {
+    const { username } = req.params;
     try {
-      const results = await Publication.findByUserId( pool, idPersona);
+      const results = await Publication.findByUsername( pool, username);
       if (results.length === 0) {
         return res.status(404).json({ error: 'No se encontraron publicaciones asociadas para esta persona' });
       }

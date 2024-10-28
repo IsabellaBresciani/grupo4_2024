@@ -4,13 +4,13 @@ const Service = require('../models/serviceModels');
 const router = express.Router();
 const pool = require('../config/database');  // Importar la conexión de la base de datos
 
-// Listar usuarios
-  router.get("/", async (req, res) => {
+//Listar usuarios
+router.get("/", async (req, res) => {
     try {
-        const [results] = User.find(pool);
-        res.json(results);
+        const results = await User.find(pool);
+        res.status(200).json(results);
     } catch (error) {
-        return res.status(500).json({ error: 'Error en la consulta' });
+        return res.status(500).json({ error: 'Error en la consulta'});
     }
 });
 
@@ -20,13 +20,14 @@ router.get("/:nom_usuario", async (req, res) => {
     
     try {
         const [results] = await User.findByUsername(pool, nom_usuario);
-        
+   
         if (results.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
         res.json(results);
     } catch (error) {
-        return res.status(500).json({ error: 'Error en la consulta' });
+        
+        return res.status(500).json({ error: 'Error en la consulta'});
     }
 });
 
@@ -119,18 +120,16 @@ router.delete('/:usuario', async (req, res) => {
 });
 
 // Obtener los servicios asociados a un usuario
-router.get('/:idPersona/servicios', async (req, res) => {
-  const { idPersona } = req.params;
+router.get('/:username/servicios', async (req, res) => {
+  const { username } = req.params;
 
   try {
     // Consulta para obtener los servicios asociados a la persona con la descripción del servicio
-    const results = await Service.findUserXService(pool, idPersona);
-
+    const results = await Service.findUserXService(pool, username);
     // Verificar si se encontraron resultados
     if (results.length === 0) {
         return res.status(404).json({ error: 'No se encontraron servicios asociados para esta persona' });
     }
-
     // Enviar los resultados como respuesta
     res.json(results);
 

@@ -3,11 +3,11 @@ const router = express.Router();
 const pool = require('../config/database'); // Conexión a la base de datos
 
 // Ruta de búsqueda
-router.get('/search', async (req, res) => {
+router.get('/', async (req, res) => {
     const { localidad, servicio, precioMax } = req.query;
 
     try {
-        const [result] = await db.query(`
+        const [result] = await pool.query(`
             SELECT s.idServicio, s.descripcion AS servicio, p.nombre AS profesional, l.nombre AS localidad, r.precio
             FROM Servicio s
             JOIN ServicioxPersona sp ON s.idServicio = sp.idServicio

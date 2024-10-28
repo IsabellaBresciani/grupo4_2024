@@ -12,7 +12,7 @@
       this.telefono = telefono;
     }
   
-    static async create(connection, { dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword }) {
+    static async create(connection, dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword ) {
       const sql = `INSERT INTO servicioya.user (dni, nombre, apellido, fecha_nacimiento, email, usuario, password) VALUES (?, ?, ?, ?, ?, ?, ?)`;
       const [result] = await connection.query(sql, [dni, nombre, apellido, fecha_nacimiento, email, usuario, hashedPassword]);
       return result;
@@ -31,8 +31,20 @@
     }
   
     static async findByUsername(connection, username) {
-      const sql = `SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento , l.nombre AS localidad FROM servicioya.user AS u JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad WHERE u.usuario = ?;`;
-      const [rows] = await connection.query(sql, [username]);
+      
+      const sql = `SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento, l.nombre AS localidad 
+                   FROM servicioya.user AS u 
+                   LEFT JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona 
+                   LEFT JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad 
+                   WHERE u.usuario = ?;`;
+
+      const [rows] = await connection.query(sql, username);
+
+      if (rows.length === 0) {
+          // Devuelve una fila vacía con los campos requeridos
+          return []
+      }
+  
       return rows;
     }
 
@@ -56,8 +68,8 @@
 
     static async findUserByEmailUsername(connection, username, email) {
       const sql = `SELECT * FROM servicioya.user WHERE usuario = ? OR email = ?`;
-      const [result] = await connection.query(sql, {username, email});
-      return result;
+      const [result] = await connection.query(sql, [username, email]);
+      return result || []; // Devuelve un array vacío si result es undefined
     }
 
   }
