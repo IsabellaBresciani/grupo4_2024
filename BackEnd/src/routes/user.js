@@ -5,10 +5,10 @@ const router = express.Router();
 const pool = require('../config/database');  // Importar la conexión de la base de datos
 
 // Listar usuarios
-  router.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
     try {
-        const [results] = User.find(pool);
-        res.json(results);
+        const results = await User.find(pool);
+        res.status(200).json(results);
     } catch (error) {
         return res.status(500).json({ error: 'Error en la consulta' });
     }
