@@ -108,6 +108,10 @@ const ServiceCard = () => {
         }
     };
 
+    useEffect(() => {
+        console.log('Servicio asociado ID recibido:', selectedAsociacionId); // Log del ID
+    }, [selectedAsociacionId]);
+
     const fetchServices = async () => {
         try {
             const response = await axios.get(`http://localhost:4444/api/user/${userName}/servicios`);  
@@ -201,8 +205,8 @@ const ServiceCard = () => {
                                 )}
                             </button>
 
-                            <button style={styles.button} onClick={handleOpenPopup}> Ver reseñas </button>
-                        </div>
+                            <button style={styles.button} onClick={() => handleOpenPopup(service.idServicio)}> Ver reseñas </button>
+                            </div>
                     ))
                 ) : (
                     <p>No hay servicios asociados</p>

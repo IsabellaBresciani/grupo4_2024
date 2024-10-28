@@ -156,6 +156,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
             // Aquí puedes cerrar el popup o resetear el estado
             onClose();
         } catch (error) {
+            console.log(reviewData);
             console.error('Error al crear la reseña:', error);
         }
     };
