@@ -45,8 +45,22 @@ const styles = {
         cursor: 'pointer',
         alignSelf: 'center',
     },
-    buttonHover: {
-        backgroundColor: '#ff5500',
+    buttonNS: {
+        padding: '10px 20px',
+        backgroundColor: '#ff7f11',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        minWidth: '100px', 
+        height: '40px', 
+    },
+    buttonsContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end', 
+        gap: '10px', 
+        padding: '5px',
+        marginTop: '10px', 
     },
     modal: {
         position: 'fixed',
@@ -56,7 +70,6 @@ const styles = {
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-around',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         display: 'flex',
         justifyContent: 'center',
@@ -64,13 +77,25 @@ const styles = {
     },
     modalContent: {
         display: 'flex',
+        width: '50%',
         gap: "10px",
         flexDirection: 'column',
         justifyContent: 'space-around',
         backgroundColor: 'white',
-        padding: '100px',
+        padding: '40px',
         borderRadius: '8px',
         width: '500px',
+    },
+    modalInput: {
+        width: '100%',              // Ancho completo del input
+        padding: '10px',            // Espaciado interno
+        margin: '10px 0',           // Margen entre inputs
+        border: '1px solid #ddd',   // Borde gris claro
+        borderRadius: '5px',        // Bordes redondeados
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',  // Sombra sutil
+        fontSize: '1rem',           // Tamaño de fuente adecuado
+        outline: 'none',            // Elimina el borde azul cuando se selecciona
+        transition: 'border-color 0.3s ease', // Transición suave para el borde
     },
     isVisible: { 
         position: 'absolute',
@@ -235,11 +260,14 @@ const ServiceCard = () => {
                                     name="selectedService"
                                     value={newService.selectedService}
                                     onChange={handleChange}
+                                    style={styles.modalInput}
                                 >
                                     <option value="">Seleccione un servicio</option>
                                     {servicesAll.map((service) => (
-                                        <option key={service.idservice} value={service.idservice}>
-                                            {service.description}
+                                        <option 
+                                            key={service.idservice} 
+                                            value={service.idservice}>
+                                            {service.description}                                            
                                         </option>
                                     ))}
                                 </select>
@@ -251,13 +279,16 @@ const ServiceCard = () => {
                                     name="estado"
                                     value={newService.estado}
                                     onChange={handleChange}
+                                    style={styles.modalInput}
                                 >
                                     <option value="activo">Activo</option>
                                     <option value="inactivo">Inactivo</option>
                                 </select>
                             </div>
-                            <button type="button" style={styles.button} onClick={handleAddService}>Agregar</button>
-                            <button type="button" style={styles.button} onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                            <div style={styles.buttonsContainer}>
+                                <button type="button" style={styles.buttonNS} onClick={handleAddService}>Agregar</button>
+                                <button type="button" style={styles.buttonNS} onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
