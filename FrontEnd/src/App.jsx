@@ -24,7 +24,6 @@ function App() {
         {isAuthenticated ? (
           <>
             <Route path="/search" element={<Search />} />
-            <Route path="/home" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile-details" element={<ProfileDetails />} />
             <Route path="*" element={<Navigate to="/search" />} /> {/* Redirect to search if authenticated */}
@@ -32,6 +31,7 @@ function App() {
         ) : (
           <>
             <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<Navigate to="/login" />} /> {/* Redirect to login if not authenticated */}
