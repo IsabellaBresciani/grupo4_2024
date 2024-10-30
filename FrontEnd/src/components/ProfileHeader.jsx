@@ -113,6 +113,8 @@ const styles = {
         cursor: 'pointer',
         color: '#333',
         display: 'inline-block',
+        backgroundColor: 'transparent',
+        border: 'none', //se asegura que no tenga ningun borde por defecto
     },
     profileRating: {
         display: 'flex',
