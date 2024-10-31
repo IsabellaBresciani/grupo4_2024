@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const styles = {
   reviewCard: {
@@ -97,51 +97,102 @@ const styles = {
 
 };
 
-const precioRating = '20%';
-const calidadRating = '50%';
-const atencionRating = '4%';
-const tiempoRating = '90%';
-
 const renderRating = (label, value, minLabel, maxLabel) => (
   <div style={styles.singleBar}>
     <p style={styles.title}>{label}</p>
     <div style={styles.ratingBar}>
-    <div style={{ ...styles.filledBar, width: value }}></div>
+      <div style={{ ...styles.filledBar, width: `${Math.min(value*20, 100)}%` }}></div>
     </div>
     <div style={styles.detailLabelContainer}>
-    <p>{minLabel}</p>
-    <p>{maxLabel}</p>
+      <p>{minLabel}</p>
+      <p>{maxLabel}</p>
     </div>
   </div>
 );
 
-const ReviewCard = () => {
+const ReviewCard = ({ asociacionId }) => {
+  const [reviews, setReviews] = useState([]);
+  const [users, setUsers] = useState({});
+
+  useEffect(() => {
+    const fetchReviewsWithUser = async () => {
+      try {
+        // Obtener reseñas
+        const reviewsResponse = await axios.get(`http://localhost:4444/api/review/${asociacionId}/asociacion`);
+        const reviewsData = reviewsResponse.data;
+
+        console.log("Datos de reseñas:", reviewsData); // Verificar reseñas recibidas
+        setReviews(reviewsData); // Guardar solo las reseñas
+
+        // Obtener usuarios en paralelo
+        const userPromises = reviewsData.map(review => {
+          return axios.get(`http://localhost:4444/api/user/id/${review.idAutor}`)
+            .then(userResponse => {
+              const userData = userResponse.data[0]; // Asegúrate de acceder al primer elemento
+              return {
+                idAutor: review.idAutor,
+                usuario: userData.usuario || "Usuario desconocido", // Usar el nombre de usuario
+                foto: userData.foto || null // Usar la foto
+              };
+            })
+            .catch(error => {
+              console.error(`Error al obtener datos de usuario para la reseña ${review.idreview}:`, error);
+              return { idAutor: review.idAutor, usuario: "Usuario desconocido", foto: null }; // Valor por defecto en caso de error
+            });
+        });
+
+        // Esperar a que se resuelvan todas las promesas
+        const usersData = await Promise.all(userPromises);
+        const usersMap = Object.fromEntries(usersData.map(user => [user.idAutor, user]));
+        setUsers(usersMap);
+
+      } catch (error) {
+        console.error("Error al obtener las reseñas o los usuarios:", error);
+      }
+    };
+
+    fetchReviewsWithUser();
+  }, [asociacionId]);
+
+  // Renderizado condicional si no hay reseñas aún
+  if (reviews.length === 0) {
+    return <div>Cargando reseñas...</div>;
+  }
+
   return (
-    <div style={styles.reviewCard}>
-      <div style={styles.leftColumn}>
-        {/*-----------Columna Izquierda----------*/}
-        <div style={styles.avatarContainer}>
-          <div style={styles.avatar}></div>
-          <p style={styles.userName}>Nombre de usuario</p>
-        </div>
-        <div style={styles.description}>Descripcion...</div>
-      </div>
+    <div>
+      {reviews.map((review) => {
+        const user = users[review.idAutor] || { usuario: "Usuario desconocido", foto: null }; // Obtener el usuario correspondiente
 
-      {/*-----------Barra central----------*/}
-      <div style={styles.verticalBar}></div>
+        return (
+          <div key={review.idreview} style={styles.reviewCard}>
+            <div style={styles.leftColumn}>
+              <div style={styles.avatarContainer}>
+                <img
+                  src={user.foto || 'https://via.placeholder.com/50'} // Usar un placeholder si foto es null
+                  alt="Avatar"
+                  style={styles.avatar}
+                />
+                <p style={styles.userName}>{user.usuario}</p>
+              </div>
+              <div style={styles.description}>{review.comentario}</div>
+            </div>
 
-      <div style={styles.rightColumn}>
-        {/*-----------Columna Derecha----------*/}
-        <div style={styles.ratingBarsContainer}>
-          {renderRating("Precio", precioRating, "Malo", "Excelente")}
-          {renderRating("Calidad", calidadRating, "Pésima", "Admirable")}
-          {renderRating("Atención al cliente", atencionRating, "Antisocial", "Muy atento")}
-          {renderRating("Tiempo del trabajo", tiempoRating, "Muy lento", "Muy veloz")}
-        </div>
-        
-      </div>
-    </div>    
-    );
+            <div style={styles.verticalBar}></div>
+
+            <div style={styles.rightColumn}>
+              <div style={styles.ratingBarsContainer}>
+                {renderRating("Precio", review.precio, "Malo", "Excelente")}
+                {renderRating("Calidad", review.calidad, "Pésima", "Admirable")}
+                {renderRating("Atención al cliente", review.atencion, "Antisocial", "Muy atento")}
+                {renderRating("Tiempo del trabajo", review.tiempo, "Muy lento", "Muy veloz")}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default ReviewCard;

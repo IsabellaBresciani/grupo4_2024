@@ -98,18 +98,33 @@ router.delete('/:review_id', async (req, res) => {
   }
 });
 
-router.get('/usuario/:idAutor/servicio/:idService', async (req, res) => {
-  const { idAutor, idService } = req.params;
+// Ver todas las reseñas de una asociación específica
+router.get('/:idAsociacion/asociacion', async (req, res) => {
+  const { idAsociacion } = req.params;
 
   try {
-    const reviews = await Review.findByServiceAndUser(pool, idAutor, idService);
-    if (reviews.length === 0) return res.status(404).json({ message: 'No hay reseñas para este usuario y servicio.' });
+    const reviews = await Review.findByAssociation(pool, idAsociacion);
+    if (reviews.length === 0) return res.status(404).json({ message: 'No hay reseñas para esta asociación.' });
     res.json(reviews);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener reseñas del servicio asociado' });
+    console.error('Error al obtener reseñas de la asociación:', error);
+    res.status(500).json({ error: 'Error al obtener reseñas de la asociación' });
   }
 });
 
+// Obtener la persona de una asociación específica
+router.get('/:idAsociacion/idasociacion', async (req, res) => {
+  const { idAsociacion } = req.params;
+
+  try {
+    // Suponiendo que tienes una función `findUserByAssociation` en el modelo Review para obtener el usuario asociado
+    const user = await Review.findUserByAssociation(pool, idAsociacion);
+    if (!user) return res.status(404).json({ message: 'No se encontró la persona asociada a esta asociación.' });
+    res.json(user);
+  } catch (error) {
+    console.error('Error al obtener la persona de la asociación:', error);
+    res.status(500).json({ error: 'Error al obtener la persona de la asociación' });
+  }
+});
 
 module.exports = router;

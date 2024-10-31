@@ -24,11 +24,16 @@
       return rows;
     }
   
-    static async findById(connection, idPersona) {
-      const sql = `SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento , l.nombre FROM servicioya.user AS u JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad WHERE u.id = ?;`;
-      const [rows] = await connection.query(sql, [idPersona]);
-      return rows[0];
-    }
+    static async findById(pool, id) {
+      try {
+          const sql = 'SELECT * FROM user WHERE id = ?';
+          const [rows] = await pool.query(sql, [id]);
+          return rows;
+      } catch (error) {
+          console.error('Error al buscar usuario por ID:', error); // Log para el servidor
+          throw error; // Propagar el error para que el controlador pueda manejarlo
+      }
+  }
   
     static async findByUsername(connection, username) {
       

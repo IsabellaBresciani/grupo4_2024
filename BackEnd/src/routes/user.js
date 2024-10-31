@@ -14,6 +14,22 @@ router.get("/", async (req, res) => {
     }
 });
 
+// Buscar usuario por ID
+router.get("/id/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const results = await User.findById(pool, id); // Aquí no necesitas destructurar
+      if (results.length === 0) {
+          return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+      res.json(results);
+  } catch (error) {
+      console.error('Error en la búsqueda de usuario:', error); // Log para ver el error
+      return res.status(500).json({ error: 'Error en la consulta' });
+  }
+});
+
 // Buscar usuario 
 router.get("/:nom_usuario", async (req, res) => {
     const { nom_usuario } = req.params;

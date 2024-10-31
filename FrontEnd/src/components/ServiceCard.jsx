@@ -199,9 +199,9 @@ const ServiceCard = () => {
     }, []);
 
     const handleOpenPopup = (idAsociacion) => {
-        setSelectedAsociacionId(idAsociacion);  // Guardar idAsociacion seleccionado
+        setSelectedAsociacionId(idAsociacion);  // Ahora se establece el idAsociacion
         setShowPopup(true);
-    };
+    };    
 
     const handleClosePopup = () => {
         setShowPopup(false);
@@ -230,8 +230,8 @@ const ServiceCard = () => {
                                 )}
                             </button>
 
-                            <button style={styles.button} onClick={() => handleOpenPopup(service.idServicio)}> Ver reseñas </button>
-                            </div>
+                            <button style={styles.button} onClick={() => handleOpenPopup(service.idAsociacion)}>Ver reseñas</button>                            
+                        </div>
                     ))
                 ) : (
                     <p>No hay servicios asociados</p>

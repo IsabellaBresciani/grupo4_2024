@@ -69,6 +69,31 @@ class Review {
     const [rows] = await pool.query(query, [idAutor, idservice]);
     return rows;
   }
+
+    // Buscar todas las reseñas para una asociación específica
+    static async findByAssociation(connection, idAsociacion) {
+      const sql = `
+        SELECT * FROM servicioya.review 
+        WHERE servicioasociado_id = ?;
+      `;
+      const [rows] = await connection.query(sql, [idAsociacion]);
+      return rows;
+    }
+
+    //Retorna usuario por un idAsoaciacion
+    static async findUserByAssociation(connection, idAsociacion) {
+      const sql = `
+        SELECT u.* 
+        FROM servicioya.user AS u
+        JOIN servicioya.servicioasociado AS sa ON idPersona = u.id
+        WHERE sa.idAsociacion = ?;
+      `;
+      const [rows] = await connection.query(sql, [idAsociacion]);
+      return rows[0]; // Retorna el usuario encontrado, si existe
+    }
+  
 };
+
+
 
 module.exports = Review;

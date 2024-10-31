@@ -152,7 +152,7 @@ const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
 				{/* Renderizamos el segundo popup si showPopupNR es true */}
 				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
 
-				<ReviewCard />
+				<ReviewCard asociacionId={servicioasociado_id}/>
         <p></p>
         <p></p>
   		</div>
