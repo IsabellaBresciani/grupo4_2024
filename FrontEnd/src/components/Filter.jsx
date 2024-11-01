@@ -80,7 +80,7 @@ const Filter = () => {
                     {/* ComboBox para Localidades */}
                     <div style={styles.comboBoxContainer}>
                         <label htmlFor="combo-box" style={styles.comboBoxLabel}>Seleccione una localidad:</label>
-                        <select 
+                        <select
                             id="combo-box"
                             style={styles.comboBox}
                             onChange={handleLocationChange}
@@ -92,7 +92,21 @@ const Filter = () => {
                             <option value="Ensenada">Ensenada</option>
                         </select>
                     </div>
-
+                    {/* ComboBox para Servicios */}
+                    <div style={styles.comboBoxContainer}>
+                        <label htmlFor="combo-box" style={styles.comboBoxLabel}>Seleccione un servicio:</label>
+                        <select
+                            id="combo-box"
+                            style={styles.comboBox}
+                            onChange={handleLocationChange}
+                            value=""
+                        >
+                            <option value="" disabled>--Elija un servicio--</option>
+                            <option value="La Plata">Plomería</option>
+                            <option value="Berisso">Jardinería</option>
+                            <option value="Ensenada">Instalacion de aires acondicionados</option>
+                        </select>
+                    </div>
                     {/* Slider de estrellas */}
                     <div style={styles.sliderGroup}>
                         <h5 style={styles.sliderTitle}>Estrellas: {stars}</h5>
@@ -106,8 +120,8 @@ const Filter = () => {
                         />
                     </div>
 
-                        {/* Mostrar localidades seleccionadas como etiquetas */}
-                        <div style={styles.selectedTagsContainer}>
+                    {/* Mostrar localidades seleccionadas como etiquetas */}
+                    <div style={styles.selectedTagsContainer}>
                         {selectedLocations.map((location, index) => (
                             <div key={index} style={styles.tag}>
                                 {location}
