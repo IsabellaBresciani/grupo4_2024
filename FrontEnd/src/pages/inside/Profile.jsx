@@ -3,6 +3,8 @@ import ProfileHeader from '../../components/ProfileHeader';
 import ServiceCard from '../../components/ServiceCard';
 import PostCard from '../../components/PostCard';
 import LayoutInside from '../../components/LayoutInside';
+import AddServiceButton from '../../components/AddServiceButton';
+import AddPostButton from '../../components/AddPostButton';
 
 const styles = {
     profilePage: {
@@ -29,7 +31,14 @@ const styles = {
         color: '#333',
         fontSize: '1.5rem',
         marginBottom: '15px',
+        marginTop: '10px',
     },
+    Container: {
+        display: 'flex',
+        justifyContent: 'flex-start',
+        gap: '50px',
+    },
+    
 };
 
 const Profile = () => {
@@ -42,7 +51,10 @@ const Profile = () => {
 
                     {/* Sección de Servicios */}
                     <div style={styles.section}>
-                        <h2 style={styles.heading}>Mis Servicios</h2>
+                        <div style={styles.Container}>
+                            <h2 style={styles.heading}>Mis Servicios</h2> 
+                            <AddServiceButton />
+                        </div>
                         <div style={styles.serviceCards}>
                             <ServiceCard />
                         </div>
@@ -50,7 +62,10 @@ const Profile = () => {
 
                     {/* Sección de Publicaciones */}
                     <div style={styles.section}>
+                    <div style={styles.Container}>
                         <h2 style={styles.heading}>Mis Publicaciones</h2>
+                        <AddPostButton/>
+                    </div>
                         <div style={styles.serviceCards}>
                             <PostCard />                              
                         </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 const styles = {
     postsSection: {
         width: '100%',
@@ -23,9 +24,6 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-    },
-    postCardHover: {
-        transform: 'translateY(-5px)',
     },
     postHeader: {
         display: 'flex',
@@ -59,103 +57,29 @@ const styles = {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
-    button: {
-        backgroundColor: '#ff7f11',
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        fontSize: '1em',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        transition: 'background-color 0.3s ease',
-    },
-    buttonHover: {
-        backgroundColor: '#ff5500',
-    },
-    modal: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 1000,
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '8px',
-        width: '400px',
-        maxWidth: '100%',
-        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.2)',
-    },
 };
 
 const PostCard = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [newPost, setNewPost] = useState({
-        titulo: '',
-        descripcion: '',
-        imagen: '',
-        fecha: new Date().toISOString().split('T')[0],  // Solo fecha (YYYY-MM-DD)
-    });
     const userName = localStorage.getItem('usuario');
 
-    // Función para obtener las publicaciones del usuario
     const fetchPosts = async () => {
         try {
-            const response = await axios.get(`http://localhost:4444/api/publication/${userName}/posts`); 
-                const uniquePosts = response.data.filter(
-                    (post, index, self) =>
-                        index === self.findIndex((p) => p.idPublicacion === post.idPublicacion)
-                );
-                setPosts(uniquePosts);
+            const response = await axios.get(`http://localhost:4444/api/publication/${userName}/posts`);
+            const uniquePosts = response.data.filter(
+                (post, index, self) =>
+                    index === self.findIndex((p) => p.idPublicacion === post.idPublicacion)
+            );
+            setPosts(uniquePosts);
         } catch (err) {
-            if (err.response && err.response.status === 404) {
-                setError('No se encontraron publicaciones para este usuario.');
-            } else {
-            setError('Error al cargar las publicaciones');
-        }
+            setError(err.response && err.response.status === 404 ? 'No se encontraron publicaciones para este usuario.' : 'Error al cargar las publicaciones');
         } finally {
             setLoading(false);
         }
     };
 
-    // Función para manejar el envío de una nueva publicación
-    const handleAddPost = async () => {
-        try {
-            const dataToSend = {
-                fecha: new Date().toISOString().split('T')[0],
-                descripcion: newPost.descripcion,
-                titulo: newPost.titulo, 
-                imagen: newPost.imagen, 
-                idUser: 17 // ID de la persona
-            };
-           
-            await axios.post('http://localhost:4444/api/publication', dataToSend);
-            setIsModalOpen(false); // Cerrar el modal
-            fetchPosts(); // Recargar las publicaciones
-        } catch (error) {
-            console.error('Error al agregar la publicación:', error);
-        }
-    };
-
-    // Manejar cambios en el formulario del modal
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewPost((prevPost) => ({
-            ...prevPost,
-            [name]: value
-        }));
-    };
-
-    // Llamar a la función cuando el componente se monta
     useEffect(() => {
         fetchPosts();
     }, []);
@@ -175,7 +99,7 @@ const PostCard = () => {
                                 <span style={styles.postDate}>{new Date(post.fecha).toLocaleDateString()}</span>
                             </div>
                             <div style={styles.postContent}>
-                                <h3>{post.titulo}</h3> 
+                                <h3>{post.titulo}</h3>
                                 <img src={post.imagen} alt={post.titulo} style={styles.postImage} />
                                 <p style={styles.postDescription}>{post.descripcion}</p>
                             </div>
@@ -185,51 +109,7 @@ const PostCard = () => {
                     <p>No hay publicaciones asociadas</p>
                 )}
             </div>
-
-            <div>
-                <button style={styles.button} onClick={() => setIsModalOpen(true)}>Agregar Publicación</button>
-            </div>
-
-            {isModalOpen && (
-                <div style={styles.modal}>
-                    <div style={styles.modalContent}>
-                        <h3>Agregar nueva publicación</h3>
-                        <form>
-                            <div>
-                                <label htmlFor="titulo">Título</label>
-                                <input
-                                    type="text"
-                                    id="titulo"
-                                    name="titulo"
-                                    value={newPost.titulo}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="descripcion">Descripción</label>
-                                <textarea
-                                    id="descripcion"
-                                    name="descripcion"
-                                    value={newPost.descripcion}
-                                    onChange={handleChange}
-                                ></textarea>
-                            </div>
-                            <div>
-                                <label htmlFor="imagen">Imagen (URL)</label>
-                                <input
-                                    type="text"
-                                    id="imagen"
-                                    name="imagen"
-                                    value={newPost.imagen}
-                                    onChange={handleChange}
-                                />
-                            </div>
-                            <button type="button" style={styles.button} onClick={handleAddPost}>Agregar</button>
-                            <button type="button" style={styles.button} onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                        </form>
-                    </div>
-                </div>
-            )}
+            
         </div>
     );
 };
