@@ -82,7 +82,7 @@ const styles = {
 		overflow: 'hidden',
 		textOverflow: 'ellipsis',
 	},
-	// Estilos para la modal (Para la modificacion de la publicaicon y el error de este)
+	// Estilos para la modal (Para la modificacion de la publicaicon y el error de estego)
 	modal: {
 		position: 'fixed',
 		top: 0,
