@@ -40,16 +40,34 @@ const styles = {
         justifyContent: 'center',
         
     },
-    input: {
+    divInput:{
+        display: 'flex',
+        flexDirection: 'row',
+        color: "white",
+        border: '1px solid #ffffff',
+        borderRadius: '5px',
         marginBottom: '15px',
+        width: '40vw',
+        justifyContent: 'space-between',
+    },
+    input: {
         padding: '10px',
-        minWidth: '40vw',
-        maxWidth: "60vw",
+        minWidth: '35vw',
+        maxWidth: "55vw",
         fontSize: '1em',
         color: 'white',
         backgroundColor: 'transparent',
-        border: '1px solid #ffffff',
-        borderRadius: '5px',
+        outline: 'none',
+        border: 'none',
+    },
+    isVisible: { 
+        top: '10px',
+        right: '10px',
+        cursor: 'pointer',
+        outline: 'none',
+        border: 'none',
+        backgroundColor: 'transparent',
+        fontSize: '18px',
     },
     button: {
         padding: '15px',
@@ -64,12 +82,11 @@ const styles = {
     buttonHover: {
         backgroundColor: '#555',
     },
-    divInput:{
-        color: "white",
-    }
+    
 };
 
 function Register() {
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [formData, setFormData] = useState({
         nombre: '',
         apellido: '',
@@ -80,6 +97,7 @@ function Register() {
         password: '',
         confirm_password: ''
     });
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -130,6 +148,10 @@ function Register() {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible((prevState) => !prevState);
+    };
+
     return (
         <LayoutOutside> 
           
@@ -144,8 +166,8 @@ function Register() {
                                 <div style={styles.divInput}  key={key}>
                                     <input
                                         type={
-                                            key === 'password' || key === 'confirm_password' 
-                                            ? 'password' 
+                                            (key === 'password' || key === 'confirm_password')
+                                                ? (isPasswordVisible ? 'text' : 'password')
                                             : key === 'fecha_nacimiento' 
                                             ? 'date' 
                                             : 'text'
@@ -157,6 +179,18 @@ function Register() {
                                         style={styles.input}
                                         required
                                     />
+                                    {key == "password" || key === 'confirm_password' ? (
+                                        <>
+                                        <button
+                                            type="button"
+                                            style={styles.isVisible}
+                                            onClick={togglePasswordVisibility}
+                                        >
+                                            <i className={`fas ${isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight: '10px', color: 'white' }}></i>
+                                        </button>
+                                        </>
+                                    ):(<> </>)
+                                    }
                                 </div>
                             ))}
                             <button type="submit" style={styles.button}>Register</button>
