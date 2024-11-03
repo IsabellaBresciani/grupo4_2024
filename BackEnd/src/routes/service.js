@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/database'); // Asegúrate de tener un archivo 'database.js' para crear el pool de conexión con MySQL
+const pool = require('../config/database'); //Asegúrate de tener un archivo 'database.js' para crear el pool de conexión con MySQL
 
 // Obtener todos los servicios
 router.get("/", async (req, res) => {
