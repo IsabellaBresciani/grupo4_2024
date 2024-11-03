@@ -170,7 +170,7 @@ const PostCard = (props) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [currentPost, setCurrentPost] = useState(null);
 	const [showErrorModal, setShowErrorModal] = useState(false);
-	const userName = localStorage.getItem('usuario');
+	
 
 	const fetchPosts = async () => {
 		try {
