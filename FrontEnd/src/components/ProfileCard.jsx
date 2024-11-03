@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const styles = {
     profileCard: {
@@ -10,6 +11,8 @@ const styles = {
         maxWidth: '1000px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
         margin: '20px 0',  // Space around each card 
+        textDecoration: 'none', // Remove underline from link
+        color: 'inherit', // Inherit the text color
     },
     profileImage: {
         width: '100px',
@@ -20,7 +23,7 @@ const styles = {
     },
     profileDetails: {
         flexGrow: 1,
-        overflow: 'hidden',  // Para evitar desbordes en textos largos
+        overflow: 'hidden',  // To avoid overflow in long texts
     },
     profileDetailsHeader: {
         margin: 0,
@@ -39,42 +42,42 @@ const styles = {
         color: '#ffc107', // Star color
     },
     contactInfo: {
-      marginTop: '10px', // Espacio entre la descripción y la información de contacto
+        marginTop: '10px', // Space between description and contact info
     },
 };
 
-function ProfileCard({ name, description, email, phone, img }) {
-  return (
-    <div style={styles.profileCard}>
-      {/* Profile image */}
-      <img 
-        src={img}
-        alt="Profile" 
-        style={styles.profileImage} 
-      />
-      
-      {/* Text container */}
-      <div style={styles.profileDetails}>
-        <h3 style={styles.profileDetailsHeader}>{name}</h3>
-        <p style={styles.profileDetailsText}>{description}</p>
-        
-        {/* Contact information */}
-        <div style={styles.contactInfo}>
-        <p style={styles.profileDetailsText}>Email: {email}</p>
-        <p style={styles.profileDetailsText}>Teléfono: {phone}</p>
-        </div>
+function ProfileCard({ id, name, description, email, phone, img }) {
+    return (
+        <Link to={`/profile/${id}`} style={styles.profileCard}>
+            {/* Profile image */}
+            <img 
+                src={img}
+                alt="Profile" 
+                style={styles.profileImage} 
+            />
+            
+            {/* Text container */}
+            <div style={styles.profileDetails}>
+                <h3 style={styles.profileDetailsHeader}>{name}</h3>
+                <p style={styles.profileDetailsText}>{description}</p>
+                
+                {/* Contact information */}
+                <div style={styles.contactInfo}>
+                    <p style={styles.profileDetailsText}>Email: {email}</p>
+                    <p style={styles.profileDetailsText}>Teléfono: {phone}</p>
+                </div>
 
-        {/* Rating with stars */}
-        <div style={styles.profileRating}>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-        </div>
-      </div>
-    </div>
-  );
+                {/* Rating with stars */}
+                <div style={styles.profileRating}>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                </div>
+            </div>
+        </Link>
+    );
 }
 
 export default ProfileCard;

@@ -14,9 +14,9 @@ const styles = {
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        minHeight: "95vh",
+        minHeight: "94vh",
         flexGrow: 1,
-        padding: "4vw"
+        padding: "0vw 2vw"
     },
 
     formContainer: {
@@ -30,7 +30,7 @@ const styles = {
         marginBottom: '20px',
         color: 'white',
         fontWeight: 0.5,
-        margin: '5vh',
+        margin: '4vh',
     },
     registerForm: {
         flex: 1,
