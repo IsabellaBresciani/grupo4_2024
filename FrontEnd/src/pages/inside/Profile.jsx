@@ -62,7 +62,7 @@ const Profile = () => {
                             <AddServiceButton />
                         </div>
                         <div style={styles.serviceCards}>
-                            <ServiceCard />
+                            <ServiceCard usuario="me"/>
 
                         </div>
                     </div>

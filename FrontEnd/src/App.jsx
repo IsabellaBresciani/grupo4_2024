@@ -25,6 +25,7 @@ function App() {
           <>
             <Route path="/search" element={<Search />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:usuario" element={<ProfileDetails />} />
             <Route path="/profile-details" element={<ProfileDetails />} />
             <Route path="*" element={<Navigate to="/search" />} /> {/* Redirect to search if authenticated */}
           </>
