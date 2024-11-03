@@ -100,21 +100,21 @@ const NavBarInside = ({ content, activeItem }) => {
                       
                       <li className="nav-item">
                           
-                          <a href={icon}   style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover " title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                          <a   style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover " title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
                             <Link to="/profile" style={activeItem === 'profile' ? styles.activeIcon : styles.sidebarIcon}  className="bi bi-person-circle fs-1"></Link>
                           </a>
                        
                       </li>
                       <li className="nav-item">
                           
-                          <a href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover " title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                          <a   style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover " title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
                             <Link style={activeItem === 'search' ? styles.activeIcon : styles.sidebarIcon} to="/search" className="bi bi-search fs-1"></Link>
                           </a>
                        
                       </li>
                   
                       <li>
-                            <a href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.200rem, 0)"}} className="nav-link py-3 px-2 icon-link icon-link-hover" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Orders">
+                            <a  style={{"--bs-icon-link-transform": "translate3d(0, -.200rem, 0)"}} className="nav-link py-3 px-2 icon-link icon-link-hover" title="Settings" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Orders">
                                 <Link to="/config" style={activeItem === 'config' ? styles.activeIcon : styles.sidebarIcon} className="bi bi-gear fs-1"></Link>
                             </a>
                       </li>
@@ -122,7 +122,7 @@ const NavBarInside = ({ content, activeItem }) => {
                       <hr/><hr/><hr/><hr/><hr/>
                       <li className="nav-item">
                           
-                          <a onClick={handleLogout} href={icon}  style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
+                          <a onClick={handleLogout}   style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">
                             <Link style={styles.sidebarIcon} className="bi bi-box-arrow-right fs-1"></Link>
                           </a>
                        

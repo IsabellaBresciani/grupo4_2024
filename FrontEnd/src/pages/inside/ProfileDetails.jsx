@@ -50,12 +50,9 @@ const ProfileDetails = () => {
 
                 {/* Services Section */}
                 <section>
-                    <h2>Mis Servicios</h2>
-       
-                   
+                    <h2>Mis Servicios</h2>   
                     <ServiceCard usuario={usuario}  />
-                        
-                    
+   
                 </section>
 
                 {/* Posts Section */}

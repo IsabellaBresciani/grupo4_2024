@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 const styles = {
     profileCard: {
@@ -47,8 +47,13 @@ const styles = {
 };
 
 function ProfileCard({ usuario, name, description, email, phone, img }) {
+ 
+    const userNameStorage = String(localStorage.getItem('usuario'));
+    const [userName, setUserName] = useState(userNameStorage);
+   
+
     return (
-        <Link to={`/profile/${usuario}`} style={styles.profileCard}>
+        <Link to={userName === usuario ? `/profile` : `/profile/${usuario}`} style={styles.profileCard}>
             {/* Profile image */}
             <img 
                 src={img}

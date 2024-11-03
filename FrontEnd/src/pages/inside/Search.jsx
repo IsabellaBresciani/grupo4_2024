@@ -70,7 +70,6 @@ const Search = () => {
         
             try {
                 const response = await axios.get(`http://localhost:4444/api/user`);
-
                 setUserData(response.data);
                 setFilteredUsers(response.data); // Devuelve todos por defecto
                 setError(null);
