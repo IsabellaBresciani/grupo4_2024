@@ -51,73 +51,72 @@ router.get("/:nom_usuario", async (req, res) => {
 
 // Actualizar un usuario basado en el campo usuario (email o username)
 router.put('/:usuario', async (req, res) => {
-    const { usuario } = req.params;
-    const { dni, nombre, apellido, foto, fecha_nacimiento, email, password, telefono } = req.body;
-  
-    // Crear una lista de campos a actualizar dinámicamente
-    const fields = [];
-    const values = [];
-  
-    if (dni !== undefined) {
-      fields.push('dni = ?');
-      values.push(dni);
-    }
-    if (foto !== undefined) {
-      fields.push('foto = ?');
-      values.push(foto);
-    }
-    if (nombre !== undefined) {
-      fields.push('nombre = ?');
-      values.push(nombre);
-    }
-    if (apellido !== undefined) {
-      fields.push('apellido = ?');
-      values.push(apellido);
-    }
-    if (fecha_nacimiento !== undefined) {
-      fields.push('fecha_nacimiento = ?');
-      values.push(fecha_nacimiento);
-    }
-    if (email !== undefined) {
-      fields.push('email = ?');
-      values.push(email);
-    }
-    if (password !== undefined) {
-      fields.push('password = ?');
-      values.push(password);
-    }
-    if (telefono !== undefined) {
-      fields.push('telefono = ?');
-      values.push(telefono);
-    }
-  
-    // Verificar si se ha proporcionado al menos un campo para actualizar
-    if (fields.length === 0) {
-      return res.status(400).json({ error: 'No se ha proporcionado ningún campo para actualizar.' });
-    }
-  
-    // Añadir el usuario al final de los valores para la condición WHERE
-    values.push(usuario);
-  
-    const campos = fields.join( ',');
-    // Construir la consulta SQL dinámica usando template literals correctamente
-    const sql = `UPDATE user SET ${fields.join(', ')} WHERE usuario = ?`;
-  
-    try {
-      // Ejecutar la consulta
-      //const [result] = await pool.query(sql, values);
-      const result= await User.update(pool, campos, values);
+  const { usuario } = req.params;
+  const { dni, nombre, apellido, foto, fecha_nacimiento, email, password, telefono, descripcion } = req.body;
 
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ message: 'Usuario no encontrado.' });
-      }
-      res.json({ message: 'Información del usuario actualizada exitosamente.' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al actualizar la información del usuario.', error });
-    }
-  });
+  // Crear una lista de campos a actualizar dinámicamente
+  const fields = [];
+  const values = [];
 
+  if (dni !== undefined) {
+    fields.push('dni = ?');
+    values.push(dni);
+  }
+  if (foto !== undefined) {
+    fields.push('foto = ?');
+    values.push(foto);
+  }
+  if (nombre !== undefined) {
+    fields.push('nombre = ?');
+    values.push(nombre);
+  }
+  if (apellido !== undefined) {
+    fields.push('apellido = ?');
+    values.push(apellido);
+  }
+  if (fecha_nacimiento !== undefined) {
+    fields.push('fecha_nacimiento = ?');
+    values.push(fecha_nacimiento);
+  }
+  if (email !== undefined) {
+    fields.push('email = ?');
+    values.push(email);
+  }
+  if (password !== undefined) {
+    fields.push('password = ?');
+    values.push(password);
+  }
+  if (telefono !== undefined) {
+    fields.push('telefono = ?');
+    values.push(telefono);
+  }
+  if (descripcion !== undefined) {
+    fields.push('descripcion = ?');
+    values.push(descripcion);
+  }
+
+  // Verificar si se ha proporcionado al menos un campo para actualizar
+  if (fields.length === 0) {
+    return res.status(400).json({ error: 'No se ha proporcionado ningún campo para actualizar.' });
+  }
+
+  // Añadir el usuario al final de los valores para la condición WHERE
+  values.push(usuario);
+
+  const campos = fields.join(',');
+
+  try {
+    const result = await User.update(pool, campos, values);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Usuario no encontrado.' });
+    }
+    res.json({ message: 'Información del usuario actualizada exitosamente.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar la información del usuario.', error });
+  }
+});
 
 // Eliminar un usuario exisitente 
 router.delete('/:usuario', async (req, res) => {
