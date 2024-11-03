@@ -121,6 +121,21 @@ const styles = {
     minWidth: '100px', 
     height: '40px', 
   },
+  valueDinamico: {
+    position: 'absolute',
+    top: '-12px', // Ajusta la posición vertical sobre el slider
+    transform: 'translateX(-50%)',
+    fontSize: '14px',
+    color: '#333',
+    
+  },
+  valuesEstaticos: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginTop: '8px',
+    fontSize: '12px',
+    color: '#666',
+  },
 };
 
 const NewReviewPopup = ({ show, onClose, asociacionId }) => {
@@ -173,7 +188,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                         <input
                             style={styles.ratingBar}
                             type="range"
-                            min="0"
+                            min="1"
                             max="5"
                             name="precio"
                             value={reviewData.precio}
@@ -189,7 +204,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                         <input
                             style={styles.ratingBar}
                             type="range"
-                            min="0"
+                            min="1"
                             max="5"
                             name="calidad"
                             value={reviewData.calidad}
@@ -202,19 +217,36 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
 
                         {/* Barra para puntuar la atención al cliente */}
                         <p style={styles.title}>Atención al cliente</p>
-                        <input
-                            style={styles.ratingBar}
-                            type="range"
-                            min="0"
-                            max="5"
-                            name="atencion"
-                            value={reviewData.atencion}
-                            onChange={handleInputChange}
-                        />
+                        <div style={{ position: 'relative', textAlign: 'center' }}>
+                            {/* Mostrar el valor actual sobre el slider */}
+                            <span style={{ ...styles.valueDinamico, left: `${(reviewData.atencion - 1 ) * 25}%` }}>
+                                {reviewData.atencion}
+                            </span>
+                            {/* Etiquetas para cada punto 
+                            <div style={styles.valuesEstaticos}>
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                                <span>4</span>
+                                <span>5</span>
+                            </div>
+                            */}
+                            <input
+                                style={styles.ratingBar}
+                                type="range"
+                                min="1"
+                                max="5"
+                                name="atencion"
+                                value={reviewData.atencion}
+                                onChange={handleInputChange}
+                            />
+                            
+                        </div>
                         <div style={styles.detailLabelContainer}>
                             <p>Antisocial</p>
                             <p>Muy atento</p>
                         </div>
+
 
                         {/* Barra para puntuar el tiempo */}
                         <p style={styles.title}>Tiempo</p>

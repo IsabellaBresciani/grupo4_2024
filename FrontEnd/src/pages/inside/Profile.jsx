@@ -3,6 +3,8 @@ import ProfileHeader from '../../components/ProfileHeader';
 import ServiceCard from '../../components/ServiceCard';
 import PostCard from '../../components/PostCard';
 import LayoutInside from '../../components/LayoutInside';
+import AddServiceButton from '../../components/AddServiceButton';
+import AddPostButton from '../../components/AddPostButton';
 
 const styles = {
     profilePage: {
@@ -25,10 +27,24 @@ const styles = {
         justifyContent: 'left',
     },
     heading: {
-        color: '#333',
-        fontSize: '1.5rem',
+        fontSize: '30px',
+        fontWeight: '600',
         marginBottom: '15px',
+        marginTop: '10px',
     },
+    Container: {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '50px',
+    },
+    PostCards: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignSelf: 'flex-start',
+        justifyContent: 'center',
+        maxWidth: '60vw',
+    },
+    
 };
 
 const Profile = () => {
@@ -41,7 +57,10 @@ const Profile = () => {
 
                     {/* Sección de Servicios */}
                     <div style={styles.section}>
-                        <h2 style={styles.heading}>Mis Servicios</h2>
+                        <div style={styles.Container}>
+                            <h2 style={styles.heading}>Mis Servicios</h2> 
+                            <AddServiceButton />
+                        </div>
                         <div style={styles.serviceCards}>
                             <ServiceCard />
 
@@ -50,9 +69,14 @@ const Profile = () => {
 
                     {/* Sección de Publicaciones */}
                     <div style={styles.section}>
-                        <h2 style={styles.heading}>Mis Publicaciones</h2>
-                        <div style={styles.serviceCards}>
-                            <PostCard />                              
+                        <div style={styles.Container}>
+                            <h2 style={styles.heading}>Mis Publicaciones</h2>
+                            <AddPostButton/>
+                        </div>
+                        <div style={styles.Container}>
+                            <div style={styles.PostCards}>
+                                <PostCard />                              
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,9 @@
+// ServiceCard.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ReviewPopup from './ReviewPopup' ;
+import ReviewPopup from './ReviewPopup';
+
+
 const styles = {
     servicesSection: {
         display: 'flex',
@@ -12,7 +15,6 @@ const styles = {
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
         width: '100%',
-     
     },
     serviceCard: {
         backgroundColor: '#fff',
@@ -26,13 +28,6 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'space-between',
         position: 'relative',
-       
-    },
-    serviceImage: {
-        width: '100%',
-        height: '150px',
-        objectFit: 'cover',
-        borderRadius: '5px',
     },
     button: {
         fontSize: '18px',
@@ -44,58 +39,7 @@ const styles = {
         borderRadius: '5px',
         cursor: 'pointer',
         alignSelf: 'center',
-    },
-    buttonNS: {
-        padding: '10px 20px',
-        backgroundColor: '#ff7f11',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        minWidth: '100px', 
-        height: '40px', 
-    },
-    buttonsContainer: {
-        display: 'flex',
-        justifyContent: 'flex-end', 
-        gap: '10px', 
-        padding: '5px',
-        marginTop: '10px', 
-    },
-    modal: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    modalContent: {
-        display: 'flex',
-        width: '50%',
-        gap: "10px",
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        backgroundColor: 'white',
-        padding: '40px',
-        borderRadius: '8px',
-        width: '500px',
-    },
-    modalInput: {
-        width: '100%',              // Ancho completo del input
-        padding: '10px',            // Espaciado interno
-        margin: '10px 0',           // Margen entre inputs
-        border: '1px solid #ddd',   // Borde gris claro
-        borderRadius: '5px',        // Bordes redondeados
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',  // Sombra sutil
-        fontSize: '1rem',           // Tamaño de fuente adecuado
-        outline: 'none',            // Elimina el borde azul cuando se selecciona
-        transition: 'border-color 0.3s ease', // Transición suave para el borde
+        outline: 'none',
     },
     isVisible: { 
         position: 'absolute',
@@ -110,46 +54,29 @@ const styles = {
         backgroundColor: '#fff',
         fontSize: '18px',
     },
-
 };
 
 const ServiceCard = () => {
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false); 
-    const [newService, setNewService] = useState({ id: 0, estado: 'activo', selectedService: '' });
-    const [servicesAll, setServicesAll] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedAsociacionId, setSelectedAsociacionId] = useState(null);  // Estado para almacenar el idAsociacion
+    const [selectedAsociacionId, setSelectedAsociacionId] = useState(null);
     const userName = localStorage.getItem('usuario');
-
-    const fetchServicesAll = async () => {
-        try {
-            const response = await axios.get('http://localhost:4444/api/service');
-            setServicesAll(response.data);
-        } catch (error) {
-            console.error('Error fetching services:', error);
-        }
-    };
-
-    useEffect(() => {
-        console.log('Servicio asociado ID recibido:', selectedAsociacionId); // Log del ID
-    }, [selectedAsociacionId]);
 
     const fetchServices = async () => {
         try {
-            const response = await axios.get(`http://localhost:4444/api/user/${userName}/servicios`);  
+            const response = await axios.get(`http://localhost:4444/api/user/${userName}/servicios`);
             const uniqueServices = response.data.filter(
                 (service, index, self) =>
                     index === self.findIndex((s) => s.idServicio === service.idServicio)
-            );  
+            );
             setServices(uniqueServices);
         } catch (err) {
             if (err.response && err.response.status === 404) {
                 setError('No se encontraron servicios asociados al usuario.');
             } else {
-            setError('Error al cargar los servicios.');
+                setError('Error al cargar los servicios.');
             }
         } finally {
             setLoading(false);
@@ -159,54 +86,26 @@ const ServiceCard = () => {
     const handleUpdateStatus = async (idServicio, currentState) => {
         const newStatus = currentState === 'activo' ? 'inactivo' : 'activo';
         try {
-            await axios.put(`http://localhost:4444/api/user/17/servicios/${idServicio}`, {
-                estado: newStatus,
-            });
+            await axios.put(`http://localhost:4444/api/user/17/servicios/${idServicio}`, { estado: newStatus });
             fetchServices();
         } catch (error) {
             console.error('Error al actualizar el estado del servicio:', error);
         }
     };
 
-    const handleAddService = async () => {
-        try {
-            const dataToSend = {
-                idPersona: 17,
-                idServicio: newService.selectedService, 
-                estado: newService.estado,
-            };
-
-            await axios.post('http://localhost:4444/api/user/17/servicios', dataToSend);
-        
-            setIsModalOpen(false);
-            fetchServices();
-        } catch (error) {
-            console.error('Error al agregar el servicio:', error);
-        }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewService((prevService) => ({
-            ...prevService,
-            [name]: value,
-        }));
-    };
-
-    useEffect(() => {
-        fetchServicesAll(); // Fetch available services on mount
-        fetchServices();    // Fetch user services
-    }, []);
-
     const handleOpenPopup = (idAsociacion) => {
-        setSelectedAsociacionId(idAsociacion);  // Ahora se establece el idAsociacion
+        setSelectedAsociacionId(idAsociacion);
         setShowPopup(true);
-    };    
+    };
 
     const handleClosePopup = () => {
         setShowPopup(false);
-        setSelectedAsociacionId(null);  // Limpiar el idAsociacion al cerrar el popup
+        setSelectedAsociacionId(null);
     };
+
+    useEffect(() => {
+        fetchServices();
+    }, []);
 
     if (loading) return <p>Cargando servicios...</p>;
     if (error) return <p>{error}</p>;
@@ -230,69 +129,20 @@ const ServiceCard = () => {
                                 )}
                             </button>
 
-                            <button style={styles.button} onClick={() => handleOpenPopup(service.idAsociacion)}>Ver reseñas</button>                            
+                            <button style={styles.button} onClick={() => handleOpenPopup(service.idAsociacion)}>Ver reseñas</button>
+                            
                         </div>
                     ))
                 ) : (
-                    <p>No hay servicios asociados</p>
+                    <p>No hay servicios asociados.</p>
                 )}
-            </div>
-
-            <ReviewPopup 
+               <ReviewPopup 
                 show={showPopup} 
                 onClose={handleClosePopup} 
                 servicioasociado_id={selectedAsociacionId}  // Pasar idAsociacion seleccionado a ReviewPopup
-            />
-
-            <div>
-                <button style={styles.button} onClick={() => setIsModalOpen(true)}>Agregar servicio</button>
+                />
             </div>
-
-            {isModalOpen && (
-                <div style={styles.modal}>
-                    <div style={styles.modalContent}>
-                        <h3>Agregar nuevo servicio</h3>
-                        <form>
-                            <div>
-                                <label htmlFor="selectedService">Seleccionar un servicio</label>
-                                <select
-                                    id="selectedService"
-                                    name="selectedService"
-                                    value={newService.selectedService}
-                                    onChange={handleChange}
-                                    style={styles.modalInput}
-                                >
-                                    <option value="">Seleccione un servicio</option>
-                                    {servicesAll.map((service) => (
-                                        <option 
-                                            key={service.idservice} 
-                                            value={service.idservice}>
-                                            {service.description}                                            
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor="estado">Estado</label>
-                                <select
-                                    id="estado"
-                                    name="estado"
-                                    value={newService.estado}
-                                    onChange={handleChange}
-                                    style={styles.modalInput}
-                                >
-                                    <option value="activo">Activo</option>
-                                    <option value="inactivo">Inactivo</option>
-                                </select>
-                            </div>
-                            <div style={styles.buttonsContainer}>
-                                <button type="button" style={styles.buttonNS} onClick={handleAddService}>Agregar</button>
-                                <button type="button" style={styles.buttonNS} onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
+            
         </div>
     );
 };
