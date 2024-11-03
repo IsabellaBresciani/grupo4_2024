@@ -32,9 +32,9 @@ class Publication {
       return rows;
     }
   
-    static async update(connection, { idPublicacion, descripcion, titulo }) {
-      const sql = `UPDATE Publicacion SET descripcion = ?, titulo = ? WHERE idPublicacion = ?`;
-      const [result] = await connection.query(sql, [descripcion, titulo, idPublicacion]);
+    static async update(connection, { idPublicacion, descripcion, titulo, imagen }) {
+      const sql = `UPDATE Publicacion SET descripcion = ?, titulo = ?, imagen = ? WHERE idPublicacion = ?`;
+      const [result] = await connection.query(sql, [descripcion, titulo, imagen, idPublicacion]);
       return result;
     }
   
