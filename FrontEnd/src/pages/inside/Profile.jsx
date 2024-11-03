@@ -28,15 +28,22 @@ const styles = {
         justifyContent: 'left',
     },
     heading: {
-        color: '#333',
-        fontSize: '1.5rem',
+        fontSize: '30px',
+        fontWeight: '600',
         marginBottom: '15px',
         marginTop: '10px',
     },
     Container: {
         display: 'flex',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         gap: '50px',
+    },
+    PostCards: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignSelf: 'flex-start',
+        justifyContent: 'center',
+        maxWidth: '60vw',
     },
     
 };
@@ -62,12 +69,14 @@ const Profile = () => {
 
                     {/* Sección de Publicaciones */}
                     <div style={styles.section}>
-                    <div style={styles.Container}>
-                        <h2 style={styles.heading}>Mis Publicaciones</h2>
-                        <AddPostButton/>
-                    </div>
-                        <div style={styles.serviceCards}>
-                            <PostCard />                              
+                        <div style={styles.Container}>
+                            <h2 style={styles.heading}>Mis Publicaciones</h2>
+                            <AddPostButton/>
+                        </div>
+                        <div style={styles.Container}>
+                            <div style={styles.PostCards}>
+                                <PostCard />                              
+                            </div>
                         </div>
                     </div>
                 </div>
