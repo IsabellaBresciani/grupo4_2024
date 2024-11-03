@@ -11,8 +11,7 @@ const styles = {
         display: 'flex',
         height: '100vh',
     },
-    profileContent: {       //Recomendaria sacar esto pq con esto se ven dos scroll bars y el contenido no ocupa toda la pantalla. no lo saco pq no estoy seguro de si tiene otra funcionalidad
-        marginLeft: '5vw',
+    profileContent: {       
         padding: '20px',
         flexGrow: 1,
         backgroundColor: '#f9f9f9',
@@ -64,6 +63,7 @@ const Profile = () => {
                         </div>
                         <div style={styles.serviceCards}>
                             <ServiceCard />
+
                         </div>
                     </div>
 

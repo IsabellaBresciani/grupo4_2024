@@ -14,7 +14,7 @@ function LogPageComponent() {
             color: 'white',
             maxWidth: '700px',
             minWidth: '50vw', // Usar el estado para minWidth
-            padding: '0vw 4vw 2vw 0vw'
+            padding: '0vw 4vw 0vw 0vw'
         },
         registerInfoTitle: {
             fontSize: "2em",
