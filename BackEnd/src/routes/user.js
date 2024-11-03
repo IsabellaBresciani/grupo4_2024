@@ -36,7 +36,7 @@ router.get("/:nom_usuario", async (req, res) => {
     
     try {
         const [results] = await User.findByUsername(pool, nom_usuario);
-   
+      
         if (results.length === 0) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }

@@ -162,7 +162,12 @@ const styles = {
 
 };
 
-const ProfileHeader = () => {
+const ProfileHeader = (props) => {
+    const [usuario, setUsuario] = useState(props.usuario);
+    if (usuario == "me"){
+        const usuario = String(localStorage.getItem('usuario'));
+        setUsuario(usuario)
+    }
     const [userData, setUserData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -178,10 +183,12 @@ const ProfileHeader = () => {
     const [editandoDescripcion, setEditandoDescripcion] = useState(false); // estado para editar descripción
     const [descripcion, setDescripcion] = useState("Ingrese una breve descripción."); // estado para la descripción
 
-    const userName = String(localStorage.getItem('usuario'));
+   
+
     const getData = async () => {
         try {
-            const userD = await axios.get(`http://localhost:4444/api/user/${userName}`);
+            const userD = await axios.get(`http://localhost:4444/api/user/${usuario}`);
+          
             setUserData(userD.data);
         } catch (err) {
             setError('Error al obtener los datos del usuario');
@@ -189,6 +196,7 @@ const ProfileHeader = () => {
             setLoading(false);
         }
     };
+    
 
     const handleChange = (e) => {
 
@@ -219,7 +227,7 @@ const ProfileHeader = () => {
             };
 
             if (Object.keys(dataUpdated).length > 0) {
-                await axios.put(`http://localhost:4444/api/user/${userName}`, dataUpdated);
+                await axios.put(`http://localhost:4444/api/user/${usuario}`, dataUpdated);
                 getData(); // Refresca los datos después de la modificación
             }
         } catch (error) {
@@ -273,7 +281,10 @@ const ProfileHeader = () => {
                 <div style={styles.nameRatingEdit}>
                     <h1 style={styles.profileDetailsHeader}>{userData.nombre} {userData.apellido}</h1>
                     <button style={styles.editIcon} onClick={() => setIsModalOpen(true)}>
-                    <FontAwesomeIcon icon={faEdit} />
+                    {props.usuario === "me" && (
+                                <FontAwesomeIcon icon={faEdit} />
+                    )} 
+                    
                 </button>
 
                     {isModalOpen && (
@@ -408,7 +419,8 @@ const ProfileHeader = () => {
                         {descripcion}
                     </p>
                 )}
-                {!editandoDescripcion && (
+                {!editandoDescripcion && props.usuario === "me" && (
+                  
                     <div style={styles.editDescriptionIcon} onClick={handleEditDescriptionClick}>
                         <FontAwesomeIcon icon={faEdit} />
                     </div>

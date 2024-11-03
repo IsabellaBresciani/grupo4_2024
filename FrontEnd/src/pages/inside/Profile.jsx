@@ -53,7 +53,7 @@ const Profile = () => {
         <LayoutInside activeItem="profile">  
             <div style={styles.profilePage}>          
                 <div style={styles.profileContent}>
-                    <ProfileHeader />
+                    <ProfileHeader usuario="me"/>
 
                     {/* Sección de Servicios */}
                     <div style={styles.section}>
@@ -62,7 +62,7 @@ const Profile = () => {
                             <AddServiceButton />
                         </div>
                         <div style={styles.serviceCards}>
-                            <ServiceCard />
+                            <ServiceCard usuario="me"/>
 
                         </div>
                     </div>
@@ -75,7 +75,7 @@ const Profile = () => {
                         </div>
                         <div style={styles.Container}>
                             <div style={styles.PostCards}>
-                                <PostCard />                              
+                                <PostCard usuario="me"/>                              
                             </div>
                         </div>
                     </div>

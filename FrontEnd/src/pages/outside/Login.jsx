@@ -40,9 +40,6 @@ const styles = {
         marginBottom: '8vh',
         height: 'auto',
     },
-    divInput:{
-        color: "white",
-    },
     registerForm: {
         flex: 1,
         color: 'rgb(255, 255, 255)',
@@ -51,16 +48,34 @@ const styles = {
         justifyContent: 'center',
         minWidth: '30vw',
     },
-    input: {
+    divInput:{
+        display: 'flex',
+        flexDirection: 'row',
+        color: "white",
+        border: '1px solid #ffffff',
+        borderRadius: '5px',
         marginBottom: '15px',
+        width: '40vw',
+        justifyContent: 'space-between',
+    },
+    input: {
         padding: '10px',
-        minWidth: '40vw',
+        minWidth: '35vw',
         maxWidth: "55vw",
         fontSize: '1em',
         color: 'white',
         backgroundColor: 'transparent',
-        border: '1px solid #ffffff',
-        borderRadius: '5px',
+        outline: 'none',
+        border: 'none',
+    },
+    isVisible: { 
+        top: '10px',
+        right: '10px',
+        cursor: 'pointer',
+        outline: 'none',
+        border: 'none',
+        backgroundColor: 'transparent',
+        fontSize: '18px',
     },
     button: {
         padding: '15px',
@@ -84,6 +99,7 @@ const styles = {
 function Login() {
     const [usuario, setUser] = useState('');
     const [password, setPassword] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const navigate = useNavigate(); 
     const { login } = useAuth(); // Using the hook to get login function
 
@@ -118,6 +134,10 @@ function Login() {
             });
         }
     };
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible((prevState) => !prevState);
+    };
+
 
     return (
         <LayoutOutside>  
@@ -141,13 +161,20 @@ function Login() {
                             <div style={styles.divInput}>
                                 <input
                                     style={styles.input}
-                                    type="password"
+                                    type={isPasswordVisible ? 'text' : 'password'}
                                     id="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
                                     placeholder="Contraseña"
                                 />
+                                <button
+                                    type="button"
+                                    style={styles.isVisible}
+                                    onClick={togglePasswordVisibility}
+                                >
+                                    <i className={`fas ${isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight: '10px', color: 'white' }}></i>
+                                </button>
                             </div>
                             <button style={styles.button}>Login</button>
                         </div>

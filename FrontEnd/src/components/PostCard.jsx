@@ -158,14 +158,19 @@ const styles = {
 	},
 };
 
-const PostCard = () => {
+const PostCard = (props) => {
+    const [userName, setUserName] = useState(props.usuario);
+    if (userName == "me"){
+        const userName = String(localStorage.getItem('usuario'));
+        setUserName(userName)
+    }
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [currentPost, setCurrentPost] = useState(null);
 	const [showErrorModal, setShowErrorModal] = useState(false);
-	const userName = localStorage.getItem('usuario');
+	
 
 	const fetchPosts = async () => {
 		try {

@@ -46,9 +46,9 @@ const styles = {
     },
 };
 
-function ProfileCard({ id, name, description, email, phone, img }) {
+function ProfileCard({ usuario, name, description, email, phone, img }) {
     return (
-        <Link to={`/profile/${id}`} style={styles.profileCard}>
+        <Link to={`/profile/${usuario}`} style={styles.profileCard}>
             {/* Profile image */}
             <img 
                 src={img}
