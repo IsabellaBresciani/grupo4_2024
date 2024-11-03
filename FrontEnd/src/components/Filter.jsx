@@ -114,7 +114,7 @@ const Filter = () => {
                             onChange={handleLocationChange}
                             value=""
                         >
-                            <option value="" disabled>--Elija una localidad--</option>
+                            <option value="" disabled>Elija una localidad</option>
                             <option value="La Plata">La Plata</option>
                             <option value="Berisso">Berisso</option>
                             <option value="Ensenada">Ensenada</option>
@@ -129,7 +129,7 @@ const Filter = () => {
                             onChange={handleServiceChange}
                             value=""
                         >
-                            <option value="" disabled>--Elija un servicio--</option>
+                            <option value="" disabled>Elija un servicio</option>
                             {services.map((service) => (
                                 <option key={service.idservice} value={service.description}>
                                     {service.description}
@@ -139,7 +139,7 @@ const Filter = () => {
                     </div>
                     {/* Slider de estrellas */}
                     <div style={styles.sliderGroup}>
-                        <h5 style={styles.sliderTitle}>Estrellas: {stars}</h5>
+                        <h5 style={styles.sliderTitle}>Promedio estrellas: {stars}</h5>
                         <input
                             style={styles.sliderInput}
                             type="range"
