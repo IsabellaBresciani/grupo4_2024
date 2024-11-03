@@ -52,7 +52,7 @@ router.get('/', async (req,res) => {
 router.get('/:publication_id', async (req,res) =>{
   const {publication_id} = req.params;
   try {
-    const publication = await Publication.findById(pool, review_id);
+    const publication = await Publication.findById(pool, publication_id);
     if (!publication) return res.status(404).json({ message: 'Publicacion no encontrada' });
     res.json(publication);
   } catch (error){
@@ -71,20 +71,32 @@ router.get('/:usuario', async (req,res) => {
   }
 })
 
-// Actualizar una publicacion
+// Actualizar una publicación
 router.put('/:publication_id', async (req, res) => {
-  const {publication_id } = req.params;
-  const { idPublicacion, fecha, descripcion, titulo  } = req.body[0];
+  const { publication_id } = req.params;
+  const { descripcion, titulo, imagen } = req.body; // Cambiar el formato de req.body
 
-  if ( !idPublicacion || !fecha || !descripcion || !titulo  ){
-    return res.status(400).json({ error: 'Todos los campos son obligatorios.'})
+  // Validar que los campos necesarios estén presentes
+  if (!descripcion || !titulo || !imagen) {
+    return res.status(400).json({ error: 'La descripción, el título y la imagen son obligatorios.' });
   }
+  
   try {
-    const publication = Publication.update(pool, {publication_id , comentario});
-    if (publication.affectedRows === 0) return res.status(404).json({message: 'Publicacion no encontrada'});
-    res.json({message: 'Publicacion actualizada'});
-    } catch (error) {
-      res.status(500).json({message: 'Error al actualizar la publicacion.', error});
+    // Llamar a la función de actualización pasando solo los campos necesarios
+    const publication = await Publication.update(pool, { 
+      idPublicacion: publication_id, // Aquí se pasa publication_id para identificar la publicación
+      descripcion, 
+      titulo, 
+      imagen // Asegúrate de que el modelo también pueda recibir imagen
+    });
+    
+    if (publication.affectedRows === 0) {
+      return res.status(404).json({ message: 'Publicación no encontrada' });
+    }
+    
+    res.json({ message: 'Publicación actualizada' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar la publicación.', error });
   }
 });
 
@@ -93,7 +105,7 @@ router.delete('/:publication_id', async (req, res) => {
   const { publication_id } = req.params;
   try {
     const publication = await Publication.delete(pool, publication_id);
-    if (!review) return res.status(404).json({ message: 'Publicacion no encontrada' });
+    if (!publication) return res.status(404).json({ message: 'Publicacion no encontrada' });
     res.json({message: 'Publicacion eliminada correctamente'})
     } catch (error) {
       res.status(500).json({message: 'Error al eliminar la publicacion.', error});

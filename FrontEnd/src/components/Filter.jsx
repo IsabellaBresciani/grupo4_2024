@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const styles = {
     filterGroup: {
@@ -58,7 +59,23 @@ const styles = {
 
 const Filter = () => {
     const [selectedLocations, setSelectedLocations] = useState([]);
+    const [selectedServices, setSelectedServices] = useState([]);
     const [stars, setStars] = useState(0);
+    const [services, setServices] = useState([]); // Estado para almacenar los servicios
+
+    useEffect(() => {
+        // Crea una función asíncrona dentro de useEffect
+        const fetchServices = async () => {
+            try {
+                const response = await axios.get('http://localhost:4444/api/service'); // Cambia esta URL según tu configuración
+                setServices(response.data);
+            } catch (error) {
+                console.error('Error al obtener los servicios:', error);
+            }
+        };
+        // Llama a la función asíncrona
+        fetchServices();
+    }, []);
 
     const handleLocationChange = (e) => {
         const selectedLocation = e.target.value;
@@ -67,8 +84,19 @@ const Filter = () => {
         }
     };
 
+
+    const handleServiceChange = (e) => {
+        const selectedService = e.target.value;
+        if (selectedService && !selectedServices.includes(selectedService)) {
+            setSelectedServices([...selectedServices, selectedService]);
+        }
+    };
+
     const removeLocation = (locationToRemove) => {
         setSelectedLocations(selectedLocations.filter(loc => loc !== locationToRemove));
+    };
+    const removeService = (serviceToRemove) => {
+        setSelectedServices(selectedServices.filter(ser => ser !== serviceToRemove));
     };
 
     return (
@@ -94,17 +122,19 @@ const Filter = () => {
                     </div>
                     {/* ComboBox para Servicios */}
                     <div style={styles.comboBoxContainer}>
-                        <label htmlFor="combo-box" style={styles.comboBoxLabel}>Seleccione un servicio:</label>
+                        <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Seleccione un servicio:</label>
                         <select
-                            id="combo-box"
+                            id="service-combo-box"
                             style={styles.comboBox}
-                            onChange={handleLocationChange}
+                            onChange={handleServiceChange}
                             value=""
                         >
                             <option value="" disabled>--Elija un servicio--</option>
-                            <option value="La Plata">Plomería</option>
-                            <option value="Berisso">Jardinería</option>
-                            <option value="Ensenada">Instalacion de aires acondicionados</option>
+                            {services.map((service) => (
+                                <option key={service.idservice} value={service.description}>
+                                    {service.description}
+                                </option>
+                            ))}
                         </select>
                     </div>
                     {/* Slider de estrellas */}
@@ -128,6 +158,21 @@ const Filter = () => {
                                 <span
                                     style={styles.removeTag}
                                     onClick={() => removeLocation(location)}
+                                >
+                                    &#x2715; {/* Símbolo de "X" para eliminar */}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Mostrar servicios seleccionados como etiquetas */}
+                    <div style={styles.selectedTagsContainer}>
+                        {selectedServices.map((service, index) => (
+                            <div key={index} style={styles.tag}>
+                                {service}
+                                <span
+                                    style={styles.removeTag}
+                                    onClick={() => removeService(service)}
                                 >
                                     &#x2715; {/* Símbolo de "X" para eliminar */}
                                 </span>
