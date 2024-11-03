@@ -37,7 +37,7 @@
   
     static async findByUsername(connection, username) {
       
-      const sql = `SELECT u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento, l.nombre AS localidad 
+      const sql = `SELECT u.id, u.nombre, u.apellido, u.foto, u.email, u.telefono, u.fecha_nacimiento, l.nombre AS localidad 
                    FROM servicioya.user AS u 
                    LEFT JOIN servicioya.localidadxpersona AS lp ON u.id = lp.idPersona 
                    LEFT JOIN servicioya.localidad AS l ON lp.idLocalidad = l.idLocalidad 

@@ -189,7 +189,7 @@ const PostCard = (props) => {
 
 	useEffect(() => {
 		fetchPosts();
-	}, []);
+	});
 
 	const handleDelete = async (id) => {
 		if (window.confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {

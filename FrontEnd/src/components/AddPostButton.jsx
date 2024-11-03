@@ -94,16 +94,20 @@ const AddPostButton = ({ fetchPosts }) => {
 
     const handleAddPost = async () => {
         try {
+            const userName = String(localStorage.getItem('usuario'));
+
+            const userData = await axios.get(`http://localhost:4444/api/user/${userName}`);
             const dataToSend = {
                 fecha: new Date().toISOString().split('T')[0],
                 descripcion: newPost.descripcion,
                 titulo: newPost.titulo,
                 imagen: newPost.imagen,
-                idUser: 17,
+                idUser: userData.data.id,
             };
+
             await axios.post('http://localhost:4444/api/publication', dataToSend);
             setIsModalOpen(false);
-            fetchPosts(); // Actualizar publicaciones en el componente principal
+            fetchPosts();
         } catch (error) {
             console.error('Error al agregar la publicación:', error);
         }
@@ -116,6 +120,7 @@ const AddPostButton = ({ fetchPosts }) => {
             [name]: value,
         }));
     };
+
 
     return (
         <>
@@ -169,7 +174,6 @@ const AddPostButton = ({ fetchPosts }) => {
                                             type="button"
                                             style={styles.addButton}
                                             onClick={handleAddPost}
-                                            
                                         >
                                             Agregar
                                         </button>
