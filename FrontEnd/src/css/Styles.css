@@ -1,6 +1,6 @@
 
 input::placeholder {
-    color: white; /* Color del texto placeholder */
+    color: black; /* Color del texto placeholder */
     opacity: 0.7; /* Opcional: ajusta la opacidad para hacerlo un poco más tenue */
 }
 

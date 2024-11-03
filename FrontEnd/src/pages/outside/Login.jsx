@@ -57,6 +57,7 @@ const styles = {
         marginBottom: '15px',
         width: '40vw',
         justifyContent: 'space-between',
+        backgroundColor: 'white',
     },
     input: {
         padding: '10px',
@@ -64,7 +65,7 @@ const styles = {
         maxWidth: "55vw",
         fontSize: '1em',
         color: 'white',
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
         outline: 'none',
         border: 'none',
     },
@@ -74,7 +75,7 @@ const styles = {
         cursor: 'pointer',
         outline: 'none',
         border: 'none',
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
         fontSize: '18px',
     },
     button: {
@@ -173,7 +174,7 @@ function Login() {
                                     style={styles.isVisible}
                                     onClick={togglePasswordVisibility}
                                 >
-                                    <i className={`fas ${isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight: '10px', color: 'white' }}></i>
+                                    <i className={`fas ${isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight: '10px', color: 'black' }}></i>
                                 </button>
                             </div>
                             <button style={styles.button}>Login</button>
