@@ -7,10 +7,7 @@ import AddServiceButton from '../../components/AddServiceButton';
 import AddPostButton from '../../components/AddPostButton';
 
 const styles = {
-    profilePage: {
-        display: 'flex',
-        height: '100vh',
-    },
+
     profileContent: {       
         padding: '20px',
         flexGrow: 1,
@@ -51,7 +48,7 @@ const Profile = () => {
 
     return (
         <LayoutInside activeItem="profile">  
-            <div style={styles.profilePage}>          
+         
                 <div style={styles.profileContent}>
                     <ProfileHeader usuario="me"/>
 
@@ -80,7 +77,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+
         </LayoutInside>
     );
 };
