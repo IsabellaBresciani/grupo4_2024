@@ -70,6 +70,7 @@ const Search = () => {
         
             try {
                 const response = await axios.get(`http://localhost:4444/api/user`);
+
                 setUserData(response.data);
                 setFilteredUsers(response.data); // Devuelve todos por defecto
                 setError(null);
@@ -146,7 +147,7 @@ const Search = () => {
                         {filteredUsers.length > 0 ? (
                             filteredUsers.map(user => (
                                 <ProfileCard 
-                                    key={user.id} 
+                                    usuario={user.usuario} 
                                     name={`${user.nombre} ${user.apellido}`} 
                                     email={user.email} 
                                     phone={user.telefono} 

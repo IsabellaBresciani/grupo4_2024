@@ -1,8 +1,6 @@
-// ServiceCard.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReviewPopup from './ReviewPopup';
-
 
 const styles = {
     servicesSection: {
@@ -56,13 +54,18 @@ const styles = {
     },
 };
 
-const ServiceCard = () => {
+const ServiceCard = (props) => {
+    const [userName, setUserName] = useState(props.usuario);
+    if (userName === "me") {
+        const userNameFromStorage = String(localStorage.getItem('usuario'));
+        setUserName(userNameFromStorage);
+    }
+    
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [selectedAsociacionId, setSelectedAsociacionId] = useState(null);
-    const userName = localStorage.getItem('usuario');
 
     const fetchServices = async () => {
         try {
@@ -116,35 +119,38 @@ const ServiceCard = () => {
                 {services.length > 0 ? (
                     services.map((service) => (
                         <div style={styles.serviceCard} key={service.idServicio}>
-                            <h3>{service.description}</h3>  
+                            <h3>{service.description}</h3>
                             <p>{service.estado === 'activo' ? 'Servicio activo' : 'Servicio dado de baja'}</p>
-                            <button
-                                style={styles.isVisible}
-                                onClick={() => handleUpdateStatus(service.idServicio, service.estado)}
+
+                            {/* Conditional rendering of the edit functionality based on userName */}
+                            {props.usuario === "me" && (
+                                <button
+                                    style={styles.isVisible}
+                                    onClick={() => handleUpdateStatus(service.idServicio, service.estado)}
                                 >
-                                {service.estado === 'activo' ? (                                    
-                                    <i className="fas fa-eye-slash"></i>
-                                ) : (                                    
-                                    <i className="fas fa-eye"></i>                                  
-                                )}
-                            </button>
+                                    {service.estado === 'activo' ? (                                    
+                                        <i className="fas fa-eye-slash"></i>
+                                    ) : (                                    
+                                        <i className="fas fa-eye"></i>                                  
+                                    )}
+                                </button>
+                            )}
 
                             <button style={styles.button} onClick={() => handleOpenPopup(service.idAsociacion)}>Ver reseñas</button>
-                            
                         </div>
                     ))
                 ) : (
                     <p>No hay servicios asociados.</p>
                 )}
-               <ReviewPopup 
-                show={showPopup} 
-                onClose={handleClosePopup} 
-                servicioasociado_id={selectedAsociacionId}  // Pasar idAsociacion seleccionado a ReviewPopup
+                <ReviewPopup 
+                    show={showPopup} 
+                    onClose={handleClosePopup} 
+                    servicioasociado_id={selectedAsociacionId}  
                 />
             </div>
-            
         </div>
     );
 };
 
 export default ServiceCard;
+ 
