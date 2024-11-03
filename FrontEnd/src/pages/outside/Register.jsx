@@ -43,23 +43,24 @@ const styles = {
     divInput:{
         display: 'flex',
         flexDirection: 'row',
-        color: "white",
+        color: "black",
         border: '1px solid #ffffff',
         borderRadius: '5px',
         marginBottom: '15px',
         width: '40vw',
         justifyContent: 'space-between',
+        backgroundColor:'white',
     },
     input: {
         padding: '10px',
-        minWidth: '35vw',
-        maxWidth: "55vw",
         fontSize: '1em',
-        color: 'white',
-        backgroundColor: 'transparent',
+        color: 'black',
+        backgroundColor: 'white',
         outline: 'none',
         border: 'none',
+        placeholder: 'black'
     },
+    
     isVisible: { 
         top: '10px',
         right: '10px',
@@ -186,7 +187,7 @@ function Register() {
                                             style={styles.isVisible}
                                             onClick={togglePasswordVisibility}
                                         >
-                                            <i className={`fas ${isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight: '10px', color: 'white' }}></i>
+                                            <i className={`fas ${isPasswordVisible ? 'fa-eye' : 'fa-eye-slash'}`} style={{ marginRight: '10px', color: 'black' }}></i>
                                         </button>
                                         </>
                                     ):(<> </>)
