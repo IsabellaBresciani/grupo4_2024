@@ -185,7 +185,7 @@ const ProfileHeader = (props) => {
     const getData = async () => {
         try {
             const userD = await axios.get(`http://localhost:4444/api/user/${usuario}`);
-          
+            console.log("Datos de usuario:", userD.data); // Verifica que userD.data tenga la descripción
             setUserData(userD.data);
         } catch (err) {
             setError('Error al obtener los datos del usuario');
