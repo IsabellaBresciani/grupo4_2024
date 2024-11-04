@@ -139,11 +139,15 @@ const styles = {
         width: '100%',
         paddingTop: '10px',
         marginTop: '10px',
-        borderTop: '1px solid #ddd',
         fontSize: '0.9rem',
         display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: 'column', // Para mantener la estructura del texto
+        maxHeight: '200px', // Limita la altura máxima para evitar ocupar demasiado espacio
+        overflowY: 'auto', // Permite desplazamiento vertical si la descripción es muy larga
+        padding: '15px', // Espacio interior para que el texto no quede pegado al borde
+        borderRadius: '5px', // Bordes redondeados para un mejor aspecto
     },
+    
     profileDescriptionHeader: {
         marginRight: '10px',
         fontSize: '1rem',
@@ -153,11 +157,6 @@ const styles = {
         color: '#555',
         marginLeft: '10px',
         flex: 1,
-    },
-    editDescriptionIcon: {
-        fontSize: '1rem',
-        cursor: 'pointer',
-        alignSelf: 'flex-end',
     },
 
 };
@@ -278,7 +277,7 @@ const ProfileHeader = (props) => {
                     <h1 style={styles.profileDetailsHeader}>{userData.nombre} {userData.apellido}</h1>
                     <button style={styles.editIcon} onClick={() => setIsModalOpen(true)}>
                     {props.usuario === "me" && (
-                                <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} />
                     )} 
                     
                 </button>
@@ -402,7 +401,7 @@ const ProfileHeader = (props) => {
                 <ul style={styles.profileDetails}>
                     <li style={styles.profileDetailsItem}>
                         <i className="fas fa-user"></i>
-                        Edad: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
+                        Fecha de nacimiento: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
                     </li>
                     <li style={styles.profileDetailsItem}><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>
                     <li style={styles.profileDetailsItem}><i className="fas fa-envelope"></i> Email: {userData.email}</li>
@@ -410,7 +409,8 @@ const ProfileHeader = (props) => {
                 </ul>
             </div>
             <div style={styles.profileDescription}>
-                <h3 style={styles.profileDescriptionHeader}>Descripción: {userData.descripcion}</h3>
+                <h3 style={styles.profileDescriptionHeader}>Descripción:</h3>
+                <p>{userData.descripcion}</p>
             </div>
         </div>
     );

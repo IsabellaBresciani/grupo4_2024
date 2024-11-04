@@ -6,7 +6,6 @@ const styles = {
 		width: '100%',
 		margin: '0 auto',
 		padding: '20px',
-		backgroundColor: '#f9f9f9',
 	},
 	postCards: {
 		display: 'flex',
@@ -62,8 +61,6 @@ const styles = {
 		border: 'none',
 		backgroundColor: 'white',
 		fontSize: '18px',
-		border: '2px solid red',
-		borderRadius: '5px',
 	},
 	postContent: {
 		color: '#333',
