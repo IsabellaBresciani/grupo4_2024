@@ -64,7 +64,7 @@ const styles = {
         minWidth: '35vw',
         maxWidth: "55vw",
         fontSize: '1em',
-        color: 'white',
+        color: 'black',
         backgroundColor: 'white',
         outline: 'none',
         border: 'none',
@@ -91,10 +91,7 @@ const styles = {
     buttonHover: {
         backgroundColor: '#555',
     },
-    placeholder: {
-        color: 'white',
-        opacity: 1,
-    },
+    
 };
 
 function Login() {
