@@ -177,13 +177,10 @@ const ProfileHeader = (props) => {
         apellido: '',
         foto: '',
         localidad: '',
-        telefono: ''
+        telefono: '',
+        descripcion: ''
     });
 
-    const [editandoDescripcion, setEditandoDescripcion] = useState(false); // estado para editar descripción
-    const [descripcion, setDescripcion] = useState("Ingrese una breve descripción."); // estado para la descripción
-
-   
 
     const getData = async () => {
         try {
@@ -223,7 +220,9 @@ const ProfileHeader = (props) => {
                 ...(newData.apellido && { apellido: newData.apellido }),
                 ...(newData.foto && { foto: newData.foto }),
                 ...(newData.localidad && { localidad: newData.localidad }),
-                ...(newData.telefono && { telefono: newData.telefono })
+                ...(newData.telefono && { telefono: newData.telefono }),
+                ...(newData.localidad && { localidad: newData.localidad }),
+                ...(newData.descripcion && { descripcion: newData.descripcion })
             };
 
             if (Object.keys(dataUpdated).length > 0) {
@@ -246,12 +245,17 @@ const ProfileHeader = (props) => {
                 apellido: userData.apellido || '',
                 foto: userData.foto || '',
                 localidad: userData.localidad || '',
-                telefono: userData.telefono || ''
+                telefono: userData.telefono || '',
+                descripcion: userData.descripcion || ''
             });
         }
         
     }, [userData]);
-
+    
+    const cancelModification = () => {
+        setNewData(getData());
+        setIsModalOpen(false)
+    }
     const formatDate = (fechaISO) => {
         const fecha = new Date(fechaISO);
         const year = fecha.getFullYear();
@@ -260,14 +264,6 @@ const ProfileHeader = (props) => {
         return `${year}/${month}/${day}`;
     };
 
-    //para la descripcion
-    const handleEditDescriptionClick = () => {
-        setEditandoDescripcion(true);
-    };
-    //para la descripcion
-    const handleSaveDescription = () => {
-        setEditandoDescripcion(false);
-    };
 
     if (loading) return <p>Cargando datos...</p>;
     if (error) return <p>{error}</p>;
@@ -358,6 +354,19 @@ const ProfileHeader = (props) => {
                                             onBlur={(e) => (e.target.style.borderColor = '#ddd')}
                                         />
                                     </div>
+                                    <div>
+                                        <label htmlFor="description" style={styles.modalLabel}>Descripción </label>
+                                        <input
+                                            type="text"
+                                            id="descripcion"
+                                            name="descripcion"
+                                            value={newData.descripcion}
+                                            onChange={handleChange}
+                                            style={styles.modalInput}
+                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
+                                        />
+                                    </div>
                                     {/* Contenedor de botones */}
                                     <div style={styles.buttonsContainer}>
                                         <button
@@ -369,7 +378,7 @@ const ProfileHeader = (props) => {
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setIsModalOpen(false)}
+                                            onClick={cancelModification}
                                             style={styles.cancelButton}
                                         >
                                             Cancelar
@@ -401,30 +410,7 @@ const ProfileHeader = (props) => {
                 </ul>
             </div>
             <div style={styles.profileDescription}>
-                <h3 style={styles.profileDescriptionHeader}>Descripción:</h3>
-                {editandoDescripcion ? (
-                    <div style={{ flex: 1 }}>
-                        <textarea 
-                            value={descripcion} 
-                            onChange={(e) => setDescripcion(e.target.value)} 
-                            placeholder="Ingrese una breve descripción"
-                            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
-                        />
-                        <button onClick={handleSaveDescription} style={styles.GuardarButton}>
-                            Guardar
-                        </button>
-                    </div>
-                ) : (
-                    <p style={styles.profileDescriptionText}>
-                        {descripcion}
-                    </p>
-                )}
-                {!editandoDescripcion && props.usuario === "me" && (
-                  
-                    <div style={styles.editDescriptionIcon} onClick={handleEditDescriptionClick}>
-                        <FontAwesomeIcon icon={faEdit} />
-                    </div>
-                )}
+                <h3 style={styles.profileDescriptionHeader}>Descripción: {userData.descripcion}</h3>
             </div>
         </div>
     );
