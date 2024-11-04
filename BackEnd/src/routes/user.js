@@ -47,8 +47,6 @@ router.get("/:nom_usuario", async (req, res) => {
     }
 });
 
-
-
 // Actualizar un usuario basado en el campo usuario (email o username)
 router.put('/:usuario', async (req, res) => {
   const { usuario } = req.params;
