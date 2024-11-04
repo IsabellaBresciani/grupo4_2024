@@ -140,7 +140,7 @@ const styles = {
 };
 
 const NewReviewPopup = ({ show, onClose, asociacionId }) => {
-    const [reviewData, setReviewData] = useState({
+    const initialReviewData = {
         precio: 0,
         calidad: 0,
         atencion: 0,
@@ -148,11 +148,17 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
         comentario: '',
         idAutor: 17, // Aquí deberías obtener el idAutor del contexto del usuario o similar
         servicioasociado_id: asociacionId,
-    });
+    };
+
+    const [reviewData, setReviewData] = useState(initialReviewData);
 
     if (!show) {
         return null;
     }
+
+    const resetReviewData = () => {
+        setReviewData(initialReviewData);
+    };
 
     // Función para manejar cambios en los inputs
     const handleInputChange = (e) => {
@@ -167,9 +173,9 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
     const handleSubmit = async () => {
         // Verifica si todos los campos están completos
         const areFieldsComplete = ['precio', 'calidad', 'atencion', 'tiempo'].every(
-					(field) => reviewData[field] !== 0
-			);
-    
+            (field) => reviewData[field] !== 0
+        );
+
         if (!areFieldsComplete) {
             // Muestra la alerta si algún campo está incompleto
             Swal.fire({
@@ -180,7 +186,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
             });
             return; // Detiene la ejecución si faltan campos
         }
-    
+
         try {
             const response = await axios.post('http://localhost:4444/api/review', reviewData);
             console.log('Reseña creada:', response.data);
@@ -191,6 +197,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                 confirmButtonText: 'OK'
             });
             onClose();
+            resetReviewData(); // Reinicia los campos al cerrar la ventana
         } catch (error) {
             console.error('Error al crear la reseña:', error);
             Swal.fire({
@@ -201,18 +208,14 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
             });
         }
     };
-    
-
-    
 
     return (
         <div style={styles.popupOverlay} onClick={onClose}>
             <div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-                <button style={styles.closeButton} onClick={onClose}>X</button>
+                <button style={styles.closeButton} onClick={() => { onClose(); resetReviewData(); }}>X</button>
                 <h2>Crear nueva reseña</h2>
                 <div style={styles.columnsContainer}>
                     <div style={styles.ratingBarsColumn}>
-                        {/* Barra para puntuar el precio */}
                         <p style={styles.title}>Precio</p>
                         <input
                             style={styles.ratingBar}
@@ -227,8 +230,6 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                             <p>Malo</p>
                             <p>Excelente</p>
                         </div>
-
-                        {/* Barra para puntuar la calidad del trabajo */}
                         <p style={styles.title}>Calidad</p>
                         <input
                             style={styles.ratingBar}
@@ -243,15 +244,11 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                             <p>Pesima</p>
                             <p>Admirable</p>
                         </div>
-
-                        {/* Barra para puntuar la atención al cliente */}
                         <p style={styles.title}>Atención al cliente</p>
                         <div style={{ position: 'relative', textAlign: 'center' }}>
-                            {/* Mostrar el valor actual sobre el slider */}
                             <span style={{ ...styles.valueDinamico, left: `${(reviewData.atencion - 1 ) * 25}%` }}>
                                 {reviewData.atencion}
                             </span>
-                            
                             <input
                                 style={styles.ratingBar}
                                 type="range"
@@ -261,15 +258,11 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                                 value={reviewData.atencion}
                                 onChange={handleInputChange}
                             />
-                            
                         </div>
                         <div style={styles.detailLabelContainer}>
                             <p>Antisocial</p>
                             <p>Muy atento</p>
                         </div>
-
-
-                        {/* Barra para puntuar el tiempo */}
                         <p style={styles.title}>Tiempo</p>
                         <input
                             style={styles.ratingBar}
@@ -289,7 +282,6 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                     <div style={styles.verticalBar}></div>
 
                     <div style={styles.descriptionColumn}>
-                        {/* Campo para el comentario */}
                         <p style={styles.title}>Descripción:</p>
                         <textarea
                             name="comentario"
@@ -300,7 +292,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                         />
                         <div style={styles.buttonsContainer}>
                             <button style={styles.button} onClick={handleSubmit}>Enviar Reseña</button>
-                            <button style={{ ...styles.button, backgroundColor: '#aaa' }} onClick={onClose}>Cancelar</button>
+                            <button style={{ ...styles.button, backgroundColor: '#aaa' }} onClick={() => { onClose(); resetReviewData(); }}>Cancelar</button>
                         </div>
                     </div>
                 </div>
