@@ -5,10 +5,10 @@ const router = express.Router();
 
 // Crear Review.
 router.post('/', async (req, res) => {
-  const { precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id } = req.body;
+  const { precio, atencion, calidad, tiempo, idAutor, servicioasociado_id } = req.body;
 
   // Validar que los campos obligatorios estén presentes
-  if (!precio || !atencion || !calidad || !tiempo || !comentario || !idAutor || !servicioasociado_id) {
+  if (!precio || !atencion || !calidad || !tiempo || !idAutor || !servicioasociado_id) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    const result = await Review.create(pool, { precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id });
+    const result = await Review.create(pool, { precio, atencion, calidad, tiempo, idAutor, servicioasociado_id });
     res.status(201).json({ message: 'Reseña creada', result });
   } catch (error) {
     res.status(500).json({ message: 'Error al crear la reseña', error });
