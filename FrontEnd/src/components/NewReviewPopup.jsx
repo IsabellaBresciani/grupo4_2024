@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const styles = {
   popupOverlay: {
@@ -164,17 +165,45 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
 
     // Función para enviar la reseña a la API
     const handleSubmit = async () => {
+        // Verifica si todos los campos están completos
+        const areFieldsComplete = ['precio', 'calidad', 'atencion', 'tiempo'].every(
+					(field) => reviewData[field] !== 0
+			);
+    
+        if (!areFieldsComplete) {
+            // Muestra la alerta si algún campo está incompleto
+            Swal.fire({
+                title: 'Campos incompletos',
+                text: 'Por favor, completa todos los campos antes de enviar la reseña.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+            return; // Detiene la ejecución si faltan campos
+        }
+    
         try {
-            // Verifica que todos los campos están correctamente llenos
             const response = await axios.post('http://localhost:4444/api/review', reviewData);
             console.log('Reseña creada:', response.data);
-            // Aquí puedes cerrar el popup o resetear el estado
+            Swal.fire({
+                title: 'Reseña enviada',
+                text: 'La reseña se envió exitosamente.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
             onClose();
         } catch (error) {
-            console.log(reviewData);
             console.error('Error al crear la reseña:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al enviar la reseña. Por favor, intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            });
         }
     };
+    
+
+    
 
     return (
         <div style={styles.popupOverlay} onClick={onClose}>
@@ -188,7 +217,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                         <input
                             style={styles.ratingBar}
                             type="range"
-                            min="1"
+                            min="0"
                             max="5"
                             name="precio"
                             value={reviewData.precio}
@@ -204,7 +233,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                         <input
                             style={styles.ratingBar}
                             type="range"
-                            min="1"
+                            min="0"
                             max="5"
                             name="calidad"
                             value={reviewData.calidad}
@@ -222,19 +251,11 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                             <span style={{ ...styles.valueDinamico, left: `${(reviewData.atencion - 1 ) * 25}%` }}>
                                 {reviewData.atencion}
                             </span>
-                            {/* Etiquetas para cada punto 
-                            <div style={styles.valuesEstaticos}>
-                                <span>1</span>
-                                <span>2</span>
-                                <span>3</span>
-                                <span>4</span>
-                                <span>5</span>
-                            </div>
-                            */}
+                            
                             <input
                                 style={styles.ratingBar}
                                 type="range"
-                                min="1"
+                                min="0"
                                 max="5"
                                 name="atencion"
                                 value={reviewData.atencion}
