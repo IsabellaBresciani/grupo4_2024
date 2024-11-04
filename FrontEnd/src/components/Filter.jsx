@@ -174,7 +174,7 @@ const Filter = () => {
                                     style={styles.removeTag}
                                     onClick={() => removeLocation(location)}
                                 >
-                                    &#x2715; {/* Símbolo de "X" para eliminar */}
+                                    &#x2715; {/* "X" para eliminar */}
                                 </span>
                             </div>
                         ))}
@@ -189,7 +189,7 @@ const Filter = () => {
                                     style={styles.removeTag}
                                     onClick={() => removeService(service)}
                                 >
-                                    &#x2715; {/* Símbolo de "X" para eliminar */}
+                                    &#x2715; {/* "X" para eliminar */}
                                 </span>
                             </div>
                         ))}
