@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const styles = {
     profileCard: {
@@ -10,9 +11,9 @@ const styles = {
         padding: '10px',
         maxWidth: '1000px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-        margin: '20px 0',  // Space around each card 
-        textDecoration: 'none', // Remove underline from link
-        color: 'inherit', // Inherit the text color
+        margin: '20px 0',
+        textDecoration: 'none',
+        color: 'inherit',
     },
     profileImage: {
         width: '100px',
@@ -23,7 +24,7 @@ const styles = {
     },
     profileDetails: {
         flexGrow: 1,
-        overflow: 'hidden',  // To avoid overflow in long texts
+        overflow: 'hidden',
     },
     profileDetailsHeader: {
         margin: 0,
@@ -39,19 +40,52 @@ const styles = {
         display: 'flex',
         gap: '5px',
         fontSize: '20px',
-        color: '#ffc107', // Star color
+        color: '#ffc107',
     },
-    contactInfo: {
-        marginTop: '10px', // Space between description and contact info
+    serviceList: {
+        marginTop: '10px',
     },
 };
 
-function ProfileCard({ usuario, name, description, email, phone, img }) {
- 
-    const userNameStorage = String(localStorage.getItem('usuario'));
-    const [userName, setUserName] = useState(userNameStorage);
+function ProfileCard(props) {
+    const { usuario, name, description, img, location } = props; 
+    const [userName, setUserName] = useState("");
    
+    if (usuario === "me") {
+         usuario = String(localStorage.getItem('usuario'));
+        setUserName(usuario);
+    }
 
+    const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fetchServices = async () => {
+        try {
+           
+            const response = await axios.get(`http://localhost:4444/api/user/${usuario}/servicios`);
+            const uniqueServices = response.data.filter(
+                (service, index, self) =>
+                    index === self.findIndex((s) => s.idServicio === service.idServicio)
+            );
+            
+            setServices(uniqueServices);
+        } catch (err) {
+            
+            if (err.response && err.response.status === 404) {
+                setError([]);
+            } else {
+                setError('Error al cargar los servicios.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchServices();
+    }, [userName]);
+    console.log(props.usuario, userName)
     return (
         <Link to={userName === usuario ? `/profile` : `/profile/${usuario}`} style={styles.profileCard}>
             {/* Profile image */}
@@ -65,11 +99,18 @@ function ProfileCard({ usuario, name, description, email, phone, img }) {
             <div style={styles.profileDetails}>
                 <h3 style={styles.profileDetailsHeader}>{name}</h3>
                 <p style={styles.profileDetailsText}>{description}</p>
-                
-                {/* Contact information */}
-                <div style={styles.contactInfo}>
-                    <p style={styles.profileDetailsText}>Email: {email}</p>
-                    <p style={styles.profileDetailsText}>Teléfono: {phone}</p>
+                <p style={styles.profileDetailsText}>Localidad: {location}</p>
+
+                {/* Services list */}
+                <div style={styles.serviceList}>
+                    <h4 style={{ margin: 0 }}>Servicios:</h4>
+                    {services.length > 0 ? (
+                        services.map((service) => (
+                            <p key={service.idServicio} style={styles.profileDetailsText}>{service.description}</p>
+                        ))
+                    ) : (
+                        <p style={styles.profileDetailsText}>No hay servicios disponibles.</p>
+                    )}
                 </div>
 
                 {/* Rating with stars */}

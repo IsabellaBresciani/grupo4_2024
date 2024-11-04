@@ -63,15 +63,42 @@ const Search = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [confirmedSearch, setConfirmedSearch] = useState(false); 
-
+    
     useEffect(() => {
         const getData = async () => {
-            setLoading(true); 
-        
+            setLoading(true);
+    
             try {
+                // Fetch user data
                 const response = await axios.get(`http://localhost:4444/api/user`);
-                setUserData(response.data);
-                setFilteredUsers(response.data); // Devuelve todos por defecto
+               
+    
+                const usersWithServices = await Promise.all(response.data.map(async (user) => {
+                    try {
+                        // Fetch services for each user
+                        const serviceResponse = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
+                        
+                        // Get unique services
+                        const uniqueServices = serviceResponse.data.filter(
+                            (service, index, self) =>
+                                index === self.findIndex((s) => s.idServicio === service.idServicio)
+                        );
+    
+                        // Return user with services if any
+                        if (uniqueServices.length > 0) {
+                            return { ...user, services: uniqueServices };
+                        }
+                    } catch (err) {
+                        console.error(`Error fetching services for user ${user.usuario}:`, err);
+                    }
+                    return null; // Return null if no services
+                }));
+    
+                // Filter out null values (users without services)
+                const filtered = usersWithServices.filter(user => user !== null);
+                setFilteredUsers(filtered);
+    
+                // Reset error state
                 setError(null);
             } catch (err) {
                 setError('Error al obtener los datos del usuario');
@@ -79,28 +106,38 @@ const Search = () => {
                 setLoading(false);
             }
         };
-
+    
         getData();
     }, []);
+   
+
+    
 
     const handleSearch = async () => {
         const lowercasedFilter = searchTerm.toLowerCase();
         const filteredByUser = userData.filter(user => 
             user.usuario.toLowerCase().startsWith(lowercasedFilter) 
         );
-
-        if (filteredByUser.length === 0) {
+    
+        if (filteredByUser.length === 1) { // Verifica que solo se encontró un usuario
+            const user = filteredByUser[0];
             try {
-                const response = await axios.get(`http://localhost:4444/api/user/servicio/${searchTerm}`);
-                setFilteredUsers(response.data);
+                const response = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
+                const uniqueServices = response.data.filter(
+                    (service, index, self) =>
+                        index === self.findIndex((s) => s.idServicio === service.idServicio)
+                );
+                setFilteredUsers([{ ...user, services: uniqueServices }]); // Agrega servicios al usuario
             } catch (error) {
-                console.error(error);
-                setFilteredUsers([]);
+         
+                setFilteredUsers([]); // Maneja el error
             }
+        } else if (filteredByUser.length > 1) {
+            setFilteredUsers(filteredByUser); // Muestra múltiples usuarios si se encontró más de uno
         } else {
-            setFilteredUsers(filteredByUser);
+            setFilteredUsers([]); // No se encontró usuario
         }
-
+    
         setConfirmedSearch(true); 
     };
 
@@ -151,6 +188,7 @@ const Search = () => {
                                     email={user.email} 
                                     phone={user.telefono} 
                                     img={user.foto} 
+                                    location={user.localidad}
                                 />
                             ))
                         ) : (
