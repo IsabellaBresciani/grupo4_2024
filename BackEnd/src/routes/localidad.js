@@ -71,4 +71,32 @@ router.delete("/:idLocalidad", async (req, res) => {
     }
 });
 
+//Ver todas las localidades de una persona
+router.get("/usuario/:idPersona", async (req, res) => {
+    const { idPersona } = req.params;
+
+    try {
+        const localidades = await Localidad.findByUserId(pool, idPersona);
+        if (localidades.length === 0) {
+            return res.status(404).json({ error: 'No se encontraron localidades para este usuario' });
+        }
+        res.status(200).json(localidades);
+    } catch (error) {
+        return res.status(500).json({ error: 'Error en la consulta de localidades por usuario' });
+    }
+});
+
+//Asociar localidad a un usuario
+router.post("/asociar", async (req, res) => {
+    const { idLocalidad, idPersona } = req.body;
+
+    try {
+        const newAssociationId = await Localidad.associateLocalidadToUser(pool, idLocalidad, idPersona);
+        res.status(201).json({ message: 'Localidad asociada exitosamente al usuario', id: newAssociationId });
+    } catch (error) {
+        console.error("Error al asociar localidad al usuario:", error);
+        return res.status(500).json({ error: 'Error al asociar la localidad al usuario', details: error.message });
+    }
+});
+
 module.exports = router;
