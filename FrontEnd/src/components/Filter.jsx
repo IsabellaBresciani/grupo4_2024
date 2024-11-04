@@ -58,29 +58,42 @@ const styles = {
 };
 
 const Filter = () => {
-    const [selectedLocations, setSelectedLocations] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
     const [stars, setStars] = useState(0);
     const [services, setServices] = useState([]); // Estado para almacenar los servicios
+    const [locations, setLocations] = useState([]); // Estado para almacenar las localidades
 
     useEffect(() => {
         // Crea una función asíncrona dentro de useEffect
         const fetchServices = async () => {
             try {
-                const response = await axios.get('http://localhost:4444/api/service'); // Cambia esta URL según tu configuración
-                setServices(response.data);
+                const service = await axios.get('http://localhost:4444/api/service');
+                setServices(service.data);
             } catch (error) {
                 console.error('Error al obtener los servicios:', error);
             }
         };
+
+        // Crea una función asíncrona para obtener localidades
+        const fetchLocations = async () => {
+            try {
+                const location = await axios.get('http://localhost:4444/api/localidad');
+                setLocations(location.data);
+            } catch (error) {
+                console.error('Error al obtener las localidades:', error);
+            }
+        };
+
         // Llama a la función asíncrona
         fetchServices();
+        fetchLocations();
     }, []);
 
     const handleLocationChange = (e) => {
-        const selectedLocation = e.target.value;
-        if (selectedLocation && !selectedLocations.includes(selectedLocation)) {
-            setSelectedLocations([...selectedLocations, selectedLocation]);
+        const selected = e.target.value;
+        if (selected && !selectedLocation.includes(selected)) {
+            setSelectedLocation([...selectedLocation, selected]);
         }
     };
 
@@ -93,7 +106,7 @@ const Filter = () => {
     };
 
     const removeLocation = (locationToRemove) => {
-        setSelectedLocations(selectedLocations.filter(loc => loc !== locationToRemove));
+        setSelectedLocation(selectedLocation.filter(loc => loc !== locationToRemove));
     };
     const removeService = (serviceToRemove) => {
         setSelectedServices(selectedServices.filter(ser => ser !== serviceToRemove));
@@ -104,22 +117,24 @@ const Filter = () => {
             <div className="filters-container">
                 <div style={styles.filterGroup}>
 
-
                     {/* ComboBox para Localidades */}
                     <div style={styles.comboBoxContainer}>
-                        <label htmlFor="combo-box" style={styles.comboBoxLabel}>Seleccione una localidad:</label>
+                        <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Seleccione una localidad:</label>
                         <select
-                            id="combo-box"
+                            id="location-combo-box"
                             style={styles.comboBox}
                             onChange={handleLocationChange}
                             value=""
                         >
                             <option value="" disabled>Elija una localidad</option>
-                            <option value="La Plata">La Plata</option>
-                            <option value="Berisso">Berisso</option>
-                            <option value="Ensenada">Ensenada</option>
+                            {locations.map((location) => (
+                                <option key={location.idLocalidad} value={location.nombre}>
+                                    {location.nombre}
+                                </option>
+                            ))}
                         </select>
                     </div>
+
                     {/* ComboBox para Servicios */}
                     <div style={styles.comboBoxContainer}>
                         <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Seleccione un servicio:</label>
@@ -152,7 +167,7 @@ const Filter = () => {
 
                     {/* Mostrar localidades seleccionadas como etiquetas */}
                     <div style={styles.selectedTagsContainer}>
-                        {selectedLocations.map((location, index) => (
+                        {selectedLocation.map((location, index) => (
                             <div key={index} style={styles.tag}>
                                 {location}
                                 <span

@@ -83,12 +83,14 @@ const AddServiceButton = ({ fetchServices }) => {
 
     const handleAddService = async () => {
         try {
+            const userName = String(localStorage.getItem('usuario'));
+            const userData = await axios.get(`http://localhost:4444/api/user/${userName}`);
             const dataToSend = {
-                idPersona: 17,
+                idPersona: userData.data.id,
                 idServicio: newService.selectedService,
                 estado: newService.estado,
             };
-            await axios.post('http://localhost:4444/api/user/17/servicios', dataToSend);
+            await axios.post(`http://localhost:4444/api/user/${userData.data.id}/servicios`, dataToSend);
             setIsModalOpen(false);
             fetchServices();  // Actualizar la lista de servicios en ServiceCard
         } catch (error) {
