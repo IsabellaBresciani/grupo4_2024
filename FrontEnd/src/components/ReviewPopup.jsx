@@ -103,12 +103,11 @@ const atencionRating = '4%';
 const tiempoRating = '90%';
 
 const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
-    const [showPopupNR, setShowPopupNR] = useState(false);
-
+  
+	const [showPopupNR, setShowPopupNR] = useState(false);
 	const handleOpenPopupNR = () => {
 		setShowPopupNR(true);
 	};
-	
 	const handleClosePopupNR = () => {
 		setShowPopupNR(false);
 	};
@@ -146,18 +145,18 @@ const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
           {renderRating("Tiempo del trabajo", tiempoRating, "Muy lento", "Muy veloz")}
         </div>
 				
-				<div style={styles.buttonContainer}>
-					<button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
-				</div>
-				{/* Renderizamos el segundo popup si showPopupNR es true */}
-				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
+				{/*Este button no deberia mostrarse cuando visito mi propio perfil*/}
+					<div style={styles.buttonContainer}>
+						<button style={styles.button} onClick={handleOpenPopupNR}>Dar una reseña</button>
+					</div>
+				
 
+				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
 				<ReviewCard asociacionId={servicioasociado_id}/>
-        <p></p>
-        <p></p>
+        
   		</div>
 		</div>
-  	);
+  );
 };
 
 export default ReviewPopup;
