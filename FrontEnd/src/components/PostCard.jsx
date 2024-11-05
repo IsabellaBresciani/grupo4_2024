@@ -169,7 +169,6 @@ const PostCard = (props) => {
 	const [error, setError] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [currentPost, setCurrentPost] = useState(null);
-	const [showErrorModal, setShowErrorModal] = useState(false);
 	
 
 	const fetchPosts = async () => {
