@@ -139,11 +139,15 @@ const styles = {
         width: '100%',
         paddingTop: '10px',
         marginTop: '10px',
-        borderTop: '1px solid #ddd',
         fontSize: '0.9rem',
         display: 'flex',
-        justifyContent: 'space-between',
+        flexDirection: 'column', // Para mantener la estructura del texto
+        maxHeight: '200px', // Limita la altura máxima para evitar ocupar demasiado espacio
+        overflowY: 'auto', // Permite desplazamiento vertical si la descripción es muy larga
+        padding: '15px', // Espacio interior para que el texto no quede pegado al borde
+        borderRadius: '5px', // Bordes redondeados para un mejor aspecto
     },
+    
     profileDescriptionHeader: {
         marginRight: '10px',
         fontSize: '1rem',
@@ -154,17 +158,12 @@ const styles = {
         marginLeft: '10px',
         flex: 1,
     },
-    editDescriptionIcon: {
-        fontSize: '1rem',
-        cursor: 'pointer',
-        alignSelf: 'flex-end',
-    },
 
 };
 
 const ProfileHeader = (props) => {
     const [usuario, setUsuario] = useState(props.usuario);
-    if (usuario == "me"){
+    if (usuario === "me"){
         const usuario = String(localStorage.getItem('usuario'));
         setUsuario(usuario)
     }
@@ -176,10 +175,12 @@ const ProfileHeader = (props) => {
         nombre: '',
         apellido: '',
         foto: '',
-        localidad: '',
+        idLocalidad: '',
         telefono: '',
         descripcion: ''
     });
+    const [locationsAll, setLocationsAll] = useState([]);
+
 
 
     const getData = async () => {
@@ -193,12 +194,18 @@ const ProfileHeader = (props) => {
             setLoading(false);
         }
     };
-    
+
+    const fetchLocationsAll = async () => {
+        try {
+            const response = await axios.get('http://localhost:4444/api/localidad');
+            setLocationsAll(response.data);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
 
     const handleChange = (e) => {
-
         const { name, value } = e.target;
-        console.log(value);
         setNewData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -219,11 +226,11 @@ const ProfileHeader = (props) => {
                 ...(newData.nombre && { nombre: newData.nombre }),
                 ...(newData.apellido && { apellido: newData.apellido }),
                 ...(newData.foto && { foto: newData.foto }),
-                ...(newData.localidad && { localidad: newData.localidad }),
                 ...(newData.telefono && { telefono: newData.telefono }),
-                ...(newData.localidad && { localidad: newData.localidad }),
-                ...(newData.descripcion && { descripcion: newData.descripcion })
+                ...(newData.descripcion && { descripcion: newData.descripcion }),
+                ...(newData.idLocalidad && { idLocalidad: newData.idLocalidad })
             };
+            console.log(dataUpdated ,'hola');
 
             if (Object.keys(dataUpdated).length > 0) {
                 await axios.put(`http://localhost:4444/api/user/${usuario}`, dataUpdated);
@@ -235,6 +242,7 @@ const ProfileHeader = (props) => {
     };
 
     useEffect(() => {
+        fetchLocationsAll();
         getData();
     }, []);
 
@@ -244,12 +252,11 @@ const ProfileHeader = (props) => {
                 nombre: userData.nombre || '',
                 apellido: userData.apellido || '',
                 foto: userData.foto || '',
-                localidad: userData.localidad || '',
                 telefono: userData.telefono || '',
-                descripcion: userData.descripcion || ''
+                descripcion: userData.descripcion || '',
+                idLocalidad: userData.idLocalidad || '',
             });
         }
-        
     }, [userData]);
     
     const cancelModification = () => {
@@ -278,7 +285,7 @@ const ProfileHeader = (props) => {
                     <h1 style={styles.profileDetailsHeader}>{userData.nombre} {userData.apellido}</h1>
                     <button style={styles.editIcon} onClick={() => setIsModalOpen(true)}>
                     {props.usuario === "me" && (
-                                <FontAwesomeIcon icon={faEdit} />
+                        <FontAwesomeIcon icon={faEdit} />
                     )} 
                     
                 </button>
@@ -329,17 +336,25 @@ const ProfileHeader = (props) => {
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="localidad" style={styles.modalLabel}>Localidad</label>
-                                        <input
-                                            type="text"
-                                            id="localidad"
-                                            name="localidad"
-                                            value={newData.localidad}
-                                            onChange={handleChange}
-                                            style={styles.modalInput}
-                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
-                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
-                                        />
+                                        <label htmlFor="idLocalidad" style={styles.modalLabel}>Localidad</label>
+                                            <select
+                                                id="idLocalidad"
+                                                name="idLocalidad"
+                                                onClick={fetchLocationsAll}
+                                                value={newData.idLocalidad}
+                                                onChange={handleChange}
+                                                style={styles.modalInput}
+                                                onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                                onBlur={(e) => (e.target.style.borderColor = '#ddd')}
+                                            >
+                                            {locationsAll.map((location) => (
+                                                <option 
+                                                    key={location.idLocalidad} 
+                                                    value={location.idLocalidad}>
+                                                    {location.nombre}                                            
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div>
                                         <label htmlFor="telefono" style={styles.modalLabel}>Teléfono</label>
@@ -402,7 +417,7 @@ const ProfileHeader = (props) => {
                 <ul style={styles.profileDetails}>
                     <li style={styles.profileDetailsItem}>
                         <i className="fas fa-user"></i>
-                        Edad: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
+                        Fecha de nacimiento: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
                     </li>
                     <li style={styles.profileDetailsItem}><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>
                     <li style={styles.profileDetailsItem}><i className="fas fa-envelope"></i> Email: {userData.email}</li>
@@ -410,7 +425,8 @@ const ProfileHeader = (props) => {
                 </ul>
             </div>
             <div style={styles.profileDescription}>
-                <h3 style={styles.profileDescriptionHeader}>Descripción: {userData.descripcion}</h3>
+                <h3 style={styles.profileDescriptionHeader}>Descripción:</h3>
+                <p>{userData.descripcion}</p>
             </div>
         </div>
     );

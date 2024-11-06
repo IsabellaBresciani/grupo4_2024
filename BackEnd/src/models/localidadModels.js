@@ -38,6 +38,12 @@ class Localidad {
       const [result] = await pool.execute(query, [idLocalidad, idPersona]);
       return result.insertId; // Retornamos el id del nuevo registro
     }
+    
+    static async modifyLocalidadXUser(connection, idLocalidad, idPersona) {
+      const sql = `UPDATE localidadxpersona SET idLocalidad = ? WHERE idPersona = ?`;
+      const [result] = await connection.query(sql, [idLocalidad, idPersona]);
+      return result;
+    }
 
     static async findAll(connection) {
       const sql = `SELECT * FROM Localidad`;

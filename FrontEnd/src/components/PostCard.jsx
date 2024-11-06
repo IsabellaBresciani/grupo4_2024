@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const styles = {
 	postsSection: {
 		width: '100%',
 		margin: '0 auto',
 		padding: '20px',
-		backgroundColor: '#f9f9f9',
 	},
 	postCards: {
 		display: 'flex',
@@ -62,8 +62,6 @@ const styles = {
 		border: 'none',
 		backgroundColor: 'white',
 		fontSize: '18px',
-		border: '2px solid red',
-		borderRadius: '5px',
 	},
 	postContent: {
 		color: '#333',
@@ -87,8 +85,8 @@ const styles = {
 		position: 'fixed',
 		top: 0,
 		left: 0,
-		width: '100%',
-		height: '100%',
+		width: '100vw',
+		height: '100vh',
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		display: 'flex',
 		justifyContent: 'center',
@@ -97,10 +95,11 @@ const styles = {
 	},
 	modalContent: {
 		backgroundColor: 'white',
-		borderRadius: '8px',
-		boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-		padding: '30px',
+		borderRadius: '20px',
+		boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+		padding: '20px',
 		width: '400px',
+		textAlign: 'Left',
 	},
 	modalHeader: {
 		fontSize: '1.5em',
@@ -111,51 +110,52 @@ const styles = {
 	inputField: {
 		width: '100%',
 		padding: '10px',
-		marginBottom: '15px',
-		borderRadius: '5px',
+		margin: '10px 0',
 		border: '1px solid #ddd',
-		fontSize: '1em',
+		borderRadius: '5px',
+		boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+		fontSize: '1rem',
+		outline: 'none',
+		transition: 'border-color 0.3s ease',
 	},
 	button: {
-		padding: '10px 15px',
+		padding: '10px 20px',
+    backgroundColor: '#ff7f11',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    minWidth: '100px', 
+    height: '40px',
+		marginRight: '10px', 
+	},
+	modalInputFocus: {
+		borderColor: '#FF8C00',     // Cambia el color del borde al hacer focus
+	},
+	modalLabel: {
+		display: 'block',           // Asegura que las etiquetas ocupen su propia línea
+		marginBottom: '0px',        // Margen inferior para separar de los inputs
+		fontWeight: 'bold',         // Hace que las etiquetas sean más notorias
+	},
+	buttonsContainer: {
+		display: 'flex',
+		justifyContent: 'flex-end',  // Alinea los botones a la derecha
+		marginTop: '20px',           // Margen superior para separar de los inputs
+	},
+	textarea: {
+		width: '100%',
+		height: '150px',
+		padding: '10px',
+		margin: '10px 0',
+		border: '1px solid #ddd',
 		borderRadius: '5px',
-		border: 'none',
-		color: 'white',
-		backgroundColor: '#007BFF',
-		cursor: 'pointer',
-		marginRight: '10px',
-		transition: 'background-color 0.3s',
-	},
-	cancelButton: {
-		backgroundColor: '#dc3545',
-	},
-	errorModal: {
-		position: 'fixed',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		backgroundColor: 'white',
-		borderRadius: '8px',
-		boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
-		padding: '30px',
-		width: '300px',
-		textAlign: 'center',
-		zIndex: 1001,
-	},
-	errorHeader: {
-		fontSize: '1.5em',
-		color: 'red',
-		marginBottom: '20px',
-	},
-	errorButton: {
-		padding: '10px 15px',
-		borderRadius: '5px',
-		border: 'none',
-		color: 'white',
-		backgroundColor: '#dc3545',
-		cursor: 'pointer',
-		transition: 'background-color 0.3s',
-	},
+		boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+		fontSize: '1rem',
+		outline: 'none',
+		transition: 'border-color 0.3s ease',
+  	boxSizing: 'border-box',
+  	resize: 'vertical', // Permite cambiar el tamaño solo en altura
+  },
 };
 
 const PostCard = (props) => {
@@ -169,7 +169,6 @@ const PostCard = (props) => {
 	const [error, setError] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [currentPost, setCurrentPost] = useState(null);
-	const [showErrorModal, setShowErrorModal] = useState(false);
 	
 
 	const fetchPosts = async () => {
@@ -192,15 +191,38 @@ const PostCard = (props) => {
 	});
 
 	const handleDelete = async (id) => {
-		if (window.confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {
-			try {
-				await axios.delete(`http://localhost:4444/api/publication/${id}`);
-				setPosts(posts.filter(post => post.idPublicacion !== id));
-			} catch (err) {
-				setError('Error al eliminar la publicación');
+    Swal.fire({
+      title: '¿Estás seguro?',
+			color:'#d33',
+      text: 'Esta acción NO se podrá revertir',
+      icon: 'warning',
+      showCancelButton: true,
+			confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+      	try {
+          await axios.delete(`http://localhost:4444/api/publication/${id}`);
+          setPosts(posts.filter(post => post.idPublicacion !== id));
+          Swal.fire(
+            'Eliminado',
+            'La publicación ha sido eliminada con éxito.',
+            'success'
+          );
+          } catch (err) {
+            Swal.fire(
+              'Error',
+              'Hubo un problema al eliminar la publicación. Por favor, inténtalo de nuevo.',
+              'error'
+            );
+          }
+        }
 			}
-		}
+		);
 	};
+
 
 	const handleEdit = (post) => {
 		setCurrentPost(post);
@@ -214,9 +236,21 @@ const PostCard = (props) => {
 			setPosts(posts.map(post => (post.idPublicacion === currentPost.idPublicacion ? currentPost : post)));
 			setIsEditing(false);
 			setCurrentPost(null);
+
+			Swal.fire({
+				icon: 'success',
+				title: 'Publicación actualizada',
+				text: 'La publicación se modificó con éxito',
+				confirmButtonColor: '#ff8c00',
+		});
 		} catch (err) {
-			setShowErrorModal(true); // Muestra la ventana emergente de error
-		}
+			Swal.fire({
+					icon: 'error',
+					title: 'Error al Modificar',
+					text: 'Hubo un problema al modificar la publicación. Por favor, inténtalo de nuevo.',
+					confirmButtonText: 'Cerrar',
+			});
+	}
 	};
 
 	if (loading) return <p>Cargando publicaciones...</p>;
@@ -261,42 +295,47 @@ const PostCard = (props) => {
 					<div style={styles.modalContent}>
 						<h2 style={styles.modalHeader}>Editar Publicación</h2>
 						<form onSubmit={handleUpdate}>
-							<input
-								type="text"
-								style={styles.inputField}
-								value={currentPost.titulo}
-								onChange={(e) => setCurrentPost({ ...currentPost, titulo: e.target.value })}
-								placeholder="Título"
-							/>
-							<input
-								type="text"
-								style={styles.inputField}
-								value={currentPost.descripcion}
-								onChange={(e) => setCurrentPost({ ...currentPost, descripcion: e.target.value })}
-								placeholder="Descripción"
-							/>
-							{/* Campo que falta */}
-							<input
-								type="text"
-								style={styles.inputField}
-								value={currentPost.imagen}
-								onChange={(e) => setCurrentPost({ ...currentPost, imagen: e.target.value })}
-								placeholder="URL de la imagen"
-							/>
-							<button type="submit" style={styles.button}>Guardar Cambios</button>
-							<button type="button" style={styles.cancelButton} onClick={() => setIsEditing(false)}>Cancelar</button>
+							<div>
+								<label htmlFor="titulo" style={styles.modalLabel}>Titulo: </label>
+								<input
+									type="text"
+									style={styles.inputField}
+									value={currentPost.titulo}
+									onChange={(e) => setCurrentPost({ ...currentPost, titulo: e.target.value })}
+									placeholder="Título"
+									onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+									onBlur={(e) => (e.target.style.borderColor = '#ddd')} 
+								/>
+							</div>
+							<div>
+								<label htmlFor="titulo" style={styles.modalLabel}>Descripcion: </label>
+								<textarea
+									type="text"
+									style={styles.textarea}
+									value={currentPost.descripcion}
+									onChange={(e) => setCurrentPost({ ...currentPost, descripcion: e.target.value })}
+									placeholder="Descripción"
+									onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+									onBlur={(e) => (e.target.style.borderColor = '#ddd')} 
+								/>
+							</div>
+							<div>
+								<label htmlFor="titulo" style={styles.modalLabel}>Imagen: </label>
+								<input
+									type="text"
+									style={styles.inputField}
+									value={currentPost.imagen}
+									onChange={(e) => setCurrentPost({ ...currentPost, imagen: e.target.value })}
+									placeholder="URL de la imagen"
+									onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+									onBlur={(e) => (e.target.style.borderColor = '#ddd')} 
+								/>
+							</div>
+							<div style={styles.buttonsContainer}>
+								<button type="submit" style={styles.button}>Guardar Cambios</button>
+								<button type="button" style={{...styles.button, backgroundColor: '#bbb'}} onClick={() => setIsEditing(false)}>Cancelar</button>
+							</div>
 						</form>
-					</div>
-				</div>
-			)}
-
-			{/* Modal de error */}
-			{showErrorModal && (
-				<div style={styles.modal}>
-					<div style={styles.errorModal}>
-						<h2 style={styles.errorHeader}>Error al Modificar</h2>
-						<p>Hubo un problema al modificar la publicación. Por favor, inténtalo de nuevo.</p>
-						<button style={styles.errorButton} onClick={() => setShowErrorModal(false)}>Cerrar</button>
 					</div>
 				</div>
 			)}
