@@ -50,7 +50,7 @@ router.get("/:nom_usuario", async (req, res) => {
 // Actualizar un usuario basado en el campo usuario (email o username)
 router.put('/:usuario', async (req, res) => {
   const { usuario } = req.params;
-  const { dni, nombre, apellido, foto, fecha_nacimiento, email, password, telefono, descripcion } = req.body;
+  const { dni, nombre, apellido, foto, fecha_nacimiento, email, password, telefono, descripcion, idLocalidad } = req.body;
 
   // Crear una lista de campos a actualizar dinámicamente
   const fields = [];
@@ -92,6 +92,10 @@ router.put('/:usuario', async (req, res) => {
     fields.push('descripcion = ?');
     values.push(descripcion);
   }
+  if (idLocalidad !== undefined) {
+    fields.push('idLocalidad = ?');
+    values.push(idLocalidad);
+  }
 
   // Verificar si se ha proporcionado al menos un campo para actualizar
   if (fields.length === 0) {
@@ -99,9 +103,10 @@ router.put('/:usuario', async (req, res) => {
   }
 
   // Añadir el usuario al final de los valores para la condición WHERE
-  values.push(usuario);
+  //values.push(usuario);
 
-  const campos = fields.join(',');
+  const campos = fields.join(', ');
+  values.push(usuario);
 
   try {
     const result = await User.update(pool, campos, values);
@@ -115,6 +120,7 @@ router.put('/:usuario', async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar la información del usuario.', error });
   }
 });
+
 
 // Eliminar un usuario exisitente 
 router.delete('/:usuario', async (req, res) => {

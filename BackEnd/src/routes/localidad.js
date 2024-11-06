@@ -19,12 +19,12 @@ router.get("/id/:idLocalidad", async (req, res) => {
 
     try {
         const result = await Localidad.findById(pool, idLocalidad);
-        if (!result) {
-            return res.status(404).json({ error: 'Localidad no encontrada' });
-        }
+        //if (!result) {
+        //    return res.status(404).json({ error: 'Localidad no encontrada' });
+        //}
         res.status(200).json(result);
     } catch (error) {
-        return res.status(500).json({ error: 'Error en la consulta' });
+        return res.status(500).json(error);
     }
 });
 
@@ -53,6 +53,22 @@ router.put("/:idLocalidad", async (req, res) => {
         res.status(200).json({ message: 'Localidad actualizada exitosamente' });
     } catch (error) {
         return res.status(500).json({ error: 'Error al actualizar la localidad' });
+    }
+});
+
+
+router.post("/:idPersona/:idLocalidad", async (req, res) => {
+    const { idPersona, idLocalidad } = req.params;
+    //const { idPersona } = req.body;
+
+    try {
+        const result = await Localidad.modifyLocalidadXUser(pool, idLocalidad, idPersona);
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'error', error });
+        }
+        res.status(200).json({ message: 'Localidad actualizada para el usuario.' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error al actualizar la localidad del usuario.' });
     }
 });
 

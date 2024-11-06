@@ -53,7 +53,7 @@ class User {
   }
 
   static async update(connection, fields, datos) {
-      const sql = `UPDATE servicioya.user SET ${fields} WHERE usuario = ?`;
+      const sql = `UPDATE servicioya.user u JOIN servicioya.localidadxpersona lxu on u.id = lxu.idPersona SET ${fields} WHERE u.usuario = ?`;
       const [result] = await connection.query(sql, datos);
       return result;
   }

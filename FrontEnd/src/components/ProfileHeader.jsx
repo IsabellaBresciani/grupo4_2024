@@ -163,7 +163,7 @@ const styles = {
 
 const ProfileHeader = (props) => {
     const [usuario, setUsuario] = useState(props.usuario);
-    if (usuario == "me"){
+    if (usuario === "me"){
         const usuario = String(localStorage.getItem('usuario'));
         setUsuario(usuario)
     }
@@ -175,10 +175,12 @@ const ProfileHeader = (props) => {
         nombre: '',
         apellido: '',
         foto: '',
-        localidad: '',
+        idLocalidad: '',
         telefono: '',
         descripcion: ''
     });
+    const [locationsAll, setLocationsAll] = useState([]);
+
 
 
     const getData = async () => {
@@ -192,12 +194,18 @@ const ProfileHeader = (props) => {
             setLoading(false);
         }
     };
-    
+
+    const fetchLocationsAll = async () => {
+        try {
+            const response = await axios.get('http://localhost:4444/api/localidad');
+            setLocationsAll(response.data);
+        } catch (error) {
+            console.error('Error fetching services:', error);
+        }
+    };
 
     const handleChange = (e) => {
-
         const { name, value } = e.target;
-        console.log(value);
         setNewData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -218,11 +226,11 @@ const ProfileHeader = (props) => {
                 ...(newData.nombre && { nombre: newData.nombre }),
                 ...(newData.apellido && { apellido: newData.apellido }),
                 ...(newData.foto && { foto: newData.foto }),
-                ...(newData.localidad && { localidad: newData.localidad }),
                 ...(newData.telefono && { telefono: newData.telefono }),
-                ...(newData.localidad && { localidad: newData.localidad }),
-                ...(newData.descripcion && { descripcion: newData.descripcion })
+                ...(newData.descripcion && { descripcion: newData.descripcion }),
+                ...(newData.idLocalidad && { idLocalidad: newData.idLocalidad })
             };
+            console.log(dataUpdated ,'hola');
 
             if (Object.keys(dataUpdated).length > 0) {
                 await axios.put(`http://localhost:4444/api/user/${usuario}`, dataUpdated);
@@ -234,6 +242,7 @@ const ProfileHeader = (props) => {
     };
 
     useEffect(() => {
+        fetchLocationsAll();
         getData();
     }, []);
 
@@ -243,12 +252,11 @@ const ProfileHeader = (props) => {
                 nombre: userData.nombre || '',
                 apellido: userData.apellido || '',
                 foto: userData.foto || '',
-                localidad: userData.localidad || '',
                 telefono: userData.telefono || '',
-                descripcion: userData.descripcion || ''
+                descripcion: userData.descripcion || '',
+                idLocalidad: userData.idLocalidad || '',
             });
         }
-        
     }, [userData]);
     
     const cancelModification = () => {
@@ -328,17 +336,25 @@ const ProfileHeader = (props) => {
                                         />
                                     </div>
                                     <div>
-                                        <label htmlFor="localidad" style={styles.modalLabel}>Localidad</label>
-                                        <input
-                                            type="text"
-                                            id="localidad"
-                                            name="localidad"
-                                            value={newData.localidad}
-                                            onChange={handleChange}
-                                            style={styles.modalInput}
-                                            onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
-                                            onBlur={(e) => (e.target.style.borderColor = '#ddd')}
-                                        />
+                                        <label htmlFor="idLocalidad" style={styles.modalLabel}>Localidad</label>
+                                            <select
+                                                id="idLocalidad"
+                                                name="idLocalidad"
+                                                onClick={fetchLocationsAll}
+                                                value={newData.idLocalidad}
+                                                onChange={handleChange}
+                                                style={styles.modalInput}
+                                                onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
+                                                onBlur={(e) => (e.target.style.borderColor = '#ddd')}
+                                            >
+                                            {locationsAll.map((location) => (
+                                                <option 
+                                                    key={location.idLocalidad} 
+                                                    value={location.idLocalidad}>
+                                                    {location.nombre}                                            
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div>
                                         <label htmlFor="telefono" style={styles.modalLabel}>Teléfono</label>
