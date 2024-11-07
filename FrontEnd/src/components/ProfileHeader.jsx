@@ -161,6 +161,23 @@ const styles = {
 		marginLeft: '10px',
 		flex: 1,
 	},
+	tag: {
+		display: 'flex',
+		alignItems: 'center',
+		backgroundColor: '#e0e0e0',
+		borderRadius: '15px',
+		padding: '5px 10px',
+		fontSize: '14px',
+		color: '#333',
+	},
+	tagCloseButton: {
+		marginLeft: '8px',
+		background: 'transparent',
+		border: 'none',
+		color: '#888',
+		fontSize: '16px',
+		cursor: 'pointer',
+	},
 
 };
 
@@ -204,6 +221,23 @@ const ProfileHeader = (props) => {
 			setLocationsAll(response.data);
 		} catch (error) {
 			console.error('Error fetching services:', error);
+		}
+	};
+
+	const [locations, setLocations] = useState([]);
+	// Fetch locations
+	const fetchLocations = async () => {
+		try {
+			const response = await axios.get(`http://localhost:4444/api/localidad/usuario/${usuario}`);
+			setLocations(response.data);
+		} catch (err) {
+			if (err.response && err.response.status === 404) {
+				setError([]);
+			} else {
+				setError('Error al cargar las localidades.');
+			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -257,6 +291,7 @@ const ProfileHeader = (props) => {
 	useEffect(() => {
 		fetchLocationsAll();
 		getData();
+		fetchLocations();
 	}, []);
 
 	useEffect(() => {
@@ -282,6 +317,18 @@ const ProfileHeader = (props) => {
 		const month = (fecha.getMonth() + 1).toString().padStart(2, '0');
 		const day = fecha.getDate().toString().padStart(2, '0');
 		return `${day}/${month}/${year}`;
+	};
+
+	const handleRemoveLocation = () => {
+		Swal.fire({
+            title: 'Todavia no funciona xd?',
+            text: "Estamos laburando en esto",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'chau',
+            cancelButtonText: 'Cancelar',
+            zIndex: 1500,
+        });
 	};
 
 
@@ -368,6 +415,27 @@ const ProfileHeader = (props) => {
 												</option>
 											))}
 										</select>
+										<div style={{ ...styles.modalLabel, display: 'flex', flexDirection: 'row', gap: '5px', fontWeight: 'normal' }}>
+											<p style={styles.modalLabel}>Localidades seleccionadas:</p>
+											{locations.length > 0 ? (
+												<div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
+													{locations.map((location) => (
+														<div key={location.idLocalidad} style={styles.tag}>
+															<span>{location.nombre}</span>
+															<button
+																type="button"
+																style={styles.tagCloseButton}
+																onClick={() => handleRemoveLocation()}
+															>
+																&times;
+															</button>
+														</div>
+													))}
+												</div>
+											) : (
+												<p style={styles.modalLabel}>Sin localidades asignadas.</p>
+											)}
+										</div>
 									</div>
 									<div>
 										<label htmlFor="telefono" style={styles.modalLabel}>Teléfono</label>
@@ -432,7 +500,16 @@ const ProfileHeader = (props) => {
 						<i className="fas fa-user"></i>
 						Fecha de nacimiento: {userData.fecha_nacimiento ? formatDate(userData.fecha_nacimiento) : 'Fecha no disponible'}
 					</li>
-					<li style={styles.profileDetailsItem}><i className="fas fa-map-marker-alt"></i> Localidad: {userData.localidad}</li>
+					
+					<li style={styles.profileDetailsItem}><i className="fas fa-map-marker-alt"></i> Localidades:
+					<div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '5px', alignItems: 'center', marginLeft: '5px' }}>
+						{locations.length > 0 ? (
+							<p style={styles.profileDetailsItem}>{locations.map((location) => location.nombre).join(', ')}.</p>
+						) : (
+							<p style={styles.profileDetailsItem}>Sin localidades asignadas.</p>
+						)}
+					</div>
+					</li>
 					<li style={styles.profileDetailsItem}><i className="fas fa-envelope"></i> Email: {userData.email}</li>
 					<li style={styles.profileDetailsItem}><i className="fas fa-phone"></i> Teléfono: {userData.telefono}</li>
 				</ul>
