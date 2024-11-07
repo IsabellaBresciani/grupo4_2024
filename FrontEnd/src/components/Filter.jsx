@@ -56,7 +56,7 @@ const styles = {
         cursor: 'pointer',
     },
 };
-
+/*hola*/
 const Filter = ({ onLocationChange, onServiceChange }) => {
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
