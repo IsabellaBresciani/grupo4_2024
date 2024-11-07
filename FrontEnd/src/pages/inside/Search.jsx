@@ -218,6 +218,7 @@ return (
                                 usuario={user.usuario}
                                 name={`${user.nombre} ${user.apellido}`}
                                 email={user.email}
+                                description = {user.descripcion || "No hay descripcion"}
                                 phone={user.telefono}
                                 img={user.foto}
                                 location={user.localidad}

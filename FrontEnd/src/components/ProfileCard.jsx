@@ -79,7 +79,6 @@ const styles = {
 function ProfileCard(props) {
 	const { usuario, name, description, img } = props;
 	const [userName, setUserName] = useState("");
-	console.log("Descripción recibida en ProfileCard:", description);
 
 	if (usuario === "me") {
 		usuario = String(localStorage.getItem('usuario'));
