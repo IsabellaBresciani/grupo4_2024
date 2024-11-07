@@ -46,55 +46,56 @@ const styles = {
 	},
 	modalContent: {
 		backgroundColor: 'white',
+		maxHeight: '90vh',
 		padding: '20px',
 		borderRadius: '10px',
 		width: '400px',
-		boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', /* Sombra para simular tarjeta */
-		textAlign: 'Left', /* Contenido a la izquierza */
-
+		boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+		textAlign: 'Left', 
+		overflowY: 'auto',
 	},
 	modalInput: {
-		width: '100%',              // Ancho completo del input
-		padding: '10px',            // Espaciado interno
-		margin: '10px 0',           // Margen entre inputs
-		border: '1px solid #ddd',   // Borde gris claro
-		borderRadius: '5px',        // Bordes redondeados
-		boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',  // Sombra sutil
-		fontSize: '1rem',           // Tamaño de fuente adecuado
-		outline: 'none',            // Elimina el borde azul cuando se selecciona
-		transition: 'border-color 0.3s ease', // Transición suave para el borde
+		width: '100%',              
+		padding: '10px',            
+		margin: '10px 0',           
+		border: '1px solid #ddd',   
+		borderRadius: '5px',        
+		boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',  
+		fontSize: '1rem',           
+		outline: 'none',            
+		transition: 'border-color 0.3s ease', 
 	},
 	modalInputFocus: {
-		borderColor: '#FF8C00',     // Cambia el color del borde al hacer focus
+		borderColor: '#FF8C00',     
 	},
 	modalLabel: {
-		display: 'block',           // Asegura que las etiquetas ocupen su propia línea
-		marginBottom: '0px',        // Margen inferior para separar de los inputs
-		fontWeight: 'bold',         // Hace que las etiquetas sean más notorias
+		display: 'block',           
+		marginBottom: '0px',        
+		fontWeight: 'bold',         
 	},
 	buttonsContainer: {
 		display: 'flex',
-		justifyContent: 'flex-end',  // Alinea los botones a la derecha
-		marginTop: '20px',           // Margen superior para separar de los inputs
+		justifyContent: 'flex-end',  
+		marginTop: '20px',           
 	},
 	guardarButton: {
-		backgroundColor: '#FF8C00',  // Color de fondo naranja
-		color: 'white',              // Color del texto
-		padding: '10px 20px',        // Espaciado interno
-		border: 'none',              // Sin borde
-		borderRadius: '5px',         // Bordes redondeados
-		cursor: 'pointer',           // Cambia el cursor al pasar por encima
-		marginTop: '10px',           // Margen superior para separarlo de otros elementos
+		backgroundColor: '#FF8C00',  
+		color: 'white',              
+		padding: '10px 20px',        
+		border: 'none',              
+		borderRadius: '5px',         
+		cursor: 'pointer',           
+		marginTop: '10px',           
 	},
 	cancelButton: {
-		backgroundColor: '#ccc',    // Color de fondo gris claro
-		color: 'black',             // Color del texto
-		padding: '10px 20px',       // Espaciado interno
-		border: 'none',             // Sin borde
-		borderRadius: '5px',        // Bordes redondeados
-		cursor: 'pointer',          // Cambia el cursor al pasar por encima
-		marginTop: '10px',          // Margen superior para separarlo de otros elementos
-		marginLeft: '10px',          // Espacio entre botones
+		backgroundColor: '#ccc',    
+		color: 'black',             
+		padding: '10px 20px',       
+		border: 'none',               
+		borderRadius: '5px',        
+		cursor: 'pointer',          
+		marginTop: '10px',          
+		marginLeft: '10px',          
 	},
 	nameRatingEdit: {
 		display: 'flex',
@@ -383,7 +384,7 @@ const ProfileHeader = (props) => {
 									</div>
 									<div>
 										<label htmlFor="description" style={styles.modalLabel}>Descripción </label>
-										<input
+										<textarea
 											type="text"
 											id="descripcion"
 											name="descripcion"
