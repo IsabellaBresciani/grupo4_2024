@@ -1,103 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import LayoutInside from '../../components/LayoutInside';  
+import LayoutInside from '../../components/LayoutInside';
 import ProfileCard from '../../components/ProfileCard';
-import Filter from '../../components/Filter';  
+import Filter from '../../components/Filter';
 import axios from 'axios';
 
 const styles = {
     container: {
-        display: 'flex',            
-        flexDirection: 'row',       
+        display: 'flex',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         padding: '20px',
-        alignItems: 'flex-start',   
+        alignItems: 'flex-start',
     },
     profilesContainer: {
-        flex: '1',                  
-        margin: '20px',             
+        flex: '1',
+        margin: '20px',
         padding: '10px',
     },
     filter: {
-        marginLeft: '20px',         
+        marginLeft: '20px',
         border: '2px solid #ff8000',
         padding: '20px',
-        width: '300px',             
-        textAlign: 'left',          
-        flexShrink: '0',            
+        width: '300px',
+        textAlign: 'left',
+        flexShrink: '0',
         boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
-        borderRadius: '4px',        
+        borderRadius: '4px',
     },
     searchBarContainer: {
-        display: 'inline-flex',          
-        justifyContent: 'space-between', 
-        alignItems: 'center',            
-        border: '1px solid #ccc',        
-        padding: '10px',                 
-        borderRadius: '4px',             
-        width: '80%',                    
-        margin: '20px auto',             
+        display: 'inline-flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        border: '1px solid #ccc',
+        padding: '10px',
+        borderRadius: '4px',
+        width: '80%',
+        margin: '20px auto',
     },
     searchBar: {
-        flex: '1',               
-        textAlign: 'left',       
-        padding: '10px',         
-        marginRight: '10px',     
-        fontSize: '16px',        
-        border: '0px',           
-        outline: 'none',         
+        flex: '1',
+        textAlign: 'left',
+        padding: '10px',
+        marginRight: '10px',
+        fontSize: '16px',
+        border: '0px',
+        outline: 'none',
     },
     buttonStyle: {
-        padding: '10px 20px',       
-        border: 'none',             
-        backgroundColor: '#ff8000', 
-        color: 'white',             
-        borderRadius: '4px',        
-        cursor: 'pointer',          
+        padding: '10px 20px',
+        border: 'none',
+        backgroundColor: '#ff8000',
+        color: 'white',
+        borderRadius: '4px',
+        cursor: 'pointer',
     },
 };
 
 const Search = () => {
-    const [searchTerm, setSearchTerm] = useState(''); 
-    const [userData, setUserData] = useState([]); 
-    const [filteredUsers, setFilteredUsers] = useState([]); 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [userData, setUserData] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [confirmedSearch, setConfirmedSearch] = useState(false); 
-    
+    const [confirmedSearch, setConfirmedSearch] = useState(false);
+    const [filteredLocations, setFilteredLocations] = useState([]);
+    const [filteredServices, setFilteredServices] = useState([]);
+
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
-    
+
             try {
                 // Fetch user data
-                const response = await axios.get(`http://localhost:4444/api/user`);               
-    
+                const response = await axios.get(`http://localhost:4444/api/user`);
                 const usersWithServices = await Promise.all(response.data.map(async (user) => {
                     try {
-                        // Fetch services for each user
                         const serviceResponse = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
-                        
+
                         // Get unique services
                         const uniqueServices = serviceResponse.data.filter(
                             (service, index, self) =>
                                 index === self.findIndex((s) => s.idServicio === service.idServicio)
                         );
-    
+
                         // Return user with services if any
                         if (uniqueServices.length > 0) {
                             return { ...user, services: uniqueServices };
                         }
                     } catch (err) {
                         console.error(`Error fetching services for user ${user.usuario}:`, err);
+                        return null; // Return null if no services
                     }
-                    return null; // Return null if no services
                 }));
-    
                 // Filter out null values (users without services)
-                const filtered = usersWithServices.filter(user => user !== null);
-                setFilteredUsers(filtered);
-    
-                // Reset error state
+                setUserData(usersWithServices.filter((user) => user !== null));
                 setError(null);
             } catch (err) {
                 setError('Error al obtener los datos del usuario');
@@ -105,104 +101,140 @@ const Search = () => {
                 setLoading(false);
             }
         };
-    
         getData();
     }, []);
-   
 
-    
+    useEffect(() => {
+        // Función para filtrar los usuarios
+        const applyFilters = () => {
+            const lowercasedFilter = searchTerm.toLowerCase();
+            const usersFiltered = userData.filter(user => {
+                const matchesName = user.usuario.toLowerCase().includes(lowercasedFilter);
+                const matchesLocation = filteredLocations.length === 0 || filteredLocations.includes(user.localidad);
+                const matchesService = filteredServices.length === 0 || user.services.some((service) => filteredServices.includes(service.description));
+                return matchesName && matchesLocation && matchesService;
+            });
+            setFilteredUsers(usersFiltered);
+        };
+        applyFilters();
+    }, [searchTerm, filteredLocations, filteredServices, userData]);
 
-    const handleSearch = async () => {
-        const lowercasedFilter = searchTerm.toLowerCase();
-        const filteredByUser = userData.filter(user => 
-            user.usuario.toLowerCase().startsWith(lowercasedFilter) 
-        );
-    
-        if (filteredByUser.length === 1) { // Verifica que solo se encontró un usuario
-            const user = filteredByUser[0];
-            try {
-                const response = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
-                const uniqueServices = response.data.filter(
-                    (service, index, self) =>
-                        index === self.findIndex((s) => s.idServicio === service.idServicio)
-                );
-                setFilteredUsers([{ ...user, services: uniqueServices }]); // Agrega servicios al usuario
-            } catch (error) {
-         
-                setFilteredUsers([]); // Maneja el error
-            }
-        } else if (filteredByUser.length > 1) {
-            setFilteredUsers(filteredByUser); // Muestra múltiples usuarios si se encontró más de uno
-        } else {
-            setFilteredUsers([]); // No se encontró usuario
-        }
-    
-        setConfirmedSearch(true); 
-    };
+    /*// Filter out null values (users without services)
+    const filtered = usersWithServices.filter(user => user !== null);
+    setFilteredUsers(filtered);
+
+    // Reset error state
+    setError(null);
+} catch (err) {
+    setError('Error al obtener los datos del usuario');
+} finally {
+    setLoading(false);
+}
+        };
+
+getData();
+    }, []);*/
 
     const handleChange = (e) => {
         setSearchTerm(e.target.value);
-        if (!e.target.value) {
-            setFilteredUsers(userData); // Muestra todos los usuarios si el campo está vacío
-            setConfirmedSearch(false); 
-        }
     };
 
-    if (loading) return <p>Cargando datos...</p>;
-    if (error) return <p>{error}</p>;
+/*
+const handleSearch = async () => {
+    const lowercasedFilter = searchTerm.toLowerCase();
+    const filteredByUser = userData.filter(user =>
+        user.usuario.toLowerCase().startsWith(lowercasedFilter)
+    );
 
-    return (
-        <LayoutInside activeItem="search">  
-            <div>
-                <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
-                <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>
-                <div style={styles.searchBarContainer}>
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={handleChange}
-                        placeholder="Buscar perfiles por nombre de usuario o servicio..."
-                        style={styles.searchBar}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                                handleSearch();
-                            }
-                        }}
-                    />
-                    <button 
-                        style={styles.buttonStyle}
-                        onClick={handleSearch}
-                    >
-                        Buscar
-                    </button>
+    if (filteredByUser.length === 1) { // Verifica que solo se encontró un usuario
+        const user = filteredByUser[0];
+        try {
+            const response = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
+            const uniqueServices = response.data.filter(
+                (service, index, self) =>
+                    index === self.findIndex((s) => s.idServicio === service.idServicio)
+            );
+            setFilteredUsers([{ ...user, services: uniqueServices }]); // Agrega servicios al usuario
+        } catch (error) {
+
+            setFilteredUsers([]); // Maneja el error
+        }
+    } else if (filteredByUser.length > 1) {
+        setFilteredUsers(filteredByUser); // Muestra múltiples usuarios si se encontró más de uno
+    } else {
+        setFilteredUsers([]); // No se encontró usuario
+    }
+
+    setConfirmedSearch(true);
+};
+
+const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+    if (!e.target.value) {
+        setFilteredUsers(userData); // Muestra todos los usuarios si el campo está vacío
+        setConfirmedSearch(false);
+    }
+};*/
+
+const handleLocationChange = (locations) => setFilteredLocations(locations);
+const handleServiceChange = (services) => setFilteredServices(services);
+
+if (loading) return <p>Cargando datos...</p>;
+if (error) return <p>{error}</p>;
+
+return (
+    <LayoutInside activeItem="search">
+        <div>
+            <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
+            <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>
+            <div style={styles.searchBarContainer}>
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleChange}
+                    placeholder="Buscar perfiles por nombre de usuario o servicio..."
+                    style={styles.searchBar}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            /*handleSearch();*/
+                            setSearchTerm(e.target.value);
+                        }
+                    }}
+                />
+                <button
+                    style={styles.buttonStyle}
+                    onClick={() => setSearchTerm(searchTerm)}
+                >
+                    Buscar
+                </button>
+            </div>
+
+            <div style={styles.container}>
+                <div style={styles.profilesContainer}>
+                    {filteredUsers.length > 0 ? (
+                        filteredUsers.map((user) => (
+                            <ProfileCard
+                                key={user.usuario}
+                                usuario={user.usuario}
+                                name={`${user.nombre} ${user.apellido}`}
+                                email={user.email}
+                                phone={user.telefono}
+                                img={user.foto}
+                                location={user.localidad}
+                            />
+                        ))
+                    ) : (
+                        searchTerm && <p>No se encontraron perfiles.</p>
+                    )}
                 </div>
 
-                <div style={styles.container}>
-                    <div style={styles.profilesContainer}>
-                        {filteredUsers.length > 0 ? (
-                            filteredUsers.map(user => (
-                                <ProfileCard 
-                                    usuario={user.usuario} 
-                                    name={`${user.nombre} ${user.apellido}`} 
-                                    email={user.email} 
-                                    description={user.descripcion}
-                                    phone={user.telefono} 
-                                    img={user.foto} 
-                                    location={user.localidad}
-                                />
-                            ))
-                        ) : (
-                            searchTerm && <p>No se encontraron perfiles.</p>
-                        )}
-                    </div>
-
-                    <div style={styles.filter}>
-                        <Filter />
-                    </div>
+                <div style={styles.filter}>
+                    <Filter onLocationChange={handleLocationChange} onServiceChange={handleServiceChange} />
                 </div>
             </div>
-        </LayoutInside>
-    );
+        </div>
+    </LayoutInside>
+);
 };
 
 export default Search;

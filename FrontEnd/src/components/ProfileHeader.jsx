@@ -75,7 +75,7 @@ const styles = {
         justifyContent: 'flex-end',  // Alinea los botones a la derecha
         marginTop: '20px',           // Margen superior para separar de los inputs
     },
-    GuardarButton: {
+    guardarButton: {
         backgroundColor: '#FF8C00',  // Color de fondo naranja
         color: 'white',              // Color del texto
         padding: '10px 20px',        // Espaciado interno
@@ -387,14 +387,14 @@ const ProfileHeader = (props) => {
                                         <button
                                             type="button"
                                             onClick={modifyData}
-                                            style={styles.GuardarButton}
+                                            style={styles.guardarButton}
                                         >
                                             Guardar cambios
                                         </button>
                                         <button
                                             type="button"
                                             onClick={cancelModification}
-                                            style={styles.cancelButton}
+                                            style={{ ...styles.guardarButton, backgroundColor: '#bbb', color: 'black', marginLeft: '10px' }}
                                         >
                                             Cancelar
                                         </button>
