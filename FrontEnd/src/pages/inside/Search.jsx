@@ -62,38 +62,40 @@ const Search = () => {
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [confirmedSearch, setConfirmedSearch] = useState(false);
     const [filteredLocations, setFilteredLocations] = useState([]);
     const [filteredServices, setFilteredServices] = useState([]);
 
     useEffect(() => {
         const getData = async () => {
             setLoading(true);
-
             try {
-                // Fetch user data
                 const response = await axios.get(`http://localhost:4444/api/user`);
-                const usersWithServices = await Promise.all(response.data.map(async (user) => {
+                const usersWithDetails = await Promise.all(response.data.map(async (user) => {
                     try {
                         const serviceResponse = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
-
-                        // Get unique services
                         const uniqueServices = serviceResponse.data.filter(
                             (service, index, self) =>
                                 index === self.findIndex((s) => s.idServicio === service.idServicio)
                         );
 
-                        // Return user with services if any
-                        if (uniqueServices.length > 0) {
-                            return { ...user, services: uniqueServices };
-                        }
+                        // Intentar obtener localidades para cada usuario
+                        const locationResponse = await axios.get(`http://localhost:4444/api/localidad/usuario/${user.usuario}`);
+                        
+                        // Extraer solo el nombre de la localidad
+                        const locations = Array.isArray(locationResponse.data) ? 
+                                          locationResponse.data.map(loc => loc.nombre) : [];
+
+                        // Imprimir para verificar los datos obtenidos
+                        console.log(`Usuario: ${user.usuario}`, { localidades: locations, services: uniqueServices });
+                        
+                        return { ...user, services: uniqueServices, localidades: locations };
                     } catch (err) {
-                        console.error(`Error fetching services for user ${user.usuario}:`, err);
-                        return null; // Return null if no services
+                        console.error(`Error al obtener detalles para el usuario ${user.usuario}:`, err);
+                        return null;
                     }
                 }));
-                // Filter out null values (users without services)
-                setUserData(usersWithServices.filter((user) => user !== null));
+
+                setUserData(usersWithDetails.filter((user) => user !== null));
                 setError(null);
             } catch (err) {
                 setError('Error al obtener los datos del usuario');
@@ -105,137 +107,98 @@ const Search = () => {
     }, []);
 
     useEffect(() => {
-        // Función para filtrar los usuarios
         const applyFilters = () => {
             const lowercasedFilter = searchTerm.toLowerCase();
             const usersFiltered = userData.filter(user => {
                 const matchesName = user.usuario.toLowerCase().includes(lowercasedFilter);
-                const matchesLocation = filteredLocations.length === 0 || filteredLocations.includes(user.localidad);
-                const matchesService = filteredServices.length === 0 || user.services.some((service) => filteredServices.includes(service.description));
+
+                // Filtrar por localidades: verificar si alguna localidad coincide
+                const matchesLocation = filteredLocations.length === 0 || user.localidades.some(loc => filteredLocations.includes(loc));
+
+                // Filtrar por servicios
+                const matchesService = filteredServices.length === 0 || user.services.some(service => filteredServices.includes(service.description));
+
+                console.log(`Usuario: ${user.usuario}`);
+                console.log(`  Coincide con nombre: ${matchesName}`);
+                console.log(`  Coincide con localidades: ${matchesLocation}`);
+                console.log(`  Coincide con servicios: ${matchesService}`);
+                
                 return matchesName && matchesLocation && matchesService;
             });
+
+            console.log("Usuarios filtrados:", usersFiltered);
             setFilteredUsers(usersFiltered);
         };
         applyFilters();
     }, [searchTerm, filteredLocations, filteredServices, userData]);
 
-    /*// Filter out null values (users without services)
-    const filtered = usersWithServices.filter(user => user !== null);
-    setFilteredUsers(filtered);
-
-    // Reset error state
-    setError(null);
-} catch (err) {
-    setError('Error al obtener los datos del usuario');
-} finally {
-    setLoading(false);
-}
-        };
-
-getData();
-    }, []);*/
-
     const handleChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-/*
-const handleSearch = async () => {
-    const lowercasedFilter = searchTerm.toLowerCase();
-    const filteredByUser = userData.filter(user =>
-        user.usuario.toLowerCase().startsWith(lowercasedFilter)
+    const handleLocationChange = (locations) => {
+        console.log("Localidades seleccionadas para el filtro:", locations);
+        setFilteredLocations(locations);
+    };
+
+    const handleServiceChange = (services) => setFilteredServices(services);
+
+    if (loading) return <p>Cargando datos...</p>;
+    if (error) return <p>{error}</p>;
+
+    return (
+        <LayoutInside activeItem="search">
+            <div>
+                <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
+                <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>
+                <div style={styles.searchBarContainer}>
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleChange}
+                        placeholder="Buscar perfiles por nombre de usuario o servicio..."
+                        style={styles.searchBar}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                setSearchTerm(e.target.value);
+                            }
+                        }}
+                    />
+                    <button
+                        style={styles.buttonStyle}
+                        onClick={() => setSearchTerm(searchTerm)}
+                    >
+                        Buscar
+                    </button>
+                </div>
+
+                <div style={styles.container}>
+                    <div style={styles.profilesContainer}>
+                        {filteredUsers.length > 0 ? (
+                            filteredUsers.map((user) => (
+                                <ProfileCard
+                                    key={user.usuario}
+                                    usuario={user.usuario}
+                                    name={`${user.nombre} ${user.apellido}`}
+                                    email={user.email}
+                                    description={user.descripcion || "No hay descripcion"}
+                                    phone={user.telefono}
+                                    img={user.foto}
+                                    location={user.localidades.join(', ')} // Muestra todas las localidades
+                                />
+                            ))
+                        ) : (
+                            searchTerm && <p>No se encontraron perfiles.</p>
+                        )}
+                    </div>
+
+                    <div style={styles.filter}>
+                        <Filter onLocationChange={handleLocationChange} onServiceChange={handleServiceChange} />
+                    </div>
+                </div>
+            </div>
+        </LayoutInside>
     );
-
-    if (filteredByUser.length === 1) { // Verifica que solo se encontró un usuario
-        const user = filteredByUser[0];
-        try {
-            const response = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
-            const uniqueServices = response.data.filter(
-                (service, index, self) =>
-                    index === self.findIndex((s) => s.idServicio === service.idServicio)
-            );
-            setFilteredUsers([{ ...user, services: uniqueServices }]); // Agrega servicios al usuario
-        } catch (error) {
-
-            setFilteredUsers([]); // Maneja el error
-        }
-    } else if (filteredByUser.length > 1) {
-        setFilteredUsers(filteredByUser); // Muestra múltiples usuarios si se encontró más de uno
-    } else {
-        setFilteredUsers([]); // No se encontró usuario
-    }
-
-    setConfirmedSearch(true);
-};
-
-const handleChange = (e) => {
-    setSearchTerm(e.target.value);
-    if (!e.target.value) {
-        setFilteredUsers(userData); // Muestra todos los usuarios si el campo está vacío
-        setConfirmedSearch(false);
-    }
-};*/
-
-const handleLocationChange = (locations) => setFilteredLocations(locations);
-const handleServiceChange = (services) => setFilteredServices(services);
-
-if (loading) return <p>Cargando datos...</p>;
-if (error) return <p>{error}</p>;
-
-return (
-    <LayoutInside activeItem="search">
-        <div>
-            <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
-            <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>
-            <div style={styles.searchBarContainer}>
-                <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={handleChange}
-                    placeholder="Buscar perfiles por nombre de usuario o servicio..."
-                    style={styles.searchBar}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            /*handleSearch();*/
-                            setSearchTerm(e.target.value);
-                        }
-                    }}
-                />
-                <button
-                    style={styles.buttonStyle}
-                    onClick={() => setSearchTerm(searchTerm)}
-                >
-                    Buscar
-                </button>
-            </div>
-
-            <div style={styles.container}>
-                <div style={styles.profilesContainer}>
-                    {filteredUsers.length > 0 ? (
-                        filteredUsers.map((user) => (
-                            <ProfileCard
-                                key={user.usuario}
-                                usuario={user.usuario}
-                                name={`${user.nombre} ${user.apellido}`}
-                                email={user.email}
-                                description = {user.descripcion || "No hay descripcion"}
-                                phone={user.telefono}
-                                img={user.foto}
-                                location={user.localidad}
-                            />
-                        ))
-                    ) : (
-                        searchTerm && <p>No se encontraron perfiles.</p>
-                    )}
-                </div>
-
-                <div style={styles.filter}>
-                    <Filter onLocationChange={handleLocationChange} onServiceChange={handleServiceChange} />
-                </div>
-            </div>
-        </div>
-    </LayoutInside>
-);
 };
 
 export default Search;
