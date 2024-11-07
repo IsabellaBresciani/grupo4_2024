@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import toast from 'react-hot-toast';
 
 const styles = {
 	postsSection: {
@@ -236,21 +237,10 @@ const PostCard = (props) => {
 			setPosts(posts.map(post => (post.idPublicacion === currentPost.idPublicacion ? currentPost : post)));
 			setIsEditing(false);
 			setCurrentPost(null);
-
-			Swal.fire({
-				icon: 'success',
-				title: 'Publicación actualizada',
-				text: 'La publicación se modificó con éxito',
-				confirmButtonColor: '#ff8c00',
-		});
+			toast.success('Publicación modificada exitosamente!');
 		} catch (err) {
-			Swal.fire({
-					icon: 'error',
-					title: 'Error al Modificar',
-					text: 'Hubo un problema al modificar la publicación. Por favor, inténtalo de nuevo.',
-					confirmButtonText: 'Cerrar',
-			});
-	}
+			toast.error('Hubo un error al guardar los cambios.');
+		}
 	};
 
 	if (loading) return <p>Cargando publicaciones...</p>;

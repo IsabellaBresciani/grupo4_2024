@@ -64,16 +64,7 @@ const styles = {
 		fontSize: '14px',
 		margin: '0px',
 	},
-	locationTags: {
-		padding: '8px 8px',
-		backgroundColor: '#f0f0f0',
-		borderRadius: '20px',
-		display: 'flex',
-		alignItems: 'center',
-		fontSize: '14px',
-		margin: '0px',
-		color: '#555',
-	},
+	
 };
 
 function ProfileCard(props) {
@@ -154,6 +145,14 @@ function ProfileCard(props) {
 							</div>
 						</div>
 						<p style={styles.detailText}>Descripcion: {description}</p>
+						<div style={{...styles.detailText, display: 'flex', flexDirection: 'row', gap: '5px' }} >
+						<p>Localidades:</p>
+							{locations.length > 0 ? (
+								<p>{locations.map((location) => location.nombre).join(', ')}.</p>
+							) : (
+								<p style={styles.detailText}>Sin localidades asignadas.</p>
+							)}
+						</div>
 					</div>
 				</div>
 				
@@ -165,21 +164,11 @@ function ProfileCard(props) {
 							<p key={service.idServicio} style={styles.servicesTags}>{service.description}</p>
 						))
 					) : (
-						<p style={styles.profileDetailsText}>No hay servicios disponibles.</p>
+						<p style={styles.detailText}>No hay servicios disponibles.</p>
 					)}
 				</div>
 
-				{/* Locations list */}
-				<h5>Localidades: </h5>
-				<div style={styles.serviceList}>
-					{locations.length > 0 ? (
-						locations.map((location) => (
-							<p key={location.idLocalidad} style={styles.locationTags}>{location.nombre}</p>
-						))
-					) : (
-						<p style={styles.profileDetailsText}>No hay localidades disponibles.</p>
-					)}
-				</div>
+				
 				
 			</div>
 		</Link>
