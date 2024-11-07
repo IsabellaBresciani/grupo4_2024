@@ -70,8 +70,7 @@ const Search = () => {
     
             try {
                 // Fetch user data
-                const response = await axios.get(`http://localhost:4444/api/user`);
-               
+                const response = await axios.get(`http://localhost:4444/api/user`);               
     
                 const usersWithServices = await Promise.all(response.data.map(async (user) => {
                     try {
@@ -186,6 +185,7 @@ const Search = () => {
                                     usuario={user.usuario} 
                                     name={`${user.nombre} ${user.apellido}`} 
                                     email={user.email} 
+                                    description={user.descripcion}
                                     phone={user.telefono} 
                                     img={user.foto} 
                                     location={user.localidad}

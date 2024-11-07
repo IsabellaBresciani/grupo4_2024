@@ -87,18 +87,30 @@ router.delete("/:idLocalidad", async (req, res) => {
     }
 });
 
-//Ver todas las localidades de una persona
-router.get("/usuario/:idPersona", async (req, res) => {
-    const { idPersona } = req.params;
+router.get("/usuario/:nombreUsuario", async (req, res) => {
+    const { nombreUsuario } = req.params;
 
     try {
+        // Buscar el idPersona basado en el nombre de usuario
+        const queryUserId = `SELECT id FROM user WHERE usuario = ?`;
+        const [userRows] = await pool.execute(queryUserId, [nombreUsuario]);
+
+        if (userRows.length === 0) {
+            return res.status(404).json({ error: 'No se encontró un usuario con ese nombre' });
+        }
+
+        const idPersona = userRows[0].id;
+
+        // Ahora podemos buscar las localidades usando el idPersona
         const localidades = await Localidad.findByUserId(pool, idPersona);
         if (localidades.length === 0) {
             return res.status(404).json({ error: 'No se encontraron localidades para este usuario' });
         }
+
         res.status(200).json(localidades);
     } catch (error) {
-        return res.status(500).json({ error: 'Error en la consulta de localidades por usuario' });
+        console.error(error); // Para ayudarte en la depuración
+        return res.status(500).json({ error: 'Error en la consulta de localidades por nombre de usuario' });
     }
 });
 

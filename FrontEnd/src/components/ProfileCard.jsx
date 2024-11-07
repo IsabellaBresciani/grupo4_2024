@@ -64,21 +64,34 @@ const styles = {
 		fontSize: '14px',
 		margin: '0px',
 	},
+	locationTags: {
+		padding: '8px 8px',
+		backgroundColor: '#f0f0f0',
+		borderRadius: '20px',
+		display: 'flex',
+		alignItems: 'center',
+		fontSize: '14px',
+		margin: '0px',
+		color: '#555',
+	},
 };
 
 function ProfileCard(props) {
-	const { usuario, name, description, img, location } = props; 
+	const { usuario, name, description, img } = props;
 	const [userName, setUserName] = useState("");
-	 
+	console.log("Descripción recibida en ProfileCard:", description);
+
 	if (usuario === "me") {
 		usuario = String(localStorage.getItem('usuario'));
 		setUserName(usuario);
 	}
 
 	const [services, setServices] = useState([]);
+	const [locations, setLocations] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
+	// Fetch services
 	const fetchServices = async () => {
 		try {
 			const response = await axios.get(`http://localhost:4444/api/user/${usuario}/servicios`);
@@ -87,7 +100,7 @@ function ProfileCard(props) {
 				index === self.findIndex((s) => s.idServicio === service.idServicio)
 			);
 			setServices(uniqueServices);
-		} catch (err) {	
+		} catch (err) {
 			if (err.response && err.response.status === 404) {
 				setError([]);
 			} else {
@@ -98,10 +111,27 @@ function ProfileCard(props) {
 		}
 	};
 
+	// Fetch locations
+	const fetchLocations = async () => {
+		try {
+			const response = await axios.get(`http://localhost:4444/api/localidad/usuario/${usuario}`);
+			setLocations(response.data);
+		} catch (err) {
+			if (err.response && err.response.status === 404) {
+				setError([]);
+			} else {
+				setError('Error al cargar las localidades.');
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
 		fetchServices();
+		fetchLocations();
 	}, [userName]);
-	console.log(props.usuario, userName)
+
 	return (
 		<Link to={userName === usuario ? `/profile` : `/profile/${usuario}`} style={styles.profileCard}>
 			<div style={styles.profileDetails}>
@@ -114,7 +144,7 @@ function ProfileCard(props) {
           />
 					<div style={styles.rightColumn}>
 						<div style={{display: 'flex', justifyContent: 'space-between'}}>
-							<h3 style={styles.userName}>{name}</h3> {/* Cambiar por nombre de usuario y agregar el nombre abajo */}
+							<h3 style={styles.userName}>{name}</h3>
 							{/* Rating with stars */}
 							<div style={styles.profileRating}>
 								<span>★</span>
@@ -125,8 +155,6 @@ function ProfileCard(props) {
 							</div>
 						</div>
 						<p style={styles.detailText}>Descripcion: {description}</p>
-						<p style={styles.detailText}>Localidad: {location}</p>
-						
 					</div>
 				</div>
 				
@@ -139,6 +167,18 @@ function ProfileCard(props) {
 						))
 					) : (
 						<p style={styles.profileDetailsText}>No hay servicios disponibles.</p>
+					)}
+				</div>
+
+				{/* Locations list */}
+				<h5>Localidades: </h5>
+				<div style={styles.serviceList}>
+					{locations.length > 0 ? (
+						locations.map((location) => (
+							<p key={location.idLocalidad} style={styles.locationTags}>{location.nombre}</p>
+						))
+					) : (
+						<p style={styles.profileDetailsText}>No hay localidades disponibles.</p>
 					)}
 				</div>
 				
