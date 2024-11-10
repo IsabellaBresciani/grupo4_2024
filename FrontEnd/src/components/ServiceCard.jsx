@@ -108,7 +108,7 @@ const ServiceCard = (props) => {
 
     useEffect(() => {
         fetchServices();
-    });
+    }, []);
 
     if (loading) return <p>Cargando servicios...</p>;
     if (error) return <p>{error}</p>;

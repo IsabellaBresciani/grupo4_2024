@@ -51,10 +51,13 @@ function ProfileCard(props) {
     const { usuario, name, description, img, location } = props; 
     const [userName, setUserName] = useState("");
    
-    if (usuario === "me") {
-         usuario = String(localStorage.getItem('usuario'));
-        setUserName(usuario);
-    }
+    useEffect(() => {
+        if (usuario == "me") {
+            usuario = String(localStorage.getItem('usuario'));
+            console.log(usuario)
+            setUserName(usuario);
+        }
+    }, []);
 
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -85,7 +88,7 @@ function ProfileCard(props) {
     useEffect(() => {
         fetchServices();
     }, [userName]);
-    console.log(props.usuario, userName)
+  
     return (
         <Link to={userName === usuario ? `/profile` : `/profile/${usuario}`} style={styles.profileCard}>
             {/* Profile image */}
