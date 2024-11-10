@@ -5,27 +5,39 @@ import Filter from '../../components/Filter';
 import axios from 'axios';
 
 const styles = {
+    searchContainer:{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        marginTop: "2vh",
+        
+    },
     container: {
+        justifyContent: 'center',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+  
         padding: '20px',
-        alignItems: 'flex-start',
+        alignItems: 'center',
     },
     profilesContainer: {
+        display: "flex",
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         flex: '1',
         margin: '20px',
         padding: '10px',
     },
     filter: {
-        marginLeft: '20px',
-        border: '2px solid #ff8000',
+   
+    
         padding: '20px',
-        width: '300px',
+        width: '80vw',
         textAlign: 'left',
         flexShrink: '0',
-        boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
-        borderRadius: '4px',
+       
     },
     searchBarContainer: {
         display: 'inline-flex',
@@ -34,8 +46,10 @@ const styles = {
         border: '1px solid #ccc',
         padding: '10px',
         borderRadius: '4px',
-        width: '80%',
+        width: '80vw',
         margin: '20px auto',
+        boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
+        borderRadius: '4px',
     },
     searchBar: {
         flex: '1',
@@ -148,9 +162,9 @@ const Search = () => {
 
     return (
         <LayoutInside activeItem="search">
-            <div>
-                <p>Cantidad de perfiles existentes: {filteredUsers.length}</p>
-                <p>Ingrese el nombre de usuario o servicio para buscar perfiles:</p>
+            <div  style={styles.searchContainer}>
+               
+     
                 <div style={styles.searchBarContainer}>
                     <input
                         type="text"
@@ -171,8 +185,11 @@ const Search = () => {
                         Buscar
                     </button>
                 </div>
-
+                <div style={styles.filter}>
+                        <Filter onLocationChange={handleLocationChange} onServiceChange={handleServiceChange} />
+                </div>
                 <div style={styles.container}>
+                    
                     <div style={styles.profilesContainer}>
                         {filteredUsers.length > 0 ? (
                             filteredUsers.map((user) => (
@@ -192,9 +209,7 @@ const Search = () => {
                         )}
                     </div>
 
-                    <div style={styles.filter}>
-                        <Filter onLocationChange={handleLocationChange} onServiceChange={handleServiceChange} />
-                    </div>
+                    
                 </div>
             </div>
         </LayoutInside>

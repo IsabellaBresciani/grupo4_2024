@@ -8,11 +8,19 @@ const styles = {
 		width: '100%',
 		margin: '0 auto',
 		padding: '20px',
+		flexDirection: 'column',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	postCards: {
 		display: 'flex',
 		flexDirection: 'column',
 		gap: '20px',
+		flexDirection: 'column',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	postCard: {
 		backgroundColor: 'white',
@@ -161,9 +169,9 @@ const styles = {
 
 const PostCard = (props) => {
     const [userName, setUserName] = useState(props.usuario);
-    if (userName == "me"){
-        const userName = String(localStorage.getItem('usuario'));
-        setUserName(userName)
+    if (userName === "me") {
+        const userNameFromStorage = String(localStorage.getItem('usuario'));
+        setUserName(userNameFromStorage);
     }
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -257,7 +265,9 @@ const PostCard = (props) => {
 									<i className="fas fa-user-circle" style={{ fontSize: '20px' }}></i>
 									<span style={styles.postUser}>{post.usuario}</span>
 								</div>
-								<div style={styles.headerRight}>
+								
+									{props.usuario === "me" ? (
+									<div style={styles.headerRight}>
 									<span style={styles.postDate}>{new Date(post.fecha).toLocaleDateString()}</span>
 									<button style={styles.editButton} onClick={() => handleEdit(post)}>
 										<i className="fas fa-edit"></i>
@@ -265,7 +275,12 @@ const PostCard = (props) => {
 									<button style={styles.trashButton} onClick={() => handleDelete(post.idPublicacion)}>
 										<i className="fas fa-trash"></i>
 									</button>
-								</div>
+									</div>
+									):(<div style={styles.headerRight}>
+											<span style={styles.postDate}>{new Date(post.fecha).toLocaleDateString()}</span>	
+										</div>
+									)}
+								
 							</div>
 							<div style={styles.postContent}>
 								<h3>{post.titulo}</h3>

@@ -17,12 +17,17 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         marginTop: '20px',
+        flexDirection: 'column',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+
     },
     serviceCards: {
         display: 'flex',
         flexWrap: 'wrap',
-        alignSelf: 'flex-start',
-        justifyContent: 'left',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     heading: {
         fontSize: '30px',
@@ -32,14 +37,15 @@ const styles = {
     },
     Container: {
         display: 'flex',
-        justifyContent: 'center',
+    
         gap: '50px',
     },
     PostCards: {
         display: 'flex',
         flexWrap: 'wrap',
-        alignSelf: 'flex-start',
-        justifyContent: 'left',
+    
+        justifyContent: 'center',
+        alignItems: 'center',
         maxWidth: '60vw',
     },
     

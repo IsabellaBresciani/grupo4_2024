@@ -9,7 +9,8 @@ const styles = {
 		border: '2px solid rgba(255, 135, 16, 0.8)',
 		borderRadius: '10px',
 		padding: '20px',
-		maxWidth: '1000px',
+		maxWidth: '400px',
+		minWidth: '70vw',
 		boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
 		margin: '20px 0',
 		textDecoration: 'none',
@@ -70,24 +71,19 @@ const styles = {
 function ProfileCard(props) {
     const { usuario, name, description, img, location } = props; 
     const [userName, setUserName] = useState("");
-   
-    useEffect(() => {
-        if (usuario == "me") {
-            usuario = String(localStorage.getItem('usuario'));
-            console.log(usuario)
-            setUserName(usuario);
-        }
-    }, []);
-
-	if (usuario === "me") {
-		usuario = String(localStorage.getItem('usuario'));
-		setUserName(usuario);
-	}
-
 	const [services, setServices] = useState([]);
 	const [locations, setLocations] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+
+   console.log(usuario)
+    useEffect(() => {
+		let usuario_storage = String(localStorage.getItem('usuario'));
+        if (usuario == usuario_storage) {
+            setUserName(usuario);
+        }
+    }, []);
+
 
 	// Fetch services
 	const fetchServices = async () => {

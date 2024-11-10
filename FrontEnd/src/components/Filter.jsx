@@ -2,10 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const styles = {
-    filterGroup: {
+    filterContainer: {
         display: 'flex',
         flexDirection: 'column',
         gap: '20px',
+    },
+    filterGroup: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '20px',
+        justifyContent: 'space-between',
     },
     comboBoxContainer: {
         display: 'flex',
@@ -21,13 +27,14 @@ const styles = {
         padding: '10px',
         fontSize: '14px',
         borderRadius: '5px',
-        border: '1px solid #ccc',
-        width: '100%',
+        
+        width: '80%',
     },
     sliderGroup: {
         display: 'flex',
         flexDirection: 'column',
         gap: '10px',
+        minWidth: "20vw"
     },
     sliderTitle: {
         fontSize: '14px',
@@ -35,7 +42,7 @@ const styles = {
         margin: '0',
     },
     sliderInput: {
-        maxWidth: '60%',
+        maxWidth: '100%',
     },
     selectedTagsContainer: {
         display: 'flex',
@@ -123,12 +130,12 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
 
     return (
         <div className="search-filter">
-            <div className="filters-container">
+            <div style={styles.filterContainer}>
                 <div style={styles.filterGroup}>
 
                     {/* ComboBox para Localidades */}
                     <div style={styles.comboBoxContainer}>
-                        <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Seleccione una localidad:</label>
+                        <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Localidad:</label>
                         <select
                             id="location-combo-box"
                             style={styles.comboBox}
@@ -146,7 +153,7 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
 
                     {/* ComboBox para Servicios */}
                     <div style={styles.comboBoxContainer}>
-                        <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Seleccione un servicio:</label>
+                        <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Servicio:</label>
                         <select
                             id="service-combo-box"
                             style={styles.comboBox}
@@ -175,7 +182,9 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
                     </div>
 
                     {/* Mostrar localidades seleccionadas como etiquetas */}
-                    <div style={styles.selectedTagsContainer}>
+                    
+                </div>
+                <div style={styles.selectedTagsContainer}>
                         {selectedLocation.map((location, index) => (
                             <div key={index} style={styles.tag}>
                                 {location}
@@ -203,7 +212,6 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
                             </div>
                         ))}
                     </div>
-                </div>
             </div>
         </div>
     );
