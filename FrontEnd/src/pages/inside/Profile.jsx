@@ -11,10 +11,11 @@ const styles = {
     profileContent: {       
         padding: '20px',
         flexGrow: 1,
-        backgroundColor: '#f9f9f9',
         overflowY: 'auto',
     },
     section: {
+        display: 'flex',
+        flexDirection: 'column',
         marginTop: '20px',
     },
     serviceCards: {
@@ -38,7 +39,7 @@ const styles = {
         display: 'flex',
         flexWrap: 'wrap',
         alignSelf: 'flex-start',
-        justifyContent: 'center',
+        justifyContent: 'left',
         maxWidth: '60vw',
     },
     
@@ -70,10 +71,8 @@ const Profile = () => {
                             <h2 style={styles.heading}>Mis Publicaciones</h2>
                             <AddPostButton/>
                         </div>
-                        <div style={styles.Container}>
-                            <div style={styles.PostCards}>
-                                <PostCard usuario="me"/>                              
-                            </div>
+                        <div style={styles.PostCards}>
+                            <PostCard usuario="me"/>                              
                         </div>
                     </div>
                 </div>

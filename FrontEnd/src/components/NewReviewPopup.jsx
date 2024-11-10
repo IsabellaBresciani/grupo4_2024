@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const styles = {
   popupOverlay: {
@@ -139,7 +140,7 @@ const styles = {
 };
 
 const NewReviewPopup = ({ show, onClose, asociacionId }) => {
-    const [reviewData, setReviewData] = useState({
+    const initialReviewData = {
         precio: 0,
         calidad: 0,
         atencion: 0,
@@ -147,11 +148,17 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
         comentario: '',
         idAutor: 17, // Aquí deberías obtener el idAutor del contexto del usuario o similar
         servicioasociado_id: asociacionId,
-    });
+    };
+
+    const [reviewData, setReviewData] = useState(initialReviewData);
 
     if (!show) {
         return null;
     }
+
+    const resetReviewData = () => {
+        setReviewData(initialReviewData);
+    };
 
     // Función para manejar cambios en los inputs
     const handleInputChange = (e) => {
@@ -164,31 +171,56 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
 
     // Función para enviar la reseña a la API
     const handleSubmit = async () => {
+        // Verifica si todos los campos están completos
+        const areFieldsComplete = ['precio', 'calidad', 'atencion', 'tiempo'].every(
+            (field) => reviewData[field] !== 0
+        );
+
+        if (!areFieldsComplete) {
+            // Muestra la alerta si algún campo está incompleto
+            Swal.fire({
+                title: 'Campos incompletos',
+                text: 'Por favor, completa todos los campos antes de enviar la reseña.',
+                icon: 'warning',
+                confirmButtonText: 'Entendido'
+            });
+            return; // Detiene la ejecución si faltan campos
+        }
+
         try {
-            // Verifica que todos los campos están correctamente llenos
             const response = await axios.post('http://localhost:4444/api/review', reviewData);
             console.log('Reseña creada:', response.data);
-            // Aquí puedes cerrar el popup o resetear el estado
+            Swal.fire({
+                title: 'Reseña enviada',
+                text: 'La reseña se envió exitosamente.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
             onClose();
+            resetReviewData(); // Reinicia los campos al cerrar la ventana
         } catch (error) {
-            console.log(reviewData);
             console.error('Error al crear la reseña:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al enviar la reseña. Por favor, intenta nuevamente.',
+                icon: 'error',
+                confirmButtonText: 'Cerrar'
+            });
         }
     };
 
     return (
         <div style={styles.popupOverlay} onClick={onClose}>
             <div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-                <button style={styles.closeButton} onClick={onClose}>X</button>
+                <button style={styles.closeButton} onClick={() => { onClose(); resetReviewData(); }}>X</button>
                 <h2>Crear nueva reseña</h2>
                 <div style={styles.columnsContainer}>
                     <div style={styles.ratingBarsColumn}>
-                        {/* Barra para puntuar el precio */}
                         <p style={styles.title}>Precio</p>
                         <input
                             style={styles.ratingBar}
                             type="range"
-                            min="1"
+                            min="0"
                             max="5"
                             name="precio"
                             value={reviewData.precio}
@@ -198,13 +230,11 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                             <p>Malo</p>
                             <p>Excelente</p>
                         </div>
-
-                        {/* Barra para puntuar la calidad del trabajo */}
                         <p style={styles.title}>Calidad</p>
                         <input
                             style={styles.ratingBar}
                             type="range"
-                            min="1"
+                            min="0"
                             max="5"
                             name="calidad"
                             value={reviewData.calidad}
@@ -214,41 +244,25 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                             <p>Pesima</p>
                             <p>Admirable</p>
                         </div>
-
-                        {/* Barra para puntuar la atención al cliente */}
                         <p style={styles.title}>Atención al cliente</p>
                         <div style={{ position: 'relative', textAlign: 'center' }}>
-                            {/* Mostrar el valor actual sobre el slider */}
                             <span style={{ ...styles.valueDinamico, left: `${(reviewData.atencion - 1 ) * 25}%` }}>
                                 {reviewData.atencion}
                             </span>
-                            {/* Etiquetas para cada punto 
-                            <div style={styles.valuesEstaticos}>
-                                <span>1</span>
-                                <span>2</span>
-                                <span>3</span>
-                                <span>4</span>
-                                <span>5</span>
-                            </div>
-                            */}
                             <input
                                 style={styles.ratingBar}
                                 type="range"
-                                min="1"
+                                min="0"
                                 max="5"
                                 name="atencion"
                                 value={reviewData.atencion}
                                 onChange={handleInputChange}
                             />
-                            
                         </div>
                         <div style={styles.detailLabelContainer}>
                             <p>Antisocial</p>
                             <p>Muy atento</p>
                         </div>
-
-
-                        {/* Barra para puntuar el tiempo */}
                         <p style={styles.title}>Tiempo</p>
                         <input
                             style={styles.ratingBar}
@@ -268,7 +282,6 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                     <div style={styles.verticalBar}></div>
 
                     <div style={styles.descriptionColumn}>
-                        {/* Campo para el comentario */}
                         <p style={styles.title}>Descripción:</p>
                         <textarea
                             name="comentario"
@@ -279,7 +292,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
                         />
                         <div style={styles.buttonsContainer}>
                             <button style={styles.button} onClick={handleSubmit}>Enviar Reseña</button>
-                            <button style={{ ...styles.button, backgroundColor: '#aaa' }} onClick={onClose}>Cancelar</button>
+                            <button style={{ ...styles.button, backgroundColor: '#aaa' }} onClick={() => { onClose(); resetReviewData(); }}>Cancelar</button>
                         </div>
                     </div>
                 </div>

@@ -56,8 +56,8 @@ const styles = {
         cursor: 'pointer',
     },
 };
-
-const Filter = () => {
+/*hola*/
+const Filter = ({ onLocationChange, onServiceChange }) => {
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
     const [stars, setStars] = useState(0);
@@ -93,23 +93,32 @@ const Filter = () => {
     const handleLocationChange = (e) => {
         const selected = e.target.value;
         if (selected && !selectedLocation.includes(selected)) {
-            setSelectedLocation([...selectedLocation, selected]);
+            const updatedLocations = [...selectedLocation, selected];
+            setSelectedLocation(updatedLocations);
+            onLocationChange(updatedLocations); // Pasar las localidades a Search
         }
     };
-
 
     const handleServiceChange = (e) => {
         const selectedService = e.target.value;
         if (selectedService && !selectedServices.includes(selectedService)) {
-            setSelectedServices([...selectedServices, selectedService]);
+            const updatedServices = [...selectedServices, selectedService];
+            setSelectedServices(updatedServices);
+            onServiceChange(updatedServices); // Pasar los servicios a Search
         }
     };
 
+    // Eliminar localidades o servicios seleccionados y actualizar en Search
     const removeLocation = (locationToRemove) => {
-        setSelectedLocation(selectedLocation.filter(loc => loc !== locationToRemove));
+        const updatedLocations = selectedLocation.filter(loc => loc !== locationToRemove);
+        setSelectedLocation(updatedLocations);
+        onLocationChange(updatedLocations); // Actualizar en Search
     };
+
     const removeService = (serviceToRemove) => {
-        setSelectedServices(selectedServices.filter(ser => ser !== serviceToRemove));
+        const updatedServices = selectedServices.filter(ser => ser !== serviceToRemove);
+        setSelectedServices(updatedServices);
+        onServiceChange(updatedServices); // Actualizar en Search
     };
 
     return (

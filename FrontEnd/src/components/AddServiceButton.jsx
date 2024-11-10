@@ -147,8 +147,8 @@ const AddServiceButton = ({ fetchServices }) => {
                                 </select>
                             </div>
                             <div style={styles.buttonsContainer}>
-                                <button type="button" style={styles.buttonNS} onClick={handleAddService}>Agregar</button>
-                                <button type="button" style={styles.buttonNS} onClick={() => setIsModalOpen(false)}>Cancelar</button>
+                                <button type="button" style={{...styles.buttonNS, fontWeight: 'bold'}} onClick={handleAddService}>Agregar</button>
+                                <button type="button" style={{ ...styles.buttonNS, backgroundColor: '#ccc', color: '#ff7f11', fontWeight: 'bold' }} onClick={() => setIsModalOpen(false)}>Cancelar</button>
                             </div>
                         </form>
                     </div>

@@ -10,6 +10,7 @@ import Contact from './pages/outside/Contact';
 import Login from './pages/outside/Login';
 import ProfileDetails from './pages/inside/ProfileDetails';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('isAuthenticated') === 'true');
@@ -19,6 +20,8 @@ function App() {
     setIsAuthenticated(authStatus);
   }, []);
   return (
+    <>
+    <Toaster containerStyle={{zIndex: '1000'}}/>
     <Router>
       <Routes>
         {isAuthenticated ? (
@@ -40,6 +43,7 @@ function App() {
         )}
       </Routes>
     </Router>
+    </>
   );
 }
 

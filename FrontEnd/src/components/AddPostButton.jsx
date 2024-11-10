@@ -71,7 +71,7 @@ const styles = {
         marginTop: '10px',           // Margen superior para separarlo de otros elementos
     },
     cancelButton: {
-        backgroundColor: '#ccc',    // Color de fondo gris claro
+        backgroundColor: '#bbb',    // Color de fondo gris claro
         color: 'black',             // Color del texto
         padding: '10px 20px',       // Espaciado interno
         border: 'none',             // Sin borde

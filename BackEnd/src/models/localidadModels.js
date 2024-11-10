@@ -17,7 +17,34 @@ class Localidad {
       const [rows] = await connection.query(sql, [idLocalidad]);
       return rows[0];
     }
+
+    static async findByUserId(pool, idPersona) {
+        const query = `
+            SELECT l.*
+            FROM localidad l
+            INNER JOIN localidadxpersona lp ON l.idLocalidad = lp.idLocalidad
+            INNER JOIN user u ON lp.idPersona = u.id
+            WHERE u.id = ?
+        `;
+        const [rows] = await pool.execute(query, [idPersona]);
+        return rows;
+    }
   
+    static async associateLocalidadToUser(pool, idLocalidad, idPersona) {
+      const query = `
+          INSERT INTO localidadxpersona (idLocalidad, idPersona)
+          VALUES (?, ?)
+      `;
+      const [result] = await pool.execute(query, [idLocalidad, idPersona]);
+      return result.insertId; // Retornamos el id del nuevo registro
+    }
+    
+    static async modifyLocalidadXUser(connection, idLocalidad, idPersona) {
+      const sql = `UPDATE localidadxpersona SET idLocalidad = ? WHERE idPersona = ?`;
+      const [result] = await connection.query(sql, [idLocalidad, idPersona]);
+      return result;
+    }
+
     static async findAll(connection) {
       const sql = `SELECT * FROM Localidad`;
       const [rows] = await connection.query(sql);
