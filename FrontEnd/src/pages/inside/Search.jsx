@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LayoutInside from '../../components/LayoutInside';
+import LayoutOutside from '../../components/LayoutOutside';
 import ProfileCard from '../../components/ProfileCard';
 import Filter from '../../components/Filter';
 import axios from 'axios';
@@ -71,6 +72,12 @@ const styles = {
 };
 
 const Search = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(localStorage.getItem('isAuthenticated') === 'true');
+
+    useEffect(() => {
+        const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+        setIsAuthenticated(authStatus);
+    }, []);
     const [searchTerm, setSearchTerm] = useState('');
     const [userData, setUserData] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
@@ -80,39 +87,39 @@ const Search = () => {
     const [filteredServices, setFilteredServices] = useState([]);
 
     useEffect(() => {
+        // In Search.js - Add better error handling
         const getData = async () => {
             setLoading(true);
             try {
                 const response = await axios.get(`http://localhost:4444/api/user`);
-                const usersWithDetails = await Promise.all(response.data.map(async (user) => {
-                    try {
-                        const serviceResponse = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
-                        const uniqueServices = serviceResponse.data.filter(
-                            (service, index, self) =>
-                                index === self.findIndex((s) => s.idServicio === service.idServicio)
-                        );
+                console.log('User Response:', response.data);  // Debug log
 
-                        // Intentar obtener localidades para cada usuario
-                        const locationResponse = await axios.get(`http://localhost:4444/api/localidad/usuario/${user.usuario}`);
-                        
-                        // Extraer solo el nombre de la localidad
-                        const locations = Array.isArray(locationResponse.data) ? 
-                                          locationResponse.data.map(loc => loc.nombre) : [];
+                const usersWithDetails = await Promise.all(
+                    response.data.map(async (user) => {
+                        try {
+                            // Debug logs
+                            const serviceResponse = await axios.get(`http://localhost:4444/api/user/${user.usuario}/servicios`);
+                            console.log(`Services for ${user.usuario}:`, serviceResponse.data);
 
-                        // Imprimir para verificar los datos obtenidos
-                        console.log(`Usuario: ${user.usuario}`, { localidades: locations, services: uniqueServices });
-                        
-                        return { ...user, services: uniqueServices, localidades: locations };
-                    } catch (err) {
-                        console.error(`Error al obtener detalles para el usuario ${user.usuario}:`, err);
-                        return null;
-                    }
-                }));
+                            const locationResponse = await axios.get(`http://localhost:4444/api/localidad/usuario/${user.usuario}`);
+                            console.log(`Locations for ${user.usuario}:`, locationResponse.data);
 
-                setUserData(usersWithDetails.filter((user) => user !== null));
-                setError(null);
+                            return {
+                                ...user,
+                                services: serviceResponse.data,
+                                localidades: locationResponse.data.map(loc => loc.nombre)
+                            };
+                        } catch (err) {
+                            console.error(`Error fetching details for ${user.usuario}:`, err);
+                            return null;
+                        }
+                    })
+                );
+
+                setUserData(usersWithDetails.filter(Boolean));
             } catch (err) {
-                setError('Error al obtener los datos del usuario');
+                console.error('Error fetching users:', err);
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
@@ -155,13 +162,20 @@ const Search = () => {
         setFilteredLocations(locations);
     };
 
+    const LayoutWrapper = ({ isAuthenticated, children }) => {
+        const Layout = isAuthenticated ? LayoutInside : LayoutOutside;
+        return <Layout activeItem="search">{children}</Layout>;
+      };
+
     const handleServiceChange = (services) => setFilteredServices(services);
 
     if (loading) return <p>Cargando datos...</p>;
     if (error) return <p>{error}</p>;
 
     return (
-        <LayoutInside activeItem="search">
+
+         <LayoutWrapper isAuthenticated={isAuthenticated}>
+       
             <div  style={styles.searchContainer}>
                
      
@@ -212,7 +226,8 @@ const Search = () => {
                     
                 </div>
             </div>
-        </LayoutInside>
+        
+        </LayoutWrapper>
     );
 };
 

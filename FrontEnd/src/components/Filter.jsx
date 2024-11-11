@@ -48,7 +48,8 @@ const styles = {
         display: 'flex',
         flexWrap: 'wrap',
         gap: '10px',
-        marginBottom: '5px', // Espacio entre las etiquetas y el ComboBox
+        marginTop: '10px',  // Add some spacing
+        width: '100%'       // Ensure full width
     },
     tag: {
         padding: '8px 12px',
@@ -57,16 +58,34 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         fontSize: '14px',
+        margin: '5px'       // Add margin around tags
     },
     removeTag: {
         marginLeft: '8px',
         cursor: 'pointer',
-    },
+        color: '#666'       // Make the X visible
+    }
 };
 /*hola*/
 const Filter = ({ onLocationChange, onServiceChange }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true);
+            try {
+                // ... fetch data
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
     const [selectedLocation, setSelectedLocation] = useState([]);
     const [selectedServices, setSelectedServices] = useState([]);
+    console.log(selectedLocation)
     const [stars, setStars] = useState(0);
     const [services, setServices] = useState([]); // Estado para almacenar los servicios
     const [locations, setLocations] = useState([]); // Estado para almacenar las localidades
@@ -106,13 +125,25 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
         }
     };
 
+    // 2. Update handleServiceChange to store objects instead of just strings
     const handleServiceChange = (e) => {
-        const selectedService = e.target.value;
-        if (selectedService && !selectedServices.includes(selectedService)) {
-            const updatedServices = [...selectedServices, selectedService];
+        const serviceId = e.target.value;
+        const serviceObj = services.find(s => s.idservice === parseInt(serviceId));
+        
+        if (serviceObj && !selectedServices.find(s => s.idservice === serviceObj.idservice)) {
+            const updatedServices = [...selectedServices, serviceObj];
             setSelectedServices(updatedServices);
-            onServiceChange(updatedServices); // Pasar los servicios a Search
+            onServiceChange(updatedServices);
         }
+    };
+
+    // 3. Update the remove function
+    const removeService = (serviceToRemove) => {
+        const updatedServices = selectedServices.filter(
+            service => service.idservice !== serviceToRemove.idservice
+        );
+        setSelectedServices(updatedServices);
+        onServiceChange(updatedServices);
     };
 
     // Eliminar localidades o servicios seleccionados y actualizar en Search
@@ -122,11 +153,6 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
         onLocationChange(updatedLocations); // Actualizar en Search
     };
 
-    const removeService = (serviceToRemove) => {
-        const updatedServices = selectedServices.filter(ser => ser !== serviceToRemove);
-        setSelectedServices(updatedServices);
-        onServiceChange(updatedServices); // Actualizar en Search
-    };
 
     return (
         <div className="search-filter">
@@ -155,17 +181,17 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
                     <div style={styles.comboBoxContainer}>
                         <label htmlFor="service-combo-box" style={styles.comboBoxLabel}>Servicio:</label>
                         <select
-                            id="service-combo-box"
-                            style={styles.comboBox}
-                            onChange={handleServiceChange}
-                            value=""
-                        >
-                            <option value="" disabled>Elija un servicio</option>
-                            {services.map((service) => (
-                                <option key={service.idservice} value={service.description}>
-                                    {service.description}
-                                </option>
-                            ))}
+                                        id="service-combo-box"
+                                        style={styles.comboBox}
+                                        onChange={handleServiceChange}
+                                        value=""
+                                    >
+                                        <option value="" disabled>Elija un servicio</option>
+                                        {services.map((service) => (
+                                            <option key={service.idservice} value={service.idservice}>
+                                                {service.description}
+                                            </option>
+                                        ))}
                         </select>
                     </div>
                     {/* Slider de estrellas */}
@@ -200,14 +226,14 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
 
                     {/* Mostrar servicios seleccionados como etiquetas */}
                     <div style={styles.selectedTagsContainer}>
-                        {selectedServices.map((service, index) => (
-                            <div key={index} style={styles.tag}>
-                                {service}
+                        {selectedServices.map((service) => (
+                            <div key={service.idservice} style={styles.tag}>
+                                {service.description}
                                 <span
                                     style={styles.removeTag}
                                     onClick={() => removeService(service)}
                                 >
-                                    &#x2715; {/* "X" para eliminar */}
+                                    &#x2715;
                                 </span>
                             </div>
                         ))}
