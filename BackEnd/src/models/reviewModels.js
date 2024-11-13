@@ -1,5 +1,5 @@
 class Review {
-  constructor(idreview, precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id) {
+  constructor(idreview, precio, atencion, calidad, tiempo, comentario, idAutor, idAsociacionservi) {
     this.idResenia = idreview;
     this.precio = precio;
     this.atencion = atencion;
@@ -7,13 +7,13 @@ class Review {
     this.tiempo = tiempo;
     this.comentario = comentario;
     this.idAutor = idAutor;
-    this.servicioasociado_id = servicioasociado_id;
+    this.idAsociacionservi = idAsociacionservi;
   }
 
   // Crear una nueva reseña
-  static async create(connection, { precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id }) {
-    const sql = 'INSERT INTO servicioya.review (precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    const [result] = await connection.query(sql, [precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id]);
+  static async create(connection, { precio, atencion, calidad, tiempo, comentario, idAutor, idAsociacionservi }) {
+    const sql = 'INSERT INTO servicioya.review (precio, atencion, calidad, tiempo, comentario, idAutor, idAsociacionservi) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const [result] = await connection.query(sql, [precio, atencion, calidad, tiempo, comentario, idAutor, idAsociacionservi]);
     return result;
   }
 
@@ -35,7 +35,7 @@ class Review {
   static async findByUser(connection, username) {
     const sql = `
       SELECT * FROM servicioya.review 
-      JOIN servicioya.service ON review.servicioasociado_id = service.idAsociacion 
+      JOIN servicioya.service ON review.idAsociacionservi = service.idAsociacion 
       JOIN servicioya.userXservice ON service.idAsociacion = userXservice.idAsociacion
       JOIN servicioya.User ON userXservice.idUser = User.id 
       WHERE User.name = ?
@@ -44,7 +44,7 @@ class Review {
     return rows;
   }
 
-  // Actualizar una reseña (solo comentario y otros atributos, no se puede cambiar idAutor ni servicioasociado_id)
+  // Actualizar una reseña (solo comentario y otros atributos, no se puede cambiar idAutor ni idAsociacionservi)
   static async update(connection, { idResenia, comentario, precio, atencion, calidad, tiempo }) {
     const sql = `UPDATE servicioya.review SET comentario = ?, precio = ?, atencion = ?, calidad = ?, tiempo = ? WHERE idreview = ?`;
     const [result] = await connection.query(sql, [comentario, precio, atencion, calidad, tiempo, idResenia]); // Asegúrate de que idResenia es correcto
@@ -62,7 +62,7 @@ class Review {
     const query = `
       SELECT review.*
       FROM servicioya.review AS review
-      JOIN servicioya.servicioasociado AS asociacion ON review.servicioasociado_id = asociacion.idAsociacion
+      JOIN servicioya.servicioasociado AS asociacion ON review.idAsociacionservi = asociacion.idAsociacion
       JOIN servicioya.service AS service ON asociacion.idServicio = service.idservice  -- Usando 'idServicio' para asociacion y 'idservice' para service
       WHERE review.idAutor = ? AND service.idservice = ?;
     `;
