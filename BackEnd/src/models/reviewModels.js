@@ -35,10 +35,10 @@ class Review {
   static async findByUser(connection, username) {
     const sql = `
       SELECT * FROM servicioya.review 
-      JOIN servicioya.service ON review.idAsociacionservi = service.idAsociacion 
-      JOIN servicioya.userXservice ON service.idAsociacion = userXservice.idAsociacion
-      JOIN servicioya.User ON userXservice.idUser = User.id 
-      WHERE User.name = ?
+      JOIN servicioya.servicioasociado ON review.idAsociacionservi = servicioasociado.idAsociacion
+      JOIN servicioya.service ON service.idservice = servicioasociado.idServicio
+      JOIN servicioya.user ON servicioasociado.idPersona = user.id 
+      WHERE user.usuario = ?
     `;
     const [rows] = await connection.query(sql, [username]);
     return rows;
@@ -58,15 +58,15 @@ class Review {
     return result;
   }
 
-  static async findByServiceAndUser(pool, idAutor, idservice) {
+  static async findByServiceAndUser(pool, username, idservice) {
     const query = `
-      SELECT review.*
-      FROM servicioya.review AS review
-      JOIN servicioya.servicioasociado AS asociacion ON review.idAsociacionservi = asociacion.idAsociacion
-      JOIN servicioya.service AS service ON asociacion.idServicio = service.idservice  -- Usando 'idServicio' para asociacion y 'idservice' para service
-      WHERE review.idAutor = ? AND service.idservice = ?;
+      SELECT r.precio, r.atencion, r.calidad, r.tiempo FROM servicioya.review r
+      JOIN servicioya.servicioasociado ON r.idAsociacionservi = servicioasociado.idAsociacion
+      JOIN servicioya.service ON service.idservice = servicioasociado.idServicio
+      JOIN servicioya.user ON servicioasociado.idPersona = user.id 
+      WHERE user.usuario = ? and service.idservice = ?
     `;
-    const [rows] = await pool.query(query, [idAutor, idservice]);
+    const [rows] = await pool.query(query, [username, idservice]);
     return rows;
   }
 

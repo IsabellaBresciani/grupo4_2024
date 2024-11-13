@@ -5,10 +5,10 @@ const router = express.Router();
 
 // Crear Review.
 router.post('/', async (req, res) => {
-  const { precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id } = req.body;
+  const { precio, atencion, calidad, tiempo, comentario, idAutor, idAsociacionservi} = req.body;
 
   // Validar que los campos obligatorios estén presentes
-  if (!precio || !atencion || !calidad || !tiempo || !idAutor || !servicioasociado_id) {
+  if (!precio || !atencion || !calidad || !tiempo || !idAutor || !idAsociacionservi) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
 
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 
   try {
     // Incluye el campo `comentario` en la creación de la reseña
-    const result = await Review.create(pool, { precio, atencion, calidad, tiempo, comentario, idAutor, servicioasociado_id });
+    const result = await Review.create(pool, { precio, atencion, calidad, tiempo, comentario, idAutor, idAsociacionservi });
     res.status(201).json({ message: 'Reseña creada', result });
   } catch (error) {
     console.error('Error al crear la reseña:', error);
@@ -102,11 +102,25 @@ router.delete('/:review_id', async (req, res) => {
 });
 
 // Ver todas las reseñas de una asociación específica
-router.get('/:idAsociacion/asociacion', async (req, res) => {
+router.get('/asociacion/:idAsociacion', async (req, res) => {
   const { idAsociacion } = req.params;
 
   try {
     const reviews = await Review.findByAssociation(pool, idAsociacion);
+    if (reviews.length === 0) return res.status(404).json({ message: 'No hay reseñas para esta asociación.' });
+    res.json(reviews);
+  } catch (error) {
+    console.error('Error al obtener reseñas de la asociación:', error);
+    res.status(500).json({ error: 'Error al obtener reseñas de la asociación' });
+  }
+});
+
+// Ver todas las reseñas de una asociación específica
+router.get('/:username/:idService', async (req, res) => {
+  const { username, idService } = req.params;
+
+  try {
+    const reviews = await Review.findByServiceAndUser(pool, username, idService);
     if (reviews.length === 0) return res.status(404).json({ message: 'No hay reseñas para esta asociación.' });
     res.json(reviews);
   } catch (error) {

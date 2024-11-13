@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/database'); //Asegúrate de tener un archivo 'database.js' para crear el pool de conexión con MySQL
+const Service = require('../models/serviceModels');
 
 // Obtener todos los servicios
 router.get("/", async (req, res) => {
@@ -81,6 +82,21 @@ router.delete('/:service_id', async (req, res) => {
         res.status(200).json("Servicio eliminado correctamente");
     } catch (error) {
         return res.status(500).json({ error: 'Error al eliminar el servicio' });
+    }
+});
+
+router.get("/:username/:serviceId", async (req, res) => {
+    const { username, serviceId } = req.params;
+    
+    try {
+        const [result] = await Service.findUserXServiceWithId(pool, username, serviceId);
+        
+        if (result.length === 0) {
+            return res.status(404).json({ error: 'Asociacion no encontrada.' });
+        }
+        res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({ error: 'Error en la consulta'});
     }
 });
 

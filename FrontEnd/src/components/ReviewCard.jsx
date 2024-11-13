@@ -24,7 +24,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: '10px', // espacio entre el avatar y el nombre de usuario
+    gap: '10px', 
   },
   avatar: {
     width: '50px',
@@ -110,29 +110,24 @@ const renderRating = (label, value, minLabel, maxLabel) => (
   </div>
 );
 
-const ReviewCard = ({ asociacionId }) => {
+const ReviewCard = ({ idAsociacionservi }) => {
   const [reviews, setReviews] = useState([]);
   const [users, setUsers] = useState({});
 
   useEffect(() => {
     const fetchReviewsWithUser = async () => {
       try {
-        // Obtener reseñas
-        const reviewsResponse = await axios.get(`http://localhost:4444/api/review/${asociacionId}/asociacion`);
+        const reviewsResponse = await axios.get(`http://localhost:4444/api/review/asociacion/${idAsociacionservi}`);
         const reviewsData = reviewsResponse.data;
-
-        console.log("Datos de reseñas:", reviewsData); // Verificar reseñas recibidas
-        setReviews(reviewsData); // Guardar solo las reseñas
-
-        // Obtener usuarios en paralelo
+        setReviews(reviewsData);
         const userPromises = reviewsData.map(review => {
           return axios.get(`http://localhost:4444/api/user/id/${review.idAutor}`)
             .then(userResponse => {
-              const userData = userResponse.data[0]; // Asegúrate de acceder al primer elemento
+              const userData = userResponse.data[0];
               return {
                 idAutor: review.idAutor,
-                usuario: userData.usuario || "Usuario desconocido", // Usar el nombre de usuario
-                foto: userData.foto || null // Usar la foto
+                usuario: userData.usuario || "Usuario desconocido",
+                foto: userData.foto || null 
               };
             })
             .catch(error => {
@@ -152,7 +147,7 @@ const ReviewCard = ({ asociacionId }) => {
     };
 
     fetchReviewsWithUser();
-  }, [asociacionId]);
+  }, [idAsociacionservi]);
 
   // Renderizado condicional si no hay reseñas aún
   if (reviews.length === 0) {

@@ -37,6 +37,15 @@ class Service {
       return result;
     }
 
+    static async findUserXServiceWithId(connection, username, idService) {
+      const sql = `SELECT sa.idServicio, sa.idAsociacion, s.description, sa.estado, s.imagen
+        FROM ServicioAsociado sa
+        JOIN service s ON sa.idServicio = s.idservice join user u ON sa.idPersona = u.id
+        WHERE u.usuario = ? and s.idService = ?`;
+      const [result] = await connection.query(sql, [username, idService]);
+      return result;
+    }
+
     static async addUserXService(connection,{ idPersona, idServicio, estado}) {
       const sql = `
           INSERT INTO servicioya.servicioasociado (idPersona, idServicio, estado)

@@ -206,7 +206,6 @@ const ProfileHeader = (props) => {
 	const getData = async () => {
 		try {
 			const userD = await axios.get(`http://localhost:4444/api/user/${usuario}`);
-			console.log("Datos de usuario:", userD.data); // Verifica que userD.data tenga la descripción
 			setUserData(userD.data);
 		} catch (err) {
 			setError('Error al obtener los datos del usuario');
@@ -275,8 +274,6 @@ const ProfileHeader = (props) => {
 				...(newData.descripcion && { descripcion: newData.descripcion }),
 				...(newData.idLocalidad && { idLocalidad: newData.idLocalidad })
 			};
-			console.log(dataUpdated ,'hola');
-
 			if (Object.keys(dataUpdated).length > 0) {
 				await axios.put(`http://localhost:4444/api/user/${usuario}`, dataUpdated);
 				toast.success('¡Datos modificados exitosamente!');

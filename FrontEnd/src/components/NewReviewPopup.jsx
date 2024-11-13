@@ -146,8 +146,8 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
         atencion: 0,
         tiempo: 0,
         comentario: '',
-        idAutor: 17, // Aquí deberías obtener el idAutor del contexto del usuario o similar
-        servicioasociado_id: asociacionId,
+        idAutor: 0,
+        idAsociacionservi: asociacionId,
     };
 
     const [reviewData, setReviewData] = useState(initialReviewData);
@@ -171,6 +171,9 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
 
     // Función para enviar la reseña a la API
     const handleSubmit = async () => {
+        const username =  String(localStorage.getItem('usuario'));
+        const userD = await axios.get(`http://localhost:4444/api/user/${username}`);
+        reviewData.idAutor= userD.data.id;
         // Verifica si todos los campos están completos
         const areFieldsComplete = ['precio', 'calidad', 'atencion', 'tiempo'].every(
             (field) => reviewData[field] !== 0
@@ -188,6 +191,7 @@ const NewReviewPopup = ({ show, onClose, asociacionId }) => {
         }
 
         try {
+
             const response = await axios.post('http://localhost:4444/api/review', reviewData);
             console.log('Reseña creada:', response.data);
             Swal.fire({

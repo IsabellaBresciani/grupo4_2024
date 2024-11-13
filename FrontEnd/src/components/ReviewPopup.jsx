@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NewReviewPopup from './NewReviewPopup';
 import ReviewCard from './ReviewCard';
+import axios from 'axios';
 
 const styles = {
 	popupOverlay: {
@@ -96,14 +97,8 @@ const styles = {
 		height: '50px',  
   },
 }
-// Defino los valores de cada Rating (esto deberia venir desde la BD)
-const precioRating = '20%';
-const calidadRating = '50%';
-const atencionRating = '4%';
-const tiempoRating = '90%';
 
-const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
-  
+const ReviewPopup = ({ show, onClose, idAsociacionservi }) => {
 	const [showPopupNR, setShowPopupNR] = useState(false);
 	const handleOpenPopupNR = () => {
 		setShowPopupNR(true);
@@ -111,6 +106,64 @@ const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
 	const handleClosePopupNR = () => {
 		setShowPopupNR(false);
 	};
+
+	const [ratings, setRatings] = useState({
+		precio: '',
+		calidad: '',
+		atencion: '',
+		tiempo: '',
+	  });
+
+	  useEffect(() => {
+		if (idAsociacionservi) {
+		  const getRatings = async () => {
+			let precioTotal = 0;
+			let calidadTotal = 0;
+			let atencionTotal = 0;
+			let tiempoTotal = 0;
+	
+			try {
+			  const response = await axios.get(`http://localhost:4444/api/review/asociacion/${idAsociacionservi}`);
+			  const reviews = response.data;
+				if (reviews.length !== 0) {
+				reviews.forEach((review) => {
+					precioTotal += review.precio;
+					calidadTotal += review.calidad;
+					atencionTotal += review.atencion;
+					tiempoTotal += review.tiempo;
+				});
+		
+				const precioFinal = reviews.length ? precioTotal / reviews.length : 0;
+				const calidadFinal = reviews.length ? calidadTotal / reviews.length : 0;
+				const atencionFinal = reviews.length ? atencionTotal / reviews.length : 0;
+				const tiempoFinal = reviews.length ? tiempoTotal / reviews.length : 0;
+		
+				setRatings({
+					precio: precioFinal,
+					calidad: calidadFinal,
+					atencion: atencionFinal,
+					tiempo: tiempoFinal,
+				});}
+				else{
+					setRatings({
+						precio: 0,
+						calidad: 0,
+						atencion: 0,
+						tiempo: 0,
+					})
+				}
+			} catch (error) {
+			  console.error('Error al generar el promedio de reseñas', error);
+			}
+		  };
+	
+		  getRatings();
+		}
+	  }, [idAsociacionservi]);
+	
+	  const RatingTotal = ((ratings.precio + ratings.calidad + ratings.atencion + ratings.tiempo) / 4).toFixed(1);
+
+
 
 	const renderRating = (label, value, minLabel, maxLabel) => (
 		<div style={styles.ratingRow}>
@@ -127,7 +180,7 @@ const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
 
   // Si no debe mostrarse, no renderizamos nada
 	if (!show) {
-    return null;
+    	return null;
 	}
 
   // Si debe mostrarse, renderizamos el pop-up
@@ -136,13 +189,13 @@ const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
 			<div style={styles.popupContent} onClick={(e) => e.stopPropagation()}>
 				<button style={styles.closeButton} onClick={onClose}>X</button>
 				<h2>Reseñas del servicio</h2>
-				<p style={styles.ratingGeneral}>3.5</p>         {/* Este valor tiene que venir de la BD */}
+				<p style={styles.ratingGeneral}>{RatingTotal}</p>
 				
 				<div style={styles.ratingBarsContainer}>
-          {renderRating("Precio", precioRating, "Malo", "Excelente")}
-          {renderRating("Calidad", calidadRating, "Pésima", "Admirable")}
-          {renderRating("Atención al cliente", atencionRating, "Antisocial", "Muy atento")}
-          {renderRating("Tiempo del trabajo", tiempoRating, "Muy lento", "Muy veloz")}
+          {renderRating("Precio", `${ratings.precio*100/5}%`, "Malo", "Excelente")}
+          {renderRating("Calidad", `${ratings.calidad*100/5}%`, "Pésima", "Admirable")}
+          {renderRating("Atención al cliente", `${ratings.atencion*100/5}%`, "Antisocial", "Muy atento")}
+          {renderRating("Tiempo del trabajo", `${ratings.tiempo*100/5}%`, "Muy lento", "Muy veloz")}
         </div>
 				
 				{/*Este button no deberia mostrarse cuando visito mi propio perfil*/}
@@ -151,8 +204,8 @@ const ReviewPopup = ({ show, onClose, servicioasociado_id }) => {
 					</div>
 				
 
-				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={servicioasociado_id} />
-				<ReviewCard asociacionId={servicioasociado_id}/>
+				<NewReviewPopup show={showPopupNR} onClose={handleClosePopupNR} asociacionId={idAsociacionservi} />
+				<ReviewCard idAsociacionservi={idAsociacionservi}/>
         
   		</div>
 		</div>

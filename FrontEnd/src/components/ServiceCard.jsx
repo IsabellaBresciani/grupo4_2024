@@ -65,7 +65,7 @@ const ServiceCard = (props) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedAsociacionId, setSelectedAsociacionId] = useState(null);
+    const [selectedAsociacionId, setSelectedAsociacionId] = useState(0);
 
     const fetchServices = async () => {
         try {
@@ -96,14 +96,15 @@ const ServiceCard = (props) => {
         }
     };
 
-    const handleOpenPopup = (idAsociacion) => {
-        setSelectedAsociacionId(idAsociacion);
+    const handleOpenPopup = async (idServicio) => {
+        const response = await axios.get(`http://localhost:4444/api/service/${userName}/${idServicio}`);
+        const asociacionId = response.data.idAsociacion;
+        setSelectedAsociacionId(asociacionId);
         setShowPopup(true);
     };
 
     const handleClosePopup = () => {
         setShowPopup(false);
-        setSelectedAsociacionId(null);
     };
 
     useEffect(() => {
@@ -121,8 +122,6 @@ const ServiceCard = (props) => {
                         <div style={styles.serviceCard} key={service.idServicio}>
                             <h3>{service.description}</h3>
                             <p>{service.estado === 'activo' ? 'Servicio activo' : 'Servicio dado de baja'}</p>
-
-                            {/* Conditional rendering of the edit functionality based on userName */}
                             {props.usuario === "me" && (
                                 <button
                                     style={styles.isVisible}
@@ -136,7 +135,7 @@ const ServiceCard = (props) => {
                                 </button>
                             )}
 
-                            <button style={styles.button} onClick={() => handleOpenPopup(service.idAsociacion)}>Ver reseñas</button>
+                            <button style={styles.button} onClick={() => handleOpenPopup(service.idServicio)}>Ver reseñas</button>
                         </div>
                     ))
                 ) : (
@@ -145,7 +144,7 @@ const ServiceCard = (props) => {
                 <ReviewPopup 
                     show={showPopup} 
                     onClose={handleClosePopup} 
-                    servicioasociado_id={selectedAsociacionId}  
+                    idAsociacionservi={selectedAsociacionId}  
                 />
             </div>
         </div>
@@ -153,4 +152,3 @@ const ServiceCard = (props) => {
 };
 
 export default ServiceCard;
- 
