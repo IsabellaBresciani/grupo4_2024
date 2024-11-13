@@ -74,7 +74,7 @@ class Review {
     static async findByAssociation(connection, idAsociacion) {
       const sql = `
         SELECT * FROM servicioya.review 
-        WHERE servicioasociado_id = ?;
+        WHERE idAsociacionservi = ?;
       `;
       const [rows] = await connection.query(sql, [idAsociacion]);
       return rows;
