@@ -9,7 +9,7 @@ import '../../css/Styles.css';
 const styles = {
    
     registerContainer: {
-        backgroundImage: "linear-gradient(to bottom, #ff6702, #f69d5d)",
+        backgroundImage: "linear-gradient(to bottom, #e85d04, #ff6702)",
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',

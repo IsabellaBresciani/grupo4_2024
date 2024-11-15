@@ -67,7 +67,7 @@ const styles = {
     }
 };
 /*hola*/
-const Filter = ({ onLocationChange, onServiceChange }) => {
+const Filter2 = ({ onLocationChange, onServiceChange }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -242,4 +242,4 @@ const Filter = ({ onLocationChange, onServiceChange }) => {
     );
 };
 
-export default Filter;
+export default Filter2;

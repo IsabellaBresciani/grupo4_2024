@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Register from './pages/outside/Register';
 import Search from './pages/inside/Search';
+import Search2 from './pages/inside/Search2';
 import Home from './pages/outside/Home';
 import Profile from './pages/inside/Profile';
 import Contact from './pages/outside/Contact';
@@ -27,6 +28,7 @@ function App() {
         {isAuthenticated ? (
           <>
             <Route path="/search" element={<Search />} />
+            <Route path="/search2" element={<Search2 />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:usuario" element={<ProfileDetails />} />
             <Route path="/profile-details" element={<ProfileDetails />} />
@@ -35,7 +37,7 @@ function App() {
         ) : (
           <>
             <Route path="/register" element={<Register />} />
-            <Route path="/search" element={<Search />} />
+            <Route path="/search2" element={<Search2 />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<Contact />} />

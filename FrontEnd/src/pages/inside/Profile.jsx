@@ -12,6 +12,7 @@ const styles = {
         padding: '20px',
         flexGrow: 1,
         overflowY: 'auto',
+        margin: "2vw"
     },
     section: {
         display: 'flex',

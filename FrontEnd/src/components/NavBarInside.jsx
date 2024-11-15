@@ -95,7 +95,7 @@ const NavBarInside = ({ content, activeItem }) => {
                   </a>
                   <hr/>
                   <span style={styles.logoText}>ServiciosYa</span>
-                  <hr/><hr/><hr/><hr/><hr/>
+                  <hr/><hr/><hr/>
                   <ul  className="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center align-items-center">
                       
                       <li className="nav-item">
@@ -119,7 +119,7 @@ const NavBarInside = ({ content, activeItem }) => {
                             </a>
                       </li>
 
-                      <hr/><hr/><hr/><hr/><hr/>
+                      <hr/><hr/><hr/>
                       <li className="nav-item">
                           
                           <a onClick={handleLogout}   style={{"--bs-icon-link-transform": "translate3d(0, -.125rem, 0)"}}  className="nav-link py-3 px-2 icon-link icon-link-hover" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Home">

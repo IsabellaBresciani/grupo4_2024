@@ -52,7 +52,7 @@ function NavBarOutside() {
                           <Link style={styles.navbarLink} className="nav-link" to="/home">Home</Link>
                       </li>
                       <li className="nav-item">
-                          <Link style={styles.navbarLink} className="nav-link" to="/search">Search</Link>
+                          <Link style={styles.navbarLink} className="nav-link" to="/search2">Search</Link>
                       </li>
                       <li className="nav-item">
                           <Link style={styles.navbarLink} className="nav-link" to="/contact">Contact</Link>
