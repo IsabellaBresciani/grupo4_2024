@@ -1,5 +1,5 @@
 import React from 'react';
-import LayoutOutside from '../../components/LayoutOutside'; 
+import LayoutOutside from '../../components/LayoutOutside';
 
 const styles = {
     contactContainer: {
@@ -20,13 +20,14 @@ const styles = {
         borderRadius: '8px',
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
         padding: '20px',
-        maxWidth: '300px',
+        maxWidth: '350px',
         textAlign: 'left',
     },
     contactCardTitle: {
         color: '#ff6702',
         fontSize: '1.5em',
         marginBottom: '10px',
+        fontWeight: "bold"
     },
     contactCardText: {
         fontSize: '1.1em',
@@ -79,28 +80,35 @@ const Contact = () => {
         <LayoutOutside>
             <div style={styles.contactContainer}>
                 <h1>Contactanos</h1>
-                <p>Somos el grupo 4 de Desarrollo de Software:</p>
+                <p>Somos el "Equipo 4" de Desarrollo de Software, conformado por:</p>
+                <div>Battistella Tomás</div>
+                <div>Bresciani Isabella</div>
+                <div>Hiriart Irineo</div>
+                <div>Leiva Emanuel</div>
+                <div>Ortega Jonathan</div>
+                <div>Tiero Maximiliano</div>
+                <div style={{ height: '20px' }}></div>
 
                 <div style={styles.contactInfo}>
                     <div style={styles.contactCard}>
-                        <h3 style={styles.contactCardTitle}>Atencion al cliente</h3>
+                        <h3 style={styles.contactCardTitle}>Atención al cliente</h3>
                         <p style={styles.contactCardText}>Email: grupo4@serviciosya.com</p>
-                        <p style={styles.contactCardText}>Telefono: +54 (221) 123-4567</p>
+                        <p style={styles.contactCardText}>Teléfono: +54 (221) 123-4567</p>
                         <p style={styles.contactCardText}>Horario de atencion: Mon-Fri 9:00 AM - 6:00 PM</p>
                     </div>
 
                     <div style={styles.contactCard}>
-                        <h3 style={styles.contactCardTitle}>Consultas sobre Ventas</h3>
+                        <h3 style={styles.contactCardTitle}>Consultas sobre ventas</h3>
                         <p style={styles.contactCardText}>Email: ventas@serviciosya.com</p>
-                        <p style={styles.contactCardText}>Telefono: +54 (221) 987-6543</p>
-                        <p style={styles.contactCardText}>Horario de atencion: Mon-Fri 10:00 AM - 5:00 PM</p>
+                        <p style={styles.contactCardText}>Teléfono: +54 (221) 987-6543</p>
+                        <p style={styles.contactCardText}>Horario de atención: Mon-Fri 10:00 AM - 5:00 PM</p>
                     </div>
 
                     <div style={styles.contactCard}>
-                        <h3 style={styles.contactCardTitle}>Soporte Tecnico</h3>
+                        <h3 style={styles.contactCardTitle}>Soporte técnico</h3>
                         <p style={styles.contactCardText}>Email: soportetecnico@serviciosya.com</p>
-                        <p style={styles.contactCardText}>Telefono: +54 (221) 555-4321</p>
-                        <p style={styles.contactCardText}>Horario de atencion: Mon-Fri 8:00 AM - 5:00 PM</p>
+                        <p style={styles.contactCardText}>Teléfono: +54 (221) 555-4321</p>
+                        <p style={styles.contactCardText}>Horario de atención: Mon-Fri 8:00 AM - 5:00 PM</p>
                     </div>
                 </div>
 
