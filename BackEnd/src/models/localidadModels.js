@@ -29,7 +29,12 @@ class Localidad {
         const [rows] = await pool.execute(query, [idPersona]);
         return rows;
     }
-  
+
+    static async removeLocalidadFromUser(connection, idLocalidad, idPersona) {
+      const sql = `DELETE FROM localidadxpersona WHERE idLocalidad = ? AND idPersona = ?`;
+      const [result] = await connection.query(sql, [idLocalidad, idPersona]);
+      return result;
+  }  
     static async associateLocalidadToUser(pool, idLocalidad, idPersona) {
       const query = `
           INSERT INTO localidadxpersona (idLocalidad, idPersona)

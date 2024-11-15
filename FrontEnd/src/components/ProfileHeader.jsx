@@ -228,6 +228,8 @@ const ProfileHeader = (props) => {
 	const fetchLocations = async () => {
 		try {
 			const response = await axios.get(`http://localhost:4444/api/localidad/usuario/${usuario}`);
+			console.log('Localidades obtenidas:', response.data);  // Verifica qué datos está devolviendo la API
+
 			setLocations(response.data);
 		} catch (err) {
 			if (err.response && err.response.status === 404) {
@@ -240,6 +242,20 @@ const ProfileHeader = (props) => {
 		}
 	};
 
+	const associateLocation = async (idLocalidad) => {
+		try {
+			await axios.post(`http://localhost:4444/api/localidad/asociar`, {
+				idPersona: userData.id,
+				idLocalidad
+			});
+			fetchLocations(); // Refresca la lista de localidades asociadas
+			toast.success('¡Localidad asociada exitosamente!');
+		} catch (error) {
+			console.error('Error al asociar la localidad:', error);
+			toast.error('Hubo un error al asociar la localidad.');
+		}
+	};
+
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setNewData((prevData) => ({
@@ -247,6 +263,43 @@ const ProfileHeader = (props) => {
 			[name]: value,
 		}));
 	};
+
+	// Manejar la selección de una nueva localidad
+	const handleAddLocation = (e) => {
+		const selectedId = e.target.value;
+		if (!locations.find((loc) => loc.idLocalidad === selectedId)) {
+			associateLocation(selectedId);
+		}
+	};
+
+	// Eliminar una localidad asociada al usuario
+	const handleRemoveLocation = async (idLocalidad) => {
+		const idPersona = userData.id; // Obtener idPersona desde el estado
+	  
+		// Verifica que tanto idPersona como idLocalidad estén definidos antes de hacer la llamada
+		if (!idPersona || !idLocalidad) {
+		  toast.error('Error: falta información necesaria.');
+		  return;
+		}
+	  
+		console.log('idPersona:', idPersona);
+		console.log('idLocalidad:', idLocalidad);
+	  
+		try {
+		  // Cambiar la URL para usar el nuevo endpoint con los parámetros correctos
+		  const response = await axios.delete(`http://localhost:4444/api/localidad/desasociar/${idPersona}/${idLocalidad}`);
+		  if (response.status === 200) {
+			fetchLocations(); // Refresca la lista de localidades asociadas
+			toast.success('¡Localidad eliminada exitosamente!');
+		  } else {
+			toast.error('No se pudo eliminar la localidad.');
+		  }
+		} catch (error) {
+		  console.error('Error al eliminar la localidad:', error);
+		  toast.error('Hubo un error al eliminar la localidad.');
+		}
+	  };
+	  
 
 	const modifyData = async () => {
 		const confirm = await Swal.fire({
@@ -316,18 +369,6 @@ const ProfileHeader = (props) => {
 		return `${day}/${month}/${year}`;
 	};
 
-	const handleRemoveLocation = () => {
-		Swal.fire({
-            title: 'Todavia no funciona xd?',
-            text: "Estamos laburando en esto",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'chau',
-            cancelButtonText: 'Cancelar',
-            zIndex: 1500,
-        });
-	};
-
 
 	if (loading) return <p>Cargando datos...</p>;
 	if (error) return <p>{error}</p>;
@@ -394,16 +435,14 @@ const ProfileHeader = (props) => {
 									</div>
 									<div>
 										<label htmlFor="idLocalidad" style={styles.modalLabel}>Localidad</label>
-											<select
-												id="idLocalidad"
-												name="idLocalidad"
-												onClick={fetchLocationsAll}
-												value={newData.idLocalidad}
-												onChange={handleChange}
-												style={styles.modalInput}
-												onFocus={(e) => (e.target.style.borderColor = styles.modalInputFocus.borderColor)}
-												onBlur={(e) => (e.target.style.borderColor = '#ddd')}
-											>
+										<select
+											id="idLocalidad"
+											name="idLocalidad"
+											onClick={fetchLocationsAll}
+											onChange={handleAddLocation} // Nuevo manejador
+											style={styles.modalInput}
+										>
+											<option value="">Seleccione una localidad</option>
 											{locationsAll.map((location) => (
 												<option 
 													key={location.idLocalidad} 
@@ -422,7 +461,7 @@ const ProfileHeader = (props) => {
 															<button
 																type="button"
 																style={styles.tagCloseButton}
-																onClick={() => handleRemoveLocation()}
+																onClick={() => handleRemoveLocation(location.idLocalidad)}
 															>
 																&times;
 															</button>

@@ -127,4 +127,22 @@ router.post("/asociar", async (req, res) => {
     }
 });
 
+// Eliminar la asociación de localidad para un usuario
+router.delete("/desasociar/:idPersona/:idLocalidad", async (req, res) => {
+    const { idPersona, idLocalidad } = req.params;
+
+    try {
+        // Aquí puedes usar una función del modelo Localidad para desasociar la localidad del usuario
+        const result = await Localidad.removeLocalidadFromUser(pool, idLocalidad, idPersona);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'No se encontró la asociación de localidad con el usuario' });
+        }
+
+        res.status(200).json({ message: 'Asociación de localidad eliminada correctamente' });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error al eliminar la asociación de localidad' });
+    }
+});
+
 module.exports = router;
